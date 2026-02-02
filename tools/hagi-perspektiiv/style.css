@@ -268,3 +268,28 @@ textarea::selection{
   font-size: 12.5px;
   line-height: 1.45;
 }
+.topnav{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin: 10px 0 18px;
+}
+
+.topnav a{
+  color: rgba(238,240,246,0.78);
+  text-decoration:none;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+}
+
+.topnav a:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+.topnav a.active{
+  color:#eef0f6;
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
+}
