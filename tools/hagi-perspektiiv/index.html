@@ -4,23 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hagi perspektiivi enesekontroll</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <main class="container">
     <header class="header">
-      <nav class="topnav">
-  <a href="/">Avaleht</a>
-  <a href="/tools/hagi-perspektiiv/" class="active">Tööriist</a>
-  <a href="/dokumendinaidised/">Dokumendinäidised</a>
-</nav>
       <h1>Hagi perspektiivi enesekontroll</h1>
       <p class="lead">
         5–7 minutiga saad esialgse pildi, kas rahalise nõude alus ja tõendid on koos ning mis on peamised riskid enne hagi esitamist.
       </p>
+
+      <nav class="topnav">
+        <a href="/">Avaleht</a>
+        <a class="active" href="/tools/hagi-perspektiiv/">Tööriist</a>
+        <a href="/dokumendinaidised/">Dokumendinäidised</a>
+      </nav>
 
       <div class="notice">
         <strong>Oluline:</strong> See tööriist on informatiivne enesekontroll, mitte õigusnõustamine.
@@ -47,26 +45,23 @@
       <div class="notice" style="margin-top:12px">
         <strong>Põhiandmed mustandi jaoks (valikuline):</strong>
         need väljad aitavad täita hagi struktuuri mustandit automaatselt.
-        <br /><span class="small">Täitmine on vabatahtlik.</span>
+        <br><span class="small">Täitmine on vabatahtlik.</span>
       </div>
 
       <div class="grid" style="margin-top:12px">
         <div>
-          <label class="muted small">Nõude summa (EUR) — valikuline</label>
-          <input id="claimAmount" inputmode="decimal" type="text" placeholder="nt 1250.00"
-                 style="width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.22);color:#eef0f6;">
+          <div class="small">Nõude summa (EUR) — valikuline</div>
+          <input id="claimAmount" class="input" inputmode="decimal" type="text" placeholder="nt 1250.00">
         </div>
 
         <div>
-          <label class="muted small">Oluline kuupäev (tähtaeg / sündmus) — valikuline</label>
-          <input id="keyDate" type="date"
-                 style="width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.22);color:#eef0f6;">
+          <div class="small">Oluline kuupäev (tähtaeg / sündmus) — valikuline</div>
+          <input id="keyDate" class="input" type="date">
         </div>
 
         <div style="grid-column: 1 / -1;">
-          <label class="muted small">Lühike faktikirjeldus (1–3 lauset) — valikuline</label>
-          <input id="factsShort" type="text" placeholder="nt Teenus osutatud, arve nr..., tasumata alates..."
-                 style="width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.22);color:#eef0f6;">
+          <div class="small">Lühike faktikirjeldus (1–3 lauset) — valikuline</div>
+          <input id="factsShort" class="input" type="text" placeholder="nt Teenus osutatud, arve nr..., tasumata alates...">
         </div>
       </div>
 
@@ -84,7 +79,7 @@
       <div class="badge" id="riskBadge">—</div>
       <div class="score" id="scoreLine">Skoor: —</div>
 
-      <div class="grid">
+      <div class="grid" style="margin-top:12px">
         <div>
           <h3>Puudu / nõrk koht</h3>
           <ul id="missingList"></ul>
@@ -98,9 +93,7 @@
       <hr class="sep" />
 
       <h3>Hagi struktuuri mustand (kopeeri Wordi)</h3>
-      <p class="muted">
-        See on hagi struktuuri skelett, mitte valmis hagi. Lisa ise kuupäevad, summad, faktid ja viited tõenditele.
-      </p>
+      <p class="muted">See on hagi struktuuri skelett, mitte valmis hagi. Lisa ise kuupäevad, summad, faktid ja viited tõenditele.</p>
 
       <textarea id="draft" rows="14" spellcheck="false"></textarea>
 
@@ -112,37 +105,26 @@
       <hr class="sep" />
 
       <h3>Kasulikud tööriistad</h3>
-      <p class="muted small">
-        Need on välised lingid. Nende kasutamine on Sinu otsus; tulemused võivad muutuda ning ei ole õigusnõuanne.
-      </p>
+      <p class="muted small">Need on välised lingid. Nende kasutamine on Sinu otsus; tulemused ei ole õigusnõuanne.</p>
       <div class="actions">
         <a class="btn secondary"
            href="https://www.riigiteataja.ee/aktilisa/1181/2202/5013/RLS_lisa1_01012022.pdf#"
-           target="_blank"
-           rel="noopener noreferrer">
-          Riigilõivu tabel (RLS lisa 1, PDF)
-        </a>
+           target="_blank" rel="noopener noreferrer">Riigilõivu tabel (RLS lisa 1, PDF)</a>
 
         <a class="btn secondary"
            href="https://viivisekalkulaator.ee/calculator/debt"
-           target="_blank"
-           rel="noopener noreferrer">
-          Viivise ja intressi kalkulaator
-        </a>
+           target="_blank" rel="noopener noreferrer">Viivise ja intressi kalkulaator</a>
       </div>
 
-<div class="notice" style="margin-top:12px">
-  <strong>Tagasiside:</strong>
-  Kui leidsid vea või Sul on ettepanek, kirjuta:
-  <a href="mailto:solvere.lab@gmail.com?subject=Solvere%20Lab%20tagasiside">solvere.lab@gmail.com</a>
-</div>
-
+      <div class="notice" style="margin-top:12px">
+        <strong>Tagasiside:</strong>
+        Kui leidsid vea või Sul on ettepanek, kirjuta:
+        <a href="mailto:solvere.lab@gmail.com?subject=Hagi%20perspektiiv%20-%20tagasiside">solvere.lab@gmail.com</a>
+      </div>
     </section>
 
     <footer class="footer">
-      <p class="muted small">
-        © <span id="year"></span> • Informatiivne enesekontroll • Ei ole õigusnõuanne
-      </p>
+      © <span id="year"></span> • Informatiivne enesekontroll • Ei ole õigusnõuanne
     </footer>
   </main>
 
