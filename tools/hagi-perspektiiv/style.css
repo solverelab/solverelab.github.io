@@ -260,3 +260,8 @@ textarea::selection{
   opacity: 0.95;
 }
 
+.qmeta{
+  color: rgba(238,240,246,0.70);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
