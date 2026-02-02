@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Solvere Lab</title>
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:#0a0f1a;
+      color:#eef0f6;
+    }
+    .wrap{max-width:900px;margin:60px auto;padding:20px;}
+    h1{font-size:42px;margin-bottom:10px;}
+    p{color:rgba(238,240,246,0.75);line-height:1.6;}
+    .card{
+      margin-top:20px;
+      padding:18px;
+      background:rgba(255,255,255,0.06);
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+    a{color:#7dd3fc;text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    .btn{
+      display:inline-block;
+      margin-top:12px;
+      padding:10px 16px;
+      border-radius:12px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.15);
+      color:#eef0f6;
+      font-weight:600;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Solvere Lab</h1>
+    <p>
+      Praktilised tööriistad ja näidised, mis aitavad Sul enne kohtusse pöördumist
+      hinnata nõude alust, riske ja dokumentide terviklikkust.
+      Tegemist on informatiivse enesekontrolliga, mitte õigusnõustamisega.
+    </p>
+
+    <div class="card">
+      <h2>Tööriistad</h2>
+      <p>
+        • <a href="/tools/hagi-perspektiiv/">Hagi perspektiivi enesekontroll</a>
+      </p>
+      <a class="btn" href="/tools/hagi-perspektiiv/">Ava tööriist</a>
+    </div>
+
+    <div class="card">
+      <h2>Kontakt</h2>
+      <p>
+        Kui soovid, et vaataksin Sinu juhtumi kokkuvõtte ja tõendid läbi,
+        kirjuta: 
+        <a href="mailto:solvere.lab@gmail.com?subject=Solvere%20Lab%20-%20k%C3%BCsimus">
+        solvere.lab@gmail.com
+        </a>
+      </p>
+    </div>
+
+    <p style="margin-top:30px;font-size:12px;color:rgba(238,240,246,0.6);">
+      © <span id="y"></span> • Informatiivne sisu • Ei ole õigusnõuanne
+    </p>
+  </main>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
