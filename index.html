@@ -2,29 +2,17 @@
 <html lang="et">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Solvere Lab - MARKER123</title>
-  <link rel="stylesheet" href="/assets/site.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solvere Lab</title>
+  <meta name="description" content="Juriidilise mõtlemise ja metoodika arendamise projekt. Sisu täieneb järk-järgult." />
+  <link rel="stylesheet" href="/assets/site.css?v=12" />
 </head>
-  <div style="position:fixed;right:12px;bottom:12px;z-index:9999;
-background:rgba(0,0,0,.55);color:#fff;padding:6px 10px;border-radius:10px;
-font:12px/1.2 system-ui;">
-  BUILD: 2026-02-02-ILONA-1
-</div>
-<!-- deploy ping -->
-  <body>
-  <div style="position:fixed;right:12px;bottom:12px;z-index:9999;
-background:rgba(0,0,0,.55);color:#fff;padding:6px 10px;border-radius:10px;
-font:12px/1.2 system-ui;">
-  BUILD: ROOT-INDEX-TEST-1
-</div>
+
+<body>
   <main class="container">
     <header class="header">
-      <h1>Solvere Lab ✅ UUS</h1>
-
-      <p class="lead">
-        Juriidilise mõtlemise ja metoodika arendamise projekt.
-      </p>
+      <h1>Solvere Lab</h1>
+      <p class="lead">Juriidilise mõtlemise ja metoodika arendamise projekt.</p>
 
       <nav class="topnav">
         <a class="active" href="/">Avaleht</a>
@@ -41,12 +29,12 @@ font:12px/1.2 system-ui;">
     <section class="card">
       <h2>Tööriist</h2>
       <p class="muted">
-        Hagi perspektiivi enesekontroll aitab koondada põhiinfo ja märgata tüüpilisi nõrku kohti enne edasiste sammude tegemist.
+        Nõude perspektiivi analüüs aitab koondada põhiinfo ja märgata tüüpilisi nõrku kohti enne järgmiste sammude tegemist.
       </p>
       <div class="actions">
         <a class="btn" href="/tools/hagi-perspektiiv/">Ava tööriist</a>
       </div>
-      <p class="small" style="margin-top:10px;">
+      <p class="muted small" style="margin-top:10px">
         Märkus: tulemus on informatiivne ega asenda individuaalset õigusnõustamist.
       </p>
     </section>
@@ -54,28 +42,30 @@ font:12px/1.2 system-ui;">
     <section class="card">
       <h2>Dokumendinäidised</h2>
       <p class="muted">
-        Siia koondan järk-järgult dokumendinäidiseid ja vormipõhju.
+        Siia koondan järk-järgult erinevaid dokumendinäidiseid ja vormipõhju (PDF).
       </p>
       <div class="actions">
-        <a class="btn secondary" href="/dokumendinaidised/">Ava dokumendinäidised</a>
+        <a class="btn" href="/dokumendinaidised/">Ava dokumendinäidised</a>
       </div>
     </section>
 
     <section class="card">
       <h2>Tagasiside</h2>
       <p class="muted">
-        Kui leidsid vea või Sul on ettepanek, kirjuta:
-        <a href="mailto:solvere.lab@gmail.com?subject=Solvere%20Lab%20tagasiside">solvere.lab@gmail.com</a>
+        Kui leidsid vea või Sul on ettepanek, kirjuta: <a href="mailto:solvere.lab@gmail.com">solvere.lab@gmail.com</a>
       </p>
     </section>
 
     <footer class="footer">
-      © <span id="y"></span> • Informatiivne sisu • Ei ole õigusnõuanne
+      © <span id="year"></span> Solvere Lab
     </footer>
   </main>
 
   <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
+    (function () {
+      var y = document.getElementById("year");
+      if (y) y.textContent = String(new Date().getFullYear());
+    })();
   </script>
 </body>
 </html>
