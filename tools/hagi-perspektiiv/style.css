@@ -1,11 +1,28 @@
-/* Neutraalne: lase värvid määrata /assets/site.css-l
-   Siin on ainult paigutus ja reavahed. */
+/* ===========================
+   TUMESININE TAUST AINULT SELLEL LEHEL
+   (ei mõjuta avaloot index.html, ei muuda /assets/site.css)
+   =========================== */
+
+html, body { height: 100%; }
+
+/* Override: eemalda "valguslaigud" ja tee ühtlane tumesinine */
+body{
+  background: linear-gradient(160deg, #071827, #060a12 60%, #0b1020) !important;
+}
+
+/* Soovi korral: tee kaardid natuke "ühtlasemaks" (vähem triibulisust) */
+.card{
+  background: rgba(255,255,255,.05) !important;
+}
+
+/* ===========================
+   Ülejäänu: ainult paigutus, reavahed
+   =========================== */
 
 body { line-height: 1.55; }
 p, li { line-height: 1.55; margin: 0.6em 0; }
 .muted { line-height: 1.55; }
 
-/* Badged – ilma värvita, ainult layout */
 .badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px; }
 .badge { padding: 4px 10px; border-radius: 999px; font-size: 13px; }
 .badge.subtle { opacity: .8; }
@@ -13,7 +30,6 @@ p, li { line-height: 1.55; margin: 0.6em 0; }
 .disclaimer { margin-top: 10px; }
 .disclaimer summary { cursor:pointer; }
 
-/* Küsimuste struktuur */
 .questions { display:flex; flex-direction:column; gap: 14px; }
 
 .q { padding: 12px; border-radius: 12px; }
@@ -27,7 +43,6 @@ p, li { line-height: 1.55; margin: 0.6em 0; }
 .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; }
 .secondary-actions { margin-top: 10px; }
 
-/* Raport */
 .report-grid { display:grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
 @media (min-width: 900px) { .report-grid { grid-template-columns: 1fr 1fr; } }
 
