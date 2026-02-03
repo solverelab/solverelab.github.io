@@ -1,309 +1,235 @@
-:root{
-  --bg:#0b0c0f;
-  --panel:#11131a;
-  --panel2: rgba(255,255,255,0.02);
-  --text:#e9ecf3;
-  --muted:#aab2c5;
-  --line: rgba(255,255,255,0.10);
-  --line2: rgba(255,255,255,0.14);
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-  --radius: 14px;
-  --max: 1040px; /* 960–1100 */
-  --pad: 18px;
-  --header-h: 56px;
+  <title>Nõude perspektiivi analüüs — Solvere Lab</title>
+  <meta name="description" content="Struktureeritud küsimustik, mis aitab enne edasiste sammude tegemist sõnastada nõude alust ja tuvastada võimalikud riskid. Tegemist on informatiivse tööriistaga, mitte õigusnõustamisega." />
 
-  --focus: 2px solid rgba(233,236,243,0.85);
-  --focus-offset: 3px;
-}
+  <!-- Open Graph (basic) -->
+  <meta property="og:locale" content="et_EE" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nõude perspektiivi analüüs — Solvere Lab" />
+  <meta property="og:description" content="Struktureeritud küsimustik, mis aitab enne edasiste sammude tegemist sõnastada nõude alust ja tuvastada võimalikud riskid. Tegemist on informatiivse tööriistaga, mitte õigusnõustamisega." />
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
-  background:
-    radial-gradient(900px 500px at 30% 0%, rgba(233,236,243,0.06), transparent 60%),
-    var(--bg);
-  color:var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  line-height:1.5;
-  text-rendering: optimizeLegibility;
-}
+  <link rel="stylesheet" href="./site.css?v=10" />
+</head>
 
-a{ color:inherit; text-decoration:none; }
-a:hover{ text-decoration:underline; }
+<body>
+  <a class="skip-link" href="#analysis">Liigu sisuni</a>
 
-.container{
-  width:100%;
-  max-width: var(--max);
-  margin:0 auto;
-  padding: 0 var(--pad);
-}
+  <!-- Sticky header -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <a class="brand-link" href="/" aria-label="Solvere Lab avaleht">Solvere Lab</a>
+        <span class="brand-sep" aria-hidden="true">/</span>
+        <span class="brand-page">Nõude perspektiivi analüüs</span>
+      </div>
 
-.section{ padding: 26px 0; }
-.hero{ padding-top: calc(var(--header-h) + 18px); }
+      <nav class="header-actions" aria-label="Tegevused">
+        <a class="btn" href="#analysis">Alusta analüüsi</a>
+      </nav>
+    </div>
+  </header>
 
-h1{
-  font-size: 1.72rem;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  margin: 0 0 12px;
-}
-h2{
-  font-size: 1.12rem;
-  letter-spacing: -0.01em;
-  margin: 0 0 12px;
-}
-h3{
-  font-size: 1rem;
-  margin: 0 0 10px;
-  color: rgba(233,236,243,0.92);
-}
+  <main class="container" role="main">
+    <!-- Hero -->
+    <section class="section hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Nõude perspektiivi analüüs</h1>
 
-p{ margin: 0 0 12px; }
-.lead{
-  font-size: 1.02rem;
-  max-width: 62ch;
-}
-.muted{
-  color: var(--muted);
-  max-width: 72ch;
-}
-.small{ font-size: 0.92rem; color: rgba(233,236,243,0.65); }
-.meta{ margin-top: 10px; color: var(--muted); font-size: 0.95rem; }
+      <p class="lead">
+        Struktureeritud küsimustik, mis aitab enne edasiste sammude tegemist sõnastada nõude alust ja tuvastada võimalikud riskid.
+      </p>
+      <p class="muted">
+        Tegemist on informatiivse tööriistaga, mitte õigusnõustamisega.
+      </p>
 
-.divider{
-  height:1px;
-  background: linear-gradient(90deg, transparent, var(--line2), transparent);
-}
+      <div class="actions">
+        <a class="btn" href="#analysis">Alusta analüüsi</a>
+      </div>
+    </section>
 
-/* Sticky header */
-.site-header{
-  position: fixed;
-  inset: 0 0 auto 0;
-  height: var(--header-h);
-  background: rgba(11,12,15,0.70);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-  z-index: 50;
-}
-.header-inner{
-  height: var(--header-h);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-}
-.brand{
-  display:flex;
-  align-items:baseline;
-  gap: 10px;
-  min-width:0;
-}
-.brand-link{
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 8px 10px;
-  border-radius: 10px;
-}
-.brand-link:hover{
-  background: rgba(255,255,255,0.04);
-  text-decoration:none;
-}
-.brand-sep{ color: rgba(233,236,243,0.35); }
-.brand-page{
-  color: rgba(233,236,243,0.70);
-  font-size: 0.95rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 52vw;
-}
+    <div class="divider" aria-hidden="true"></div>
 
-/* Buttons */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(233,236,243,0.18);
-  background: rgba(233,236,243,0.10);
-  color: var(--text);
-  font-weight: 600;
-  font-size: 0.95rem;
-  line-height: 1;
-  cursor:pointer;
-  user-select:none;
-}
-.btn:hover{
-  text-decoration:none;
-  background: rgba(233,236,243,0.14);
-  border-color: rgba(233,236,243,0.28);
-}
-.btn.secondary{
-  background: transparent;
-  border-color: var(--line);
-  color: rgba(233,236,243,0.85);
-}
-.btn.secondary:hover{
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(233,236,243,0.20);
-}
+    <!-- Milleks see on? -->
+    <section class="section" aria-labelledby="purpose">
+      <h2 id="purpose">Milleks see on?</h2>
+      <ul class="bullets">
+        <li>Aitab sõnastada nõude aluse ja faktilise loo.</li>
+        <li>Aitab näha vaidlust mõlema poole perspektiivist.</li>
+        <li>Aitab kaardistada tõendid ja võimalikud lüngad.</li>
+        <li>Aitab tuvastada tüüpilised riskikohad enne edasisi samme.</li>
+      </ul>
+    </section>
 
-/* Callout box */
-.callout{
-  background: linear-gradient(180deg, rgba(233,236,243,0.06), rgba(233,236,243,0.03));
-  border: 1px solid rgba(233,236,243,0.14);
-  border-radius: var(--radius);
-  padding: 14px 14px;
-  box-shadow: var(--shadow);
-  max-width: 74ch;
-}
-.callout p:last-child{ margin-bottom: 0; }
+    <div class="divider" aria-hidden="true"></div>
 
-.bullets{ margin: 8px 0 0; padding-left: 18px; }
-.bullets li{ margin: 8px 0; }
-.bullets li::marker{ color: rgba(233,236,243,0.55); }
+    <!-- Kuidas see töötab? -->
+    <section class="section" aria-labelledby="how">
+      <h2 id="how">Kuidas see töötab?</h2>
+      <ul class="bullets">
+        <li>Vastad järjestikustele küsimustele (faktid, nõue, vastuväited, tõendid).</li>
+        <li>Kirjutad lühidalt ja konkreetselt; vajadusel täpsustad hiljem.</li>
+        <li>Saad struktureeritud ülevaate, mida kasutada järgmiste sammude planeerimisel.</li>
+      </ul>
+      <p class="meta">10–15 min · Ei eelda juriidilisi teadmisi.</p>
+    </section>
 
-/* Cards / tool UI (existing structure, improved style) */
-.card{
-  margin: 14px 0;
-  padding: 16px;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  background: var(--panel2);
-  box-shadow: var(--shadow);
-}
-.hidden{ display:none; }
+    <div class="divider" aria-hidden="true"></div>
 
-.radio-row{
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
-}
-.radio-row label{
-  display:flex;
-  gap: 10px;
-  align-items:flex-start;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(233,236,243,0.10);
-  background: rgba(255,255,255,0.02);
-}
-.radio-row input{ margin-top: 2px; }
+    <!-- Oluline (vastutuspiirang) -->
+    <section class="section" aria-labelledby="important">
+      <h2 id="important">Oluline</h2>
+      <div class="callout" role="note" aria-label="Vastutuspiirang">
+        <p>Tööriist on mõeldud mõtete struktureerimiseks.</p>
+        <p>See ei anna õiguslikku hinnangut ega prognoosi tulemusi.</p>
+        <p>See ei asenda juristi nõu.</p>
+      </div>
+    </section>
 
-.notice{
-  border: 1px solid rgba(233,236,243,0.14);
-  background: rgba(233,236,243,0.06);
-  border-radius: var(--radius);
-  padding: 12px 12px;
-  color: rgba(233,236,243,0.88);
-}
-.notice strong{ font-weight: 700; }
+    <div class="divider" aria-hidden="true"></div>
 
-.grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
+    <!-- Metoodiline taust -->
+    <section class="section" aria-labelledby="background">
+      <h2 id="background">Metoodiline taust</h2>
+      <ul class="bullets">
+        <li>kohtupraktikas korduvad vaidlusmustrid</li>
+        <li>nõuete ja vastuväidete struktuur</li>
+        <li>tõendamiskoormuse põhimõtted</li>
+      </ul>
+      <p class="muted">Eesmärk on selgus, mitte vastus.</p>
+    </section>
 
-.input, input[type="text"], input[type="date"], textarea, select{
-  width:100%;
-  border-radius: 12px;
-  border: 1px solid rgba(233,236,243,0.14);
-  background: rgba(255,255,255,0.03);
-  color: var(--text);
-  padding: 10px 12px;
-  outline: none;
-}
-textarea{
-  min-height: 140px;
-  resize: vertical;
-}
+    <div class="divider" aria-hidden="true"></div>
 
-.actions{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
-}
+    <!-- Alusta (CTA kordus) -->
+    <section class="section" aria-labelledby="start">
+      <h2 id="start">Alusta</h2>
+      <div class="actions">
+        <a class="btn" href="#analysis">Alusta analüüsi</a>
+      </div>
+    </section>
 
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(233,236,243,0.16);
-  background: rgba(233,236,243,0.08);
-  font-weight: 700;
-  margin-top: 6px;
-}
-.score{
-  margin-top: 10px;
-  color: rgba(233,236,243,0.75);
-}
+    <div class="divider" aria-hidden="true"></div>
 
-.sep{
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 16px 0;
-}
+    <!-- ====== KÜSIMUSTIK (loogika muutmata) ====== -->
+    <section class="section" id="analysis" aria-labelledby="analysisTitle">
+      <h2 id="analysisTitle">Küsimustik</h2>
+      <p class="muted">
+        Vasta lühidalt ja konkreetselt. Vajadusel täpsustad hiljem.
+      </p>
 
-/* Footer */
-.footer{
-  padding: 20px 0 40px;
-  color: rgba(233,236,243,0.55);
-  border-top: 1px solid var(--line);
-  margin-top: 26px;
-  font-size: 0.92rem;
-}
+      <section class="card">
+        <h2>1) Vali nõude tüüp</h2>
+        <div class="radio-row">
+          <label><input type="radio" name="claimType" value="debt" checked> Võlanõue (leping / arve / laen / tasumata summa)</label>
+          <label><input type="radio" name="claimType" value="damage"> Kahju hüvitamine (lepingurikkumine / delikt)</label>
+        </div>
+        <button class="btn" id="startBtn">Alusta</button>
+      </section>
 
-/* Skip link */
-.skip-link{
-  position:absolute;
-  left:-999px;
-  top: 10px;
-  background: rgba(233,236,243,0.12);
-  color: var(--text);
-  border: 1px solid rgba(233,236,243,0.25);
-  padding: 10px 12px;
-  border-radius: 12px;
-  z-index: 100;
-}
-.skip-link:focus{
-  left: 12px;
-  outline: var(--focus);
-  outline-offset: var(--focus-offset);
-}
+      <section class="card hidden" id="formCard">
+        <h2>2) Analüüsi küsimused</h2>
+        <p class="muted">
+          Vasta ausalt. Kui “Ei” — see ei tähenda automaatselt, et nõue on võimatu; see tähendab, et risk kasvab või on vaja andmeid/tõendeid.
+        </p>
 
-/* Focus states */
-:focus-visible{
-  outline: var(--focus);
-  outline-offset: var(--focus-offset);
-}
-input:focus-visible, textarea:focus-visible, select:focus-visible{
-  border-color: rgba(233,236,243,0.35);
-  box-shadow: 0 0 0 3px rgba(233,236,243,0.08);
-}
+        <div class="notice" style="margin-top:12px">
+          <strong>Põhiandmed mustandi jaoks (valikuline):</strong>
+          need väljad aitavad täita hagi struktuuri mustandit automaatselt.
+          <br><span class="small">Täitmine on vabatahtlik.</span>
+        </div>
 
-/* Responsive */
-@media (min-width: 720px){
-  :root{ --pad: 22px; }
-  .section{ padding: 34px 0; }
-  h1{ font-size: 2.05rem; }
-  h2{ font-size: 1.18rem; }
-  .grid{ grid-template-columns: 1fr 1fr; }
-}
+        <div class="grid" style="margin-top:12px">
+          <div>
+            <div class="small">Nõude summa (EUR) — valikuline</div>
+            <input id="claimAmount" class="input" inputmode="decimal" type="text" placeholder="nt 1250.00">
+          </div>
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  *{
-    scroll-behavior: auto !important;
-    transition: none !important;
-    animation: none !important;
-  }
-}
+          <div>
+            <div class="small">Oluline kuupäev (tähtaeg / sündmus) — valikuline</div>
+            <input id="keyDate" class="input" type="date">
+          </div>
+
+          <div style="grid-column: 1 / -1;">
+            <div class="small">Lühike faktikirjeldus (1–3 lauset) — valikuline</div>
+            <input id="factsShort" class="input" type="text" placeholder="nt Teenus osutatud, arve nr..., tasumata alates...">
+          </div>
+        </div>
+
+        <div id="questions" style="margin-top:14px"></div>
+
+        <div class="actions">
+          <button class="btn secondary" id="resetBtn">Tühjenda</button>
+          <button class="btn" id="calcBtn">Näita ülevaadet</button>
+        </div>
+      </section>
+
+      <section class="card hidden" id="resultCard">
+        <h2>3) Ülevaade</h2>
+
+        <div class="badge" id="riskBadge">—</div>
+        <div class="score" id="scoreLine">—</div>
+
+        <div class="grid" style="margin-top:12px">
+          <div>
+            <h3>Puudu / nõrk koht</h3>
+            <ul id="missingList"></ul>
+          </div>
+          <div>
+            <h3>Soovitatud järgmised sammud</h3>
+            <ol id="nextSteps"></ol>
+          </div>
+        </div>
+
+        <hr class="sep" />
+
+        <h3>Hagi struktuuri mustand (kopeeri Wordi)</h3>
+        <p class="muted">See on hagi struktuuri skelett, mitte valmis hagi. Lisa ise kuupäevad, summad, faktid ja viited tõenditele.</p>
+
+        <textarea id="draft" rows="14" spellcheck="false"></textarea>
+
+        <div class="actions">
+          <button class="btn secondary" id="copyBtn">Kopeeri</button>
+          <button class="btn secondary" id="printBtn">Prindi / salvesta PDF</button>
+        </div>
+
+        <hr class="sep" />
+
+        <h3>Kasulikud tööriistad</h3>
+        <p class="muted small">Need on välised lingid. Nende kasutamine on Sinu otsus; tulemused ei ole õigusnõuanne.</p>
+        <div class="actions">
+          <a class="btn secondary"
+             href="https://www.riigiteataja.ee/aktilisa/1181/2202/5013/RLS_lisa1_01012022.pdf#"
+             target="_blank" rel="noopener noreferrer">Riigilõivu tabel (RLS lisa 1, PDF)</a>
+
+          <a class="btn secondary"
+             href="https://viivisekalkulaator.ee/calculator/debt"
+             target="_blank" rel="noopener noreferrer">Viivise ja intressi kalkulaator</a>
+        </div>
+
+        <div class="notice" style="margin-top:12px">
+          <strong>Tagasiside:</strong>
+          Kui leidsid vea või Sul on ettepanek, kirjuta:
+          <a href="mailto:solvere.lab@gmail.com?subject=N%C3%B5ude%20perspektiivi%20anal%C3%BC%C3%BCs%20-%20tagasiside">solvere.lab@gmail.com</a>
+        </div>
+      </section>
+    </section>
+    <!-- ====== /KÜSIMUSTIK ====== -->
+
+    <footer class="footer" role="contentinfo">
+      © <span id="year"></span> • Informatiivne tööriist • Ei ole õigusnõuanne
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      var y = document.getElementById("year");
+      if (y) y.textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
