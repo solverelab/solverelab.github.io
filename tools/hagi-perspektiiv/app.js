@@ -2,9 +2,8 @@
   const STAGES = [
     {
       id: "facts",
-      chip: "Faktiline struktuur",
       title: "Etapp I — Faktiline struktuur",
-      intro: "Selles etapis kontrollime, kas nõude faktiline alus on kohtumenetluseks piisavalt selge ja struktureeritud.",
+      intro: "Selles etapis kontrollime, kas nõude faktiline alus on piisavalt selge ja struktureeritud.",
       questions: [
         {
           id: "chronology",
@@ -29,9 +28,8 @@
     },
     {
       id: "loss",
-      chip: "Kahju ja summa",
       title: "Etapp II — Kahju ja nõudesumma",
-      intro: "Selles etapis kontrollime, kas kahju on kohtus esitataval kujul arvutatav ja dokumentidega toetatud.",
+      intro: "Selles etapis kontrollime, kas kahju on arvutatav ja dokumentidega toetatud.",
       questions: [
         {
           id: "calculable",
@@ -50,7 +48,6 @@
     },
     {
       id: "evidence",
-      chip: "Tõendid",
       title: "Etapp III — Tõendite kontroll",
       intro: "Selles etapis hindame, kas olemasolevad tõendid on piisavad ja kooskõlas.",
       questions: [
@@ -80,9 +77,8 @@
     },
     {
       id: "legal",
-      chip: "Õiguslik alus",
       title: "Etapp IV — Õiguslik raamistik",
-      intro: "Selles etapis kontrollime, kas Sa suudad põhjendada, miks seadus annab Sulle õiguse nõuda, ning kas on aegumise risk.",
+      intro: "Selles etapis kontrollime, kas õiguslik loogika on arusaadav ja kas võib olla tähtaegade risk.",
       questions: [
         {
           id: "legal_basis",
@@ -93,7 +89,7 @@
         {
           id: "limitation",
           text: "Kas nõue võib olla aegunud?",
-          hint: "Enamik nõudeid tuleb esitada kindla aja jooksul. Kui tähtaeg on möödunud ja vastaspool sellele tugineb, ei saa kohus nõuet rahuldada.",
+          hint: "Üldjuhul kehtib nõuetele 3-aastane tähtaeg alates ajast, mil said (või pidid saama) teada kahju tekkimisest ja sellest, kes kahju põhjustas. Kui tähtaeg võib olla möödunud ja vastaspool sellele tugineb, ei saa kohus nõuet rahuldada.",
           weight: 2,
           answers: ["Ei", "Võimalik", "Ei tea"]
         }
@@ -101,7 +97,6 @@
     },
     {
       id: "risk",
-      chip: "Riskihinnang",
       title: "Etapp V — Menetlusrisk ja otsus",
       intro: "Selles etapis hinnatakse vastaspoole võimalikke vastuväiteid ja menetluskulude riski.",
       questions: [
@@ -130,15 +125,9 @@
     "Vajavad täpsustamist": 1, "On vastuolulised": 0
   };
 
-  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v2";
+  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v3";
 
   let state = loadState() || { stageIndex: 0, answers: {} };
-
-  const progressWrap = document.getElementById("progressWrap");
-  const progressText = document.getElementById("progressText");
-  const completionText = document.getElementById("completionText");
-  const progressbarFill = document.getElementById("progressbarFill");
-  const progressbar = document.querySelector(".progressbar");
 
   const stageTitle = document.getElementById("stageTitle");
   const stageIntro = document.getElementById("stageIntro");
@@ -160,9 +149,7 @@
   const downloadReportBtn = document.getElementById("downloadReportBtn");
   const printBtn = document.getElementById("printBtn");
 
-  renderProgressChips();
   renderStage();
-  updateProgress();
 
   prevBtn.addEventListener("click", () => {
     if (state.stageIndex > 0) {
@@ -170,7 +157,6 @@
       saveState();
       reportCard.hidden = true;
       renderStage();
-      updateProgress();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
@@ -181,7 +167,6 @@
       saveState();
       reportCard.hidden = true;
       renderStage();
-      updateProgress();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       openReport();
@@ -192,9 +177,7 @@
     state = { stageIndex: 0, answers: {} };
     saveState();
     reportCard.hidden = true;
-    renderProgressChips();
     renderStage();
-    updateProgress();
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
@@ -220,27 +203,6 @@
 
   printBtn.addEventListener("click", () => window.print());
 
-  function renderProgressChips() {
-    progressWrap.innerHTML = "";
-    STAGES.forEach((st, idx) => {
-      const chip = document.createElement("div");
-      chip.className = "step-chip";
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.textContent = `${idx + 1}. ${st.chip}`;
-      btn.addEventListener("click", () => {
-        state.stageIndex = idx;
-        saveState();
-        reportCard.hidden = true;
-        renderStage();
-        updateProgress();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      chip.appendChild(btn);
-      progressWrap.appendChild(chip);
-    });
-  }
-
   function renderStage() {
     const st = STAGES[state.stageIndex];
     stageTitle.textContent = st.title;
@@ -250,13 +212,7 @@
     st.questions.forEach((q) => questionForm.appendChild(renderQuestion(q)));
 
     prevBtn.disabled = state.stageIndex === 0;
-    nextBtn.textContent = state.stageIndex === STAGES.length - 1 ? "Vaata raportit →" : "Järgmine etapp →";
-
-    const chips = [...progressWrap.querySelectorAll(".step-chip")];
-    chips.forEach((c, idx) => {
-      c.classList.toggle("active", idx === state.stageIndex);
-      c.classList.toggle("done", stageCompletion(idx) === 1);
-    });
+    nextBtn.textContent = state.stageIndex === STAGES.length - 1 ? "Vaata raportit →" : "Järgmine →";
   }
 
   function renderQuestion(q) {
@@ -300,7 +256,6 @@
 
           state.answers[q.id] = arr;
           saveState();
-          updateProgress();
         });
 
         const span = document.createElement("span");
@@ -327,7 +282,6 @@
         input.addEventListener("change", () => {
           state.answers[q.id] = a;
           saveState();
-          updateProgress();
         });
 
         const span = document.createElement("span");
@@ -345,20 +299,6 @@
     return wrap;
   }
 
-  function updateProgress() {
-    const total = countAllQuestions();
-    const answered = countAnsweredQuestions();
-    const pct = total === 0 ? 0 : Math.round((answered / total) * 100);
-
-    progressText.textContent = `Etapp ${state.stageIndex + 1} / ${STAGES.length}`;
-    completionText.textContent = `Täidetud: ${pct}%`;
-    progressbarFill.style.width = `${pct}%`;
-    progressbar.setAttribute("aria-valuenow", String(pct));
-
-    const chips = [...progressWrap.querySelectorAll(".step-chip")];
-    chips.forEach((c, idx) => c.classList.toggle("done", stageCompletion(idx) === 1));
-  }
-
   function openReport() {
     renderReport();
     reportCard.hidden = false;
@@ -370,7 +310,6 @@
 
     reportBadges.innerHTML = "";
     reportBadges.appendChild(makeBadge(`Riskitase: ${summary.riskLevel}`));
-    reportBadges.appendChild(makeBadge(`Täidetud: ${summary.completedPct}%`, true));
     reportBadges.appendChild(makeBadge(`Kuupäev: ${new Date().toLocaleDateString("et-EE")}`, true));
 
     overallAssessment.textContent = summary.overallText;
@@ -410,7 +349,7 @@
     const s = evaluate();
     const lines = [];
     lines.push("NÕUDE EELANALÜÜSI RAPORT");
-    lines.push("Koostatud Solvere Lab struktureeritud metoodika alusel.");
+    lines.push("Koostatud metoodika alusel vastuste põhjal.");
     lines.push(`Kuupäev: ${new Date().toLocaleDateString("et-EE")}`);
     lines.push("");
     lines.push(`Üldhinnang: ${s.riskLevel}`);
@@ -430,10 +369,6 @@
   }
 
   function evaluate() {
-    const total = countAllQuestions();
-    const answered = countAnsweredQuestions();
-    const completedPct = total === 0 ? 0 : Math.round((answered / total) * 100);
-
     const stageSummaries = STAGES.map((st) => {
       const { stageScorePct } = scoreStage(st);
 
@@ -444,7 +379,7 @@
             ? "Siin on puudujääke — enne hagi esitamist tasub täpsustada."
             : "Siin on kriitilisi lünki — enne kohtusse pöördumist on vaja tugevdada.";
 
-      return { title: st.chip, text, pct: stageScorePct };
+      return { title: stageTitleShort(st.title), text, pct: stageScorePct };
     });
 
     const flags = collectFlags();
@@ -468,21 +403,27 @@
 
     const nextSteps = buildNextSteps(riskLevel, flags);
 
-    return { riskLevel, completedPct, overallText, keyRisks, nextSteps, stageSummaries };
+    return { riskLevel, overallText, keyRisks, nextSteps, stageSummaries };
+  }
+
+  function stageTitleShort(fullTitle) {
+    // "Etapp IV — Õiguslik raamistik" -> "Õiguslik raamistik"
+    const parts = fullTitle.split("—");
+    return (parts[1] || fullTitle).trim();
   }
 
   function buildNextSteps(riskLevel, flags) {
     const steps = [];
 
     if (flags.hasAegumineRisk) {
-      steps.push("Kontrolli nõude tähtaegu (aegumine). Kui tähtaeg võib olla möödunud, on see kriitiline risk.");
+      steps.push("Kontrolli tähtaegu: üldjuhul kehtib nõuetele 3-aastane tähtaeg alates ajast, mil said (või pidid saama) teada kahju tekkimisest ja vastutavast isikust.");
     }
 
     steps.push("Koosta kirjalik kronoloogia (mis juhtus, millal, kes osales, mis oli tagajärg).");
-    steps.push("Koosta tõendite loetelu ja seosta iga väide vähemalt ühe tõendiga (leping, kirjavahetus, arved, fotod, tunnistajad).");
+    steps.push("Koosta tõendite loetelu ja seosta iga oluline väide vähemalt ühe tõendiga.");
 
     if (flags.hasKahjuProblem) {
-      steps.push("Koosta kahju arvutus (summad, kuupäevad, alusdokumendid) nii, et nõudesumma oleks selge ja põhjendatav.");
+      steps.push("Koosta kahju arvutus (summad, kuupäevad, alusdokumendid), et nõudesumma oleks selge ja põhjendatav.");
     }
 
     if (flags.hasEvidenceConflict) {
@@ -494,10 +435,10 @@
     }
 
     if (riskLevel === "Madal") {
-      steps.push("Koosta kirjalik nõue vastaspoolele enne kohtusse pöördumist ja tee realistlik kompromissihinnang.");
+      steps.push("Koosta kirjalik nõue vastaspoolele enne kohtusse pöördumist ja hinda kompromissivõimalust.");
       steps.push("Kui lähed kohtusse: vormista hagi struktuuris: kronoloogia → rikkumine → põhjuslik seos → kahju → tõendid.");
     } else if (riskLevel === "Keskmine") {
-      steps.push("Enne hagi esitamist tugevdada nõude alus: täpsusta faktid, lisa dokumendid, kontrolli tähtaegu, mõtle läbi vastuväited.");
+      steps.push("Enne hagi esitamist tugevda nõude alus: täpsusta faktid, lisa dokumendid, mõtle läbi vastuväited.");
       steps.push("Kaalu professionaalset nõu, kui riskid puudutavad tähtaegu, põhjuslikku seost või kahju arvestust.");
     } else {
       steps.push("Ära esita hagi enne, kui kriitilised lüngad on täidetud (kronoloogia/tõendid/kahju/õiguslik loogika).");
@@ -538,7 +479,7 @@
 
     const evidenceCons = a["evidence_consistent"];
     const hasEvidenceConflict = evidenceCons === "On vastuolulised";
-    if (hasEvidenceConflict) { keyRisks.push("Tõendid on vastuolulised — enne menetlust korrasta vastuolud ja täpsusta selgitused."); riskScore += 14; }
+    if (hasEvidenceConflict) { keyRisks.push("Tõendid on vastuolulised — korrasta vastuolud ja täpsusta selgitused."); riskScore += 14; }
     if (evidenceCons === "Vajavad täpsustamist") { keyRisks.push("Tõendid vajavad täpsustamist — seosta tõendid konkreetsete väidetega."); riskScore += 7; }
 
     const legalBasis = a["legal_basis"];
@@ -589,41 +530,7 @@
     });
 
     const stageScorePct = max === 0 ? 0 : Math.round((got / max) * 100);
-    return { got, max, stageScorePct };
-  }
-
-  function stageCompletion(idx) {
-    const st = STAGES[idx];
-    const total = st.questions.length;
-    let answered = 0;
-    st.questions.forEach((q) => {
-      const ans = state.answers[q.id];
-      if (q.type === "multi") {
-        if (Array.isArray(ans) && ans.length > 0) answered++;
-      } else {
-        if (typeof ans === "string" && ans.length > 0) answered++;
-      }
-    });
-    return total === 0 ? 0 : answered / total;
-  }
-
-  function countAllQuestions() {
-    return STAGES.reduce((sum, st) => sum + st.questions.length, 0);
-  }
-
-  function countAnsweredQuestions() {
-    let n = 0;
-    STAGES.forEach((st) => {
-      st.questions.forEach((q) => {
-        const ans = state.answers[q.id];
-        if (q.type === "multi") {
-          if (Array.isArray(ans) && ans.length > 0) n++;
-        } else {
-          if (typeof ans === "string" && ans.length > 0) n++;
-        }
-      });
-    });
-    return n;
+    return { stageScorePct };
   }
 
   function saveState() {
