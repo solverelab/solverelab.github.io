@@ -4,18 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dokumendinäidised – Solvere Lab</title>
-  <meta name="description" content="Dokumendinäidised ja vormipõhjad, mida saab kohandada vastavalt oma olukorrale." />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=1" />
 </head>
-
 <body>
   <main class="container">
-
     <header class="header">
       <h1>Dokumendinäidised</h1>
 
       <p class="lead">
-        Siia koondan järk-järgult dokumendinäidised ja vormipõhjad.
+        Siia lisan järk-järgult neutraalseid dokumendinäidiseid ja vormipõhju.
       </p>
 
       <nav class="topnav">
@@ -29,51 +26,45 @@
       </div>
     </header>
 
-    <!-- Dokumendid -->
     <section class="card">
-      <h2>Üürilepingud</h2>
+      <h2>PDF-näidised</h2>
+      <p class="muted">
+        Lingid avanevad uues aknas. Soovi korral saad faili ka alla laadida.
+      </p>
 
-      <div class="doc-item" style="margin-top:16px;">
-        <h3>Tähtajatu üürileping (lisadega)</h3>
-
-        <p class="muted small">
-          Üldine vormipõhi, mida saab kohandada vastavalt konkreetsele üürisuhtele.
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin-top:0">Tähtajatu üürileping (lisadega)</h3>
+        <p class="muted small" style="margin-top:6px">
+          Näidis on mõeldud struktuuri ja tüüplausete orientiiriks. Kohanda alati vastavalt olukorrale.
         </p>
 
-        <div class="actions" style="margin-top:10px;">
-<a class="btn"
-   href="/dokumendinaidised/docs/Tahtajatu-uurileping-lisadega.pdf"
-   target="_blank"
-   rel="noopener">
-   Ava PDF
-</a>
+        <div class="actions" style="margin-top:12px">
+          <!-- FAILI NIMI PRAEGU: "Tahtajatu üürileping lisadega.pdf"
+               URL-ENCODE on vajalik, sest failinimes on tühikud ja täpitähed -->
+          <a class="btn secondary"
+             href="/dokumendinaidised/docs/Tahtajatu%20%C3%BC%C3%BCrileping%20lisadega.pdf"
+             target="_blank" rel="noopener">
+            Ava PDF
+          </a>
 
-<a class="btn secondary"
-   href="/dokumendinaidised/docs/Tahtajatu-uurileping-lisadega.pdf"
-   download>
-   Laadi alla
-</a>
+          <a class="btn secondary"
+             href="/dokumendinaidised/docs/Tahtajatu%20%C3%BC%C3%BCrileping%20lisadega.pdf"
+             download>
+            Laadi alla
+          </a>
         </div>
+      </div>
+
+      <div class="notice" style="margin-top:12px;">
+        <strong>Tagasiside / ettepanek:</strong><br />
+        Kui soovid, et lisaksin kindlat tüüpi näidise, kirjuta:
+        <a href="mailto:solvere.lab@gmail.com?subject=Dokumendin%C3%A4idised%20-%20ettepanek">solvere.lab@gmail.com</a>
       </div>
     </section>
 
-    <!-- Tagasiside -->
-    <section class="card">
-      <h2>Tagasiside</h2>
-
-      <p>
-        Kui soovid, et lisaksin kindlat tüüpi näidise, kirjuta:
-      </p>
-
-      <a href="mailto:solvere.lab@gmail.com?subject=Dokumendin%C3%A4idised%20-%20ettepanek">
-        solvere.lab@gmail.com
-      </a>
-    </section>
-
     <footer class="footer">
-      © <span id="y"></span> Solvere Lab
+      © <span id="y"></span> • Solvere Lab
     </footer>
-
   </main>
 
   <script>
