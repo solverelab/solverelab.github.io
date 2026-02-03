@@ -1,133 +1,309 @@
-<!doctype html>
-<html lang="et">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hagi perspektiivi enesekontroll</title>
-  <link rel="stylesheet" href="../../assets/site.css" />
-</head>
-<body>
-  <main class="container">
-    <header class="header">
-      <h1>Hagi perspektiivi enesekontroll</h1>
-      <p class="lead">
-        5–7 minutiga saad esialgse pildi, kas rahalise nõude alus ja tõendid on koos ning mis on peamised riskid enne hagi esitamist.
-      </p>
+:root{
+  --bg:#0b0c0f;
+  --panel:#11131a;
+  --panel2: rgba(255,255,255,0.02);
+  --text:#e9ecf3;
+  --muted:#aab2c5;
+  --line: rgba(255,255,255,0.10);
+  --line2: rgba(255,255,255,0.14);
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
 
-      <nav class="topnav">
-        <a href="/">Avaleht</a>
-        <a class="active" href="/tools/hagi-perspektiiv/">Tööriist</a>
-        <a href="/dokumendinaidised/">Dokumendinäidised</a>
-      </nav>
+  --radius: 14px;
+  --max: 1040px; /* 960–1100 */
+  --pad: 18px;
+  --header-h: 56px;
 
-      <div class="notice">
-        <strong>Oluline:</strong> See tööriist on informatiivne enesekontroll, mitte õigusnõustamine.
-        Tulemused sõltuvad sisendi täpsusest ning ei asenda juristi hinnangut dokumente ja asjaolusid arvestades.
-        Andmeid ei saadeta serverisse — arvutus toimub Sinu brauseris.
-      </div>
-    </header>
+  --focus: 2px solid rgba(233,236,243,0.85);
+  --focus-offset: 3px;
+}
 
-    <section class="card">
-      <h2>1) Vali nõude tüüp</h2>
-      <div class="radio-row">
-        <label><input type="radio" name="claimType" value="debt" checked> Võlanõue (leping / arve / laen / tasumata summa)</label>
-        <label><input type="radio" name="claimType" value="damage"> Kahju hüvitamine (lepingurikkumine / delikt)</label>
-      </div>
-      <button class="btn" id="startBtn">Alusta</button>
-    </section>
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:
+    radial-gradient(900px 500px at 30% 0%, rgba(233,236,243,0.06), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  line-height:1.5;
+  text-rendering: optimizeLegibility;
+}
 
-    <section class="card hidden" id="formCard">
-      <h2>2) Kontrollküsimused</h2>
-      <p class="muted">
-        Vasta ausalt. Kui “Ei” — see ei tähenda automaatselt, et nõue on võimatu; see tähendab, et risk kasvab või on vaja andmeid/tõendeid.
-      </p>
+a{ color:inherit; text-decoration:none; }
+a:hover{ text-decoration:underline; }
 
-      <div class="notice" style="margin-top:12px">
-        <strong>Põhiandmed mustandi jaoks (valikuline):</strong>
-        need väljad aitavad täita hagi struktuuri mustandit automaatselt.
-        <br><span class="small">Täitmine on vabatahtlik.</span>
-      </div>
+.container{
+  width:100%;
+  max-width: var(--max);
+  margin:0 auto;
+  padding: 0 var(--pad);
+}
 
-      <div class="grid" style="margin-top:12px">
-        <div>
-          <div class="small">Nõude summa (EUR) — valikuline</div>
-          <input id="claimAmount" class="input" inputmode="decimal" type="text" placeholder="nt 1250.00">
-        </div>
+.section{ padding: 26px 0; }
+.hero{ padding-top: calc(var(--header-h) + 18px); }
 
-        <div>
-          <div class="small">Oluline kuupäev (tähtaeg / sündmus) — valikuline</div>
-          <input id="keyDate" class="input" type="date">
-        </div>
+h1{
+  font-size: 1.72rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+h2{
+  font-size: 1.12rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+h3{
+  font-size: 1rem;
+  margin: 0 0 10px;
+  color: rgba(233,236,243,0.92);
+}
 
-        <div style="grid-column: 1 / -1;">
-          <div class="small">Lühike faktikirjeldus (1–3 lauset) — valikuline</div>
-          <input id="factsShort" class="input" type="text" placeholder="nt Teenus osutatud, arve nr..., tasumata alates...">
-        </div>
-      </div>
+p{ margin: 0 0 12px; }
+.lead{
+  font-size: 1.02rem;
+  max-width: 62ch;
+}
+.muted{
+  color: var(--muted);
+  max-width: 72ch;
+}
+.small{ font-size: 0.92rem; color: rgba(233,236,243,0.65); }
+.meta{ margin-top: 10px; color: var(--muted); font-size: 0.95rem; }
 
-      <div id="questions" style="margin-top:14px"></div>
+.divider{
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--line2), transparent);
+}
 
-      <div class="actions">
-        <button class="btn secondary" id="resetBtn">Tühjenda</button>
-        <button class="btn" id="calcBtn">Näita tulemust</button>
-      </div>
-    </section>
+/* Sticky header */
+.site-header{
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--header-h);
+  background: rgba(11,12,15,0.70);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  z-index: 50;
+}
+.header-inner{
+  height: var(--header-h);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap: 10px;
+  min-width:0;
+}
+.brand-link{
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.brand-link:hover{
+  background: rgba(255,255,255,0.04);
+  text-decoration:none;
+}
+.brand-sep{ color: rgba(233,236,243,0.35); }
+.brand-page{
+  color: rgba(233,236,243,0.70);
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 52vw;
+}
 
-    <section class="card hidden" id="resultCard">
-      <h2>3) Tulemus</h2>
+/* Buttons */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(233,236,243,0.18);
+  background: rgba(233,236,243,0.10);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor:pointer;
+  user-select:none;
+}
+.btn:hover{
+  text-decoration:none;
+  background: rgba(233,236,243,0.14);
+  border-color: rgba(233,236,243,0.28);
+}
+.btn.secondary{
+  background: transparent;
+  border-color: var(--line);
+  color: rgba(233,236,243,0.85);
+}
+.btn.secondary:hover{
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(233,236,243,0.20);
+}
 
-      <div class="badge" id="riskBadge">—</div>
-      <div class="score" id="scoreLine">Skoor: —</div>
+/* Callout box */
+.callout{
+  background: linear-gradient(180deg, rgba(233,236,243,0.06), rgba(233,236,243,0.03));
+  border: 1px solid rgba(233,236,243,0.14);
+  border-radius: var(--radius);
+  padding: 14px 14px;
+  box-shadow: var(--shadow);
+  max-width: 74ch;
+}
+.callout p:last-child{ margin-bottom: 0; }
 
-      <div class="grid" style="margin-top:12px">
-        <div>
-          <h3>Puudu / nõrk koht</h3>
-          <ul id="missingList"></ul>
-        </div>
-        <div>
-          <h3>Soovitatud järgmised sammud</h3>
-          <ol id="nextSteps"></ol>
-        </div>
-      </div>
+.bullets{ margin: 8px 0 0; padding-left: 18px; }
+.bullets li{ margin: 8px 0; }
+.bullets li::marker{ color: rgba(233,236,243,0.55); }
 
-      <hr class="sep" />
+/* Cards / tool UI (existing structure, improved style) */
+.card{
+  margin: 14px 0;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  box-shadow: var(--shadow);
+}
+.hidden{ display:none; }
 
-      <h3>Hagi struktuuri mustand (kopeeri Wordi)</h3>
-      <p class="muted">See on hagi struktuuri skelett, mitte valmis hagi. Lisa ise kuupäevad, summad, faktid ja viited tõenditele.</p>
+.radio-row{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.radio-row label{
+  display:flex;
+  gap: 10px;
+  align-items:flex-start;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(233,236,243,0.10);
+  background: rgba(255,255,255,0.02);
+}
+.radio-row input{ margin-top: 2px; }
 
-      <textarea id="draft" rows="14" spellcheck="false"></textarea>
+.notice{
+  border: 1px solid rgba(233,236,243,0.14);
+  background: rgba(233,236,243,0.06);
+  border-radius: var(--radius);
+  padding: 12px 12px;
+  color: rgba(233,236,243,0.88);
+}
+.notice strong{ font-weight: 700; }
 
-      <div class="actions">
-        <button class="btn secondary" id="copyBtn">Kopeeri</button>
-        <button class="btn secondary" id="printBtn">Prindi / salvesta PDF</button>
-      </div>
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
 
-      <hr class="sep" />
+.input, input[type="text"], input[type="date"], textarea, select{
+  width:100%;
+  border-radius: 12px;
+  border: 1px solid rgba(233,236,243,0.14);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+}
+textarea{
+  min-height: 140px;
+  resize: vertical;
+}
 
-      <h3>Kasulikud tööriistad</h3>
-      <p class="muted small">Need on välised lingid. Nende kasutamine on Sinu otsus; tulemused ei ole õigusnõuanne.</p>
-      <div class="actions">
-        <a class="btn secondary"
-           href="https://www.riigiteataja.ee/aktilisa/1181/2202/5013/RLS_lisa1_01012022.pdf#"
-           target="_blank" rel="noopener noreferrer">Riigilõivu tabel (RLS lisa 1, PDF)</a>
+.actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
 
-        <a class="btn secondary"
-           href="https://viivisekalkulaator.ee/calculator/debt"
-           target="_blank" rel="noopener noreferrer">Viivise ja intressi kalkulaator</a>
-      </div>
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(233,236,243,0.16);
+  background: rgba(233,236,243,0.08);
+  font-weight: 700;
+  margin-top: 6px;
+}
+.score{
+  margin-top: 10px;
+  color: rgba(233,236,243,0.75);
+}
 
-      <div class="notice" style="margin-top:12px">
-        <strong>Tagasiside:</strong>
-        Kui leidsid vea või Sul on ettepanek, kirjuta:
-        <a href="mailto:solvere.lab@gmail.com?subject=Hagi%20perspektiiv%20-%20tagasiside">solvere.lab@gmail.com</a>
-      </div>
-    </section>
+.sep{
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 16px 0;
+}
 
-    <footer class="footer">
-      © <span id="year"></span> • Informatiivne enesekontroll • Ei ole õigusnõuanne
-    </footer>
-  </main>
+/* Footer */
+.footer{
+  padding: 20px 0 40px;
+  color: rgba(233,236,243,0.55);
+  border-top: 1px solid var(--line);
+  margin-top: 26px;
+  font-size: 0.92rem;
+}
 
-  <script src="app.js"></script>
-</body>
-</html>
+/* Skip link */
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top: 10px;
+  background: rgba(233,236,243,0.12);
+  color: var(--text);
+  border: 1px solid rgba(233,236,243,0.25);
+  padding: 10px 12px;
+  border-radius: 12px;
+  z-index: 100;
+}
+.skip-link:focus{
+  left: 12px;
+  outline: var(--focus);
+  outline-offset: var(--focus-offset);
+}
+
+/* Focus states */
+:focus-visible{
+  outline: var(--focus);
+  outline-offset: var(--focus-offset);
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible{
+  border-color: rgba(233,236,243,0.35);
+  box-shadow: 0 0 0 3px rgba(233,236,243,0.08);
+}
+
+/* Responsive */
+@media (min-width: 720px){
+  :root{ --pad: 22px; }
+  .section{ padding: 34px 0; }
+  h1{ font-size: 2.05rem; }
+  h2{ font-size: 1.18rem; }
+  .grid{ grid-template-columns: 1fr 1fr; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
