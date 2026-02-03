@@ -546,3 +546,9 @@
     }
   }
 })();
+/* PEIDA progressi/etappide UI (kui see sul veel kuskil renderdub) */
+.progress-wrap,
+.progress-meta,
+.progressbar {
+  display: none !important;
+}
