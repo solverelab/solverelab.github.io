@@ -2,59 +2,63 @@
 <html lang="et">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dokumendinäidised – Solvere Lab</title>
-  <link rel="stylesheet" href="/assets/site.css?v=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dokumendinäidised — Solvere Lab</title>
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
+
 <body>
   <main class="container">
     <header class="header">
       <h1>Dokumendinäidised</h1>
-
       <p class="lead">
         Siia lisan järk-järgult neutraalseid dokumendinäidiseid ja vormipõhju.
       </p>
 
       <nav class="topnav">
         <a href="/">Avaleht</a>
-        <a href="/tools/hagi-perspektiiv/">Tööriist</a>
+        <a href="/tools/">Tööriistad</a>
         <a class="active" href="/dokumendinaidised/">Dokumendinäidised</a>
       </nav>
-
-      <div class="notice">
-        Materjalid on informatiivsed ning vajavad alati kohandamist vastavalt konkreetsele olukorrale.
-      </div>
     </header>
 
+    <div class="notice">
+      Materjalid on informatiivsed ning vajavad alati kohandamist vastavalt konkreetsele olukorrale.
+    </div>
+
     <section class="card">
-  <h2>PDF-näidised</h2>
+      <h2>PDF-näidised</h2>
 
-<div class="actions" style="margin-top:12px;">
-  <a class="btn secondary"
-     href="/dokumendinaidised/docs/tahtajatu-uurileping-lisadega.pdf"
-     target="_blank" rel="noopener">
-    Ava: Tähtajatu üürileping (PDF)
-  </a>
+      <div class="actions">
+        <a class="btn secondary"
+           href="/dokumendinaidised/docs/tahtajatu-uurileping-lisadega.pdf"
+           target="_blank">
+           Ava: Tähtajatu üürileping (PDF)
+        </a>
 
-  <a class="btn secondary"
-     href="/dokumendinaidised/docs/tahtajatu-uurileping-lisadega.pdf"
-     download>
-    Laadi alla
-  </a>
-</div>
+        <a class="btn"
+           href="/dokumendinaidised/docs/tahtajatu-uurileping-lisadega.pdf"
+           download>
+           Laadi alla
+        </a>
+      </div>
+    </section>
 
-  <div class="notice" style="margin-top:12px;">
-    Materjalid on informatiivsed ning vajavad alati kohandamist vastavalt konkreetsele olukorrale.
-  </div>
-</section>
+    <section class="card">
+      <h3>Ettepanekud ja täiendused</h3>
+      <p class="muted">
+        Kui Sul on ettepanekuid, millise dokumendi näidist siia lisada (nt kahjunõue, võlatunnistus,
+        korteriühistu majanduskava, lepingu lisa jms), kirjuta palun:
+      </p>
+
+      <p>
+        <a href="mailto:info@solverelab.ee">info@solverelab.ee</a>
+      </p>
+    </section>
 
     <footer class="footer">
-      © <span id="y"></span> • Solvere Lab
+      © 2026 · Solvere Lab
     </footer>
   </main>
-
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
