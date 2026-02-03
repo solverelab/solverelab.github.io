@@ -4,68 +4,66 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Solvere Lab</title>
-  <meta name="description" content="Juriidilise mõtlemise ja metoodika arendamise projekt. Sisu täieneb järk-järgult." />
-  <link rel="stylesheet" href="/assets/site.css?v=12" />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 
 <body>
   <main class="container">
     <header class="header">
       <h1>Solvere Lab</h1>
-      <p class="lead">Juriidilise mõtlemise ja metoodika arendamise projekt.</p>
+      <p class="lead">Juriidilise mõtlemise metoodika ja praktilised tööriistad nõuete läbimõtlemiseks enne kohtusse pöördumist.</p>
 
       <nav class="topnav">
         <a class="active" href="/">Avaleht</a>
-        <a href="/tools/hagi-perspektiiv/">Tööriist</a>
+        <a href="/tools/">Tööriistad</a>
         <a href="/dokumendinaidised/">Dokumendinäidised</a>
       </nav>
-
-      <div class="notice">
-        See on arendamisel olev platvorm, mille eesmärk on aidata Sul juriidilisi küsimusi ja nõudeid struktureerida.
-        Sisu täieneb järk-järgult.
-      </div>
     </header>
 
     <section class="card">
-      <h2>Tööriist</h2>
       <p class="muted">
-        Nõude perspektiivi analüüs aitab koondada põhiinfo ja märgata tüüpilisi nõrku kohti enne järgmiste sammude tegemist.
+        See on arendamisel olev platvorm, mille eesmärk on aidata Sul juriidilisi küsimusi ja nõudeid struktureerida.
+        Sisu täieneb järk-järgult.
       </p>
-      <div class="actions">
-        <a class="btn" href="/tools/hagi-perspektiiv/">Ava tööriist</a>
-      </div>
-      <p class="muted small" style="margin-top:10px">
+    </section>
+
+    <section class="card">
+      <h2 class="h3">Tööriistad</h2>
+      <p class="muted">
+        Tasuta metoodilised tööriistad, mis aitavad enne kohtusse pöördumist struktureerida nõude alust, tõendeid ja peamisi riske.
+        Tulemuseks saad kokkuvõtliku riskiraporti ja soovitatud järgmised sammud.
+      </p>
+
+      <h3 class="h4">Hagi perspektiivi hindamine</h3>
+      <p class="muted">
+        Nõude eelanalüüs: faktid (kronoloogia), rikkumine, põhjuslik seos, kahju, tõendid ja menetlusrisk.
+      </p>
+
+      <a class="btn" href="/tools/hagi-perspektiiv/">Ava tööriist</a>
+      <p class="muted" style="margin-top:10px;">
         Märkus: tulemus on informatiivne ega asenda individuaalset õigusnõustamist.
       </p>
     </section>
 
     <section class="card">
-      <h2>Dokumendinäidised</h2>
+      <h2 class="h3">Dokumendinäidised</h2>
       <p class="muted">
         Siia koondan järk-järgult erinevaid dokumendinäidiseid ja vormipõhju (PDF).
       </p>
-      <div class="actions">
-        <a class="btn" href="/dokumendinaidised/">Ava dokumendinäidised</a>
-      </div>
+
+      <a class="btn" href="/dokumendinaidised/">Ava dokumendinäidised</a>
     </section>
 
     <section class="card">
-      <h2>Tagasiside</h2>
+      <h2 class="h3">Tagasiside</h2>
       <p class="muted">
         Kui leidsid vea või Sul on ettepanek, kirjuta: <a href="mailto:solvere.lab@gmail.com">solvere.lab@gmail.com</a>
       </p>
     </section>
 
-    <footer class="footer">
-      © <span id="year"></span> Solvere Lab
+    <footer class="footer muted">
+      © Solvere Lab
     </footer>
   </main>
-
-  <script>
-    (function () {
-      var y = document.getElementById("year");
-      if (y) y.textContent = String(new Date().getFullYear());
-    })();
-  </script>
 </body>
 </html>
