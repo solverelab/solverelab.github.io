@@ -293,3 +293,7 @@ textarea::selection{
   border-color: rgba(255,255,255,0.18);
   background: rgba(255,255,255,0.10);
 }
+/* Ühtlane rütm tekstile */
+body { line-height: 1.55; }
+p, li { line-height: 1.55; margin-top: 0.6em; margin-bottom: 0.6em; }
+.q .hint { margin-top: 0.4em; margin-bottom: 0.8em; }
