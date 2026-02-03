@@ -2,16 +2,18 @@
 <html lang="et">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tööriistad — Solvere Lab</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hagi perspektiivi hindamine — Solvere Lab</title>
+
   <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="./app.css" />
 </head>
 
 <body>
   <main class="container">
     <header class="header">
-      <h1>Tööriistad</h1>
-      <p class="lead">Tasuta metoodilised tööriistad nõuete läbimõtlemiseks enne kohtusse pöördumist.</p>
+      <h1>Hagi perspektiivi hindamine</h1>
+      <p class="lead">Tasuta metoodiline tööriist, mis aitab enne kohtusse pöördumist hinnata nõude alust, tõendeid ja peamisi riske.</p>
 
       <nav class="topnav">
         <a href="/">Avaleht</a>
@@ -21,26 +23,104 @@
     </header>
 
     <section class="card">
+      <div class="badge-row">
+        <span class="badge">Tasuta</span>
+        <span class="badge subtle">Informatiivne</span>
+        <span class="badge subtle">Ei asenda õigusnõustamist</span>
+      </div>
+
+      <h2 class="h3">Metoodika</h2>
       <p class="muted">
-        Siit leiad tööriistad, mis juhivad Sind samm-sammult läbi nõude eelanalüüsi.
-        Lõpus saad automaatselt genereeritud riskiraporti ja soovitatud järgmised sammud.
+        Solvere Lab metoodika lähtub põhimõttest, et tugev nõue koosneb viiest elemendist:
+        <strong>kronoloogia</strong>, <strong>rikkumine</strong>, <strong>põhjuslik seos</strong>, <strong>arvutatav kahju</strong> ja <strong>tõendid</strong>.
       </p>
-      <p class="muted">
-        Kõik tööriistad on informatiivsed ega asenda õigusnõustamist.
-      </p>
+
+      <details class="disclaimer">
+        <summary>Oluline märkus</summary>
+        <p>
+          Tööriist aitab Sul struktureerida mõtteid ja hinnata riske. See ei anna siduvat õiguslikku hinnangut ega garanteeri menetlustulemust.
+          Kohtusse pöördumine sisaldab alati menetluskulude riski.
+        </p>
+      </details>
     </section>
 
     <section class="card">
-      <h2 class="h3">Hagi perspektiivi hindamine</h2>
-      <p class="muted">
-        Metoodiline eelanalüüs: kronoloogia, rikkumine, põhjuslik seos, kahju, tõendid ja menetlusrisk.
+      <div id="progressWrap" class="progress-wrap" aria-label="Etappide riba"></div>
+
+      <div class="progress-meta">
+        <div class="muted" id="progressText">Etapp 1 / 5</div>
+        <div class="muted" id="completionText">Täidetud: 0%</div>
+      </div>
+
+      <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="progressbarFill" class="progressbar-fill" style="width:0%"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="stage-head">
+        <h2 class="h3" id="stageTitle">Etapp I — Faktiline struktuur</h2>
+        <p class="muted" id="stageIntro"></p>
+      </div>
+
+      <form id="questionForm" class="questions" autocomplete="off"></form>
+
+      <div class="actions">
+        <button class="btn secondary" id="prevBtn" type="button">← Eelmine etapp</button>
+        <button class="btn" id="nextBtn" type="button">Järgmine etapp →</button>
+      </div>
+
+      <div class="actions secondary-actions">
+        <button class="btn ghost" id="resetBtn" type="button">Lähtesta vastused</button>
+        <button class="btn ghost" id="jumpToReportBtn" type="button">Vaata raportit</button>
+      </div>
+    </section>
+
+    <section class="card" id="reportCard" hidden>
+      <div class="report-head">
+        <h2 class="h3">Nõude eelanalüüsi raport</h2>
+        <p class="muted">Koostatud Solvere Lab struktureeritud metoodika alusel.</p>
+        <div class="report-badges" id="reportBadges"></div>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-box">
+          <h3 class="h4">Üldhinnang</h3>
+          <p id="overallAssessment"></p>
+        </div>
+
+        <div class="report-box">
+          <h3 class="h4">Peamised riskid</h3>
+          <ul id="keyRisks"></ul>
+        </div>
+
+        <div class="report-box">
+          <h3 class="h4">Soovitatud järgmised sammud</h3>
+          <ol id="nextSteps"></ol>
+        </div>
+
+        <div class="report-box">
+          <h3 class="h4">Kokkuvõte etappide kaupa</h3>
+          <div id="stageSummary"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" id="backToToolBtn" type="button">← Tagasi tööriista</button>
+        <button class="btn" id="downloadReportBtn" type="button">Laadi raport alla (.txt)</button>
+        <button class="btn ghost" id="printBtn" type="button">Prindi / Salvesta PDF-ina</button>
+      </div>
+
+      <p class="muted" style="margin-top:10px;">
+        Märkus: raport on informatiivne ega asenda õigusnõustamist.
       </p>
-      <a class="btn" href="/tools/hagi-perspektiiv/">Ava tööriist</a>
     </section>
 
     <footer class="footer muted">
       © Solvere Lab
     </footer>
   </main>
+
+  <script src="./app.js"></script>
 </body>
 </html>
