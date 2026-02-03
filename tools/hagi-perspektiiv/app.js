@@ -125,8 +125,15 @@
     "Vajavad täpsustamist": 1, "On vastuolulised": 0
   };
 
-  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v4";
-  let state = loadState() || { stageIndex: 0, answers: {} };
+  // NB: muutsin key'd, et vana salvestus (kus stageIndex=4) ei "hüppa" enam sisse.
+  // Kui tahad säilitada jätkamise loogika, ütle ja teen teisiti.
+  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v5";
+
+  // Alusta alati etapist I (ei loe stageIndexi storage'ist)
+  const loaded = loadState();
+  let state = loaded
+    ? { stageIndex: 0, answers: loaded.answers || {} }
+    : { stageIndex: 0, answers: {} };
 
   const stageTitle = document.getElementById("stageTitle");
   const stageIntro = document.getElementById("stageIntro");
@@ -483,8 +490,8 @@
     if (lim === "Ei tea") { keyRisks.push("Aegumise küsimus on kontrollimata — see võib olla kriitiline risk."); riskScore += 20; }
 
     const counter = a["counterarguments"];
-    // PARANDUS: "nõrgaim lüli"
-    if (counter === "Jah") { keyRisks.push("Vastaspoolel võib olla tugev vastuväide — mõtle läbi enda nõrgaim lüli."); riskScore += 8; }
+    // PARANDUS: "Vastaspoolel" (kirjaviga oli alguses)
+    if (counter === "Jah") { keyRisks.push("Vastaspoolel võib olla tugev vastuväide — mõtle läbi enda nõrgim lüli."); riskScore += 8; }
     if (counter === "Ei tea") { keyRisks.push("Vastaspoole vastuväiteid pole hinnatud."); riskScore += 10; }
 
     const cost = a["cost_risk"];
@@ -524,7 +531,7 @@
   }
 
   function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: state.answers })); } catch (_) {}
   }
   function loadState() {
     try {
