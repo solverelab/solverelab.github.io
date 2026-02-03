@@ -125,8 +125,7 @@
     "Vajavad täpsustamist": 1, "On vastuolulised": 0
   };
 
-  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v3";
-
+  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v4";
   let state = loadState() || { stageIndex: 0, answers: {} };
 
   const stageTitle = document.getElementById("stageTitle");
@@ -379,7 +378,7 @@
             ? "Siin on puudujääke — enne hagi esitamist tasub täpsustada."
             : "Siin on kriitilisi lünki — enne kohtusse pöördumist on vaja tugevdada.";
 
-      return { title: stageTitleShort(st.title), text, pct: stageScorePct };
+      return { title: shortTitle(st.title), text };
     });
 
     const flags = collectFlags();
@@ -397,19 +396,15 @@
           ? "Nõude aluses esineb puudujääke, mis võivad kohtumenetluses tekitada riski. Soovitav on enne hagi esitamist täpsustada faktid, tugevdada tõendibaasi ja selgitada õiguslikku loogikat."
           : "Nõude faktiline või õiguslik alus on praegusel kujul ebapiisav. Soovitav on hagi esitamist edasi lükata, koguda puuduolevad tõendid ja kontrollida nõude eeldused (sh tähtaeg).";
 
-    const keyRisks = flags.keyRisks.length
-      ? flags.keyRisks
-      : ["Olulisi kriitilisi riske ei tuvastatud olemasolevate vastuste põhjal."];
-
+    const keyRisks = flags.keyRisks.length ? flags.keyRisks : ["Olulisi kriitilisi riske ei tuvastatud vastuste põhjal."];
     const nextSteps = buildNextSteps(riskLevel, flags);
 
     return { riskLevel, overallText, keyRisks, nextSteps, stageSummaries };
   }
 
-  function stageTitleShort(fullTitle) {
-    // "Etapp IV — Õiguslik raamistik" -> "Õiguslik raamistik"
-    const parts = fullTitle.split("—");
-    return (parts[1] || fullTitle).trim();
+  function shortTitle(full) {
+    const parts = full.split("—");
+    return (parts[1] || full).trim();
   }
 
   function buildNextSteps(riskLevel, flags) {
@@ -425,25 +420,20 @@
     if (flags.hasKahjuProblem) {
       steps.push("Koosta kahju arvutus (summad, kuupäevad, alusdokumendid), et nõudesumma oleks selge ja põhjendatav.");
     }
-
     if (flags.hasEvidenceConflict) {
-      steps.push("Korrasta vastuolud tõendites: täpsusta, mis on vaieldamatu ja mis vajab selgitamist.");
+      steps.push("Korrasta vastuolud tõendites ja täpsusta selgitused.");
     }
-
     if (flags.hasLegalBasisGap) {
       steps.push("Sõnasta lihtne õiguslik loogika: mis kohustust rikuti ja miks see annab nõudeõiguse (leping / seadusest tulenev kohustus / hooletus).");
     }
 
     if (riskLevel === "Madal") {
       steps.push("Koosta kirjalik nõue vastaspoolele enne kohtusse pöördumist ja hinda kompromissivõimalust.");
-      steps.push("Kui lähed kohtusse: vormista hagi struktuuris: kronoloogia → rikkumine → põhjuslik seos → kahju → tõendid.");
     } else if (riskLevel === "Keskmine") {
       steps.push("Enne hagi esitamist tugevda nõude alus: täpsusta faktid, lisa dokumendid, mõtle läbi vastuväited.");
-      steps.push("Kaalu professionaalset nõu, kui riskid puudutavad tähtaegu, põhjuslikku seost või kahju arvestust.");
     } else {
       steps.push("Ära esita hagi enne, kui kriitilised lüngad on täidetud (kronoloogia/tõendid/kahju/õiguslik loogika).");
-      steps.push("Kaalu kohtuvälist lahendust (läbirääkimised, kompromiss), kui tõendibaas ei võimalda nõuet veenvalt tõendada.");
-      steps.push("Kui risk on seotud tähtaegadega või tõendite puudumisega, küsi enne menetluse algust professionaalset nõu.");
+      steps.push("Kaalu kohtuvälist lahendust, kui tõendibaas ei võimalda nõuet veenvalt tõendada.");
     }
 
     return [...new Set(steps)];
@@ -455,7 +445,7 @@
     let riskScore = 0;
 
     const chronology = a["chronology"];
-    if (chronology === "Ei") { keyRisks.push("Kronoloogia on ebaselge — nõude faktiline alus võib jääda segaseks."); riskScore += 18; }
+    if (chronology === "Ei") { keyRisks.push("Kronoloogia on ebaselge — faktiline alus võib jääda segaseks."); riskScore += 18; }
     if (chronology === "Osaliselt") { keyRisks.push("Kronoloogia vajab täpsustamist — täida lüngad ja fikseeri kuupäevad."); riskScore += 10; }
 
     const breach = a["breach"];
@@ -463,42 +453,42 @@
     if (breach === "Võimalik") { keyRisks.push("Rikkumine on osaliselt selge — sõnasta konkreetne kohustus ja rikkumise tegu/tegematajätmine."); riskScore += 10; }
 
     const causation = a["causation"];
-    if (causation === "Ei") { keyRisks.push("Põhjuslik seos on nõrk — selgita, kuidas rikkumine põhjustas konkreetse kahju."); riskScore += 18; }
-    if (causation === "Osaliselt") { keyRisks.push("Põhjuslik seos vajab täpsustamist — kirjuta seos samm-sammult lahti."); riskScore += 10; }
+    if (causation === "Ei") { keyRisks.push("Põhjuslik seos on nõrk — selgita seos samm-sammult."); riskScore += 18; }
+    if (causation === "Osaliselt") { keyRisks.push("Põhjuslik seos vajab täpsustamist."); riskScore += 10; }
 
     const calculable = a["calculable"];
-    if (calculable === "Ei") { keyRisks.push("Kahju ei ole arvutatav — nõudesumma peab olema konkreetne ja põhjendatav."); riskScore += 16; }
-    if (calculable === "Ligikaudselt") { keyRisks.push("Kahju on osaliselt arvutatav — vaja täpsemat arvutust ja alusdokumente."); riskScore += 8; }
+    if (calculable === "Ei") { keyRisks.push("Kahju ei ole arvutatav — nõudesumma peab olema konkreetne."); riskScore += 16; }
+    if (calculable === "Ligikaudselt") { keyRisks.push("Kahju on osaliselt arvutatav — vaja täpsemat arvutust."); riskScore += 8; }
 
     const lossDocs = a["loss_docs"];
-    if (lossDocs === "Ei") { keyRisks.push("Kahju tõendavad dokumendid puuduvad — väited võivad jääda tõendamata."); riskScore += 16; }
-    if (lossDocs === "Osaliselt") { keyRisks.push("Kahju dokumendid on osalised — kogu arved/hinnapakkumised/eksperthinnangud."); riskScore += 8; }
+    if (lossDocs === "Ei") { keyRisks.push("Kahju tõendavad dokumendid puuduvad."); riskScore += 16; }
+    if (lossDocs === "Osaliselt") { keyRisks.push("Kahju dokumendid on osalised — kogu alusdokumendid."); riskScore += 8; }
 
     const ev = Array.isArray(a["objective_evidence"]) ? a["objective_evidence"] : [];
-    if (ev.includes("puuduvad") || ev.length === 0) { keyRisks.push("Objektiivseid tõendeid on vähe — tugevda dokumentaalset tõendibaasi."); riskScore += 14; }
+    if (ev.includes("puuduvad") || ev.length === 0) { keyRisks.push("Objektiivseid tõendeid on vähe — tugevda tõendibaasi."); riskScore += 14; }
 
     const evidenceCons = a["evidence_consistent"];
     const hasEvidenceConflict = evidenceCons === "On vastuolulised";
-    if (hasEvidenceConflict) { keyRisks.push("Tõendid on vastuolulised — korrasta vastuolud ja täpsusta selgitused."); riskScore += 14; }
-    if (evidenceCons === "Vajavad täpsustamist") { keyRisks.push("Tõendid vajavad täpsustamist — seosta tõendid konkreetsete väidetega."); riskScore += 7; }
+    if (hasEvidenceConflict) { keyRisks.push("Tõendid on vastuolulised — korrasta vastuolud."); riskScore += 14; }
+    if (evidenceCons === "Vajavad täpsustamist") { keyRisks.push("Tõendid vajavad täpsustamist."); riskScore += 7; }
 
     const legalBasis = a["legal_basis"];
     const hasLegalBasisGap = legalBasis === "Ei" || legalBasis === "Osaliselt";
-    if (legalBasis === "Ei") { keyRisks.push("Õiguslik loogika on ebaselge — selgita, miks tekib nõudeõigus."); riskScore += 14; }
-    if (legalBasis === "Osaliselt") { keyRisks.push("Õiguslik loogika vajab täpsustamist — sõnasta kohustus ja rikkumine lihtsate lausetena."); riskScore += 7; }
+    if (legalBasis === "Ei") { keyRisks.push("Õiguslik loogika on ebaselge."); riskScore += 14; }
+    if (legalBasis === "Osaliselt") { keyRisks.push("Õiguslik loogika vajab täpsustamist."); riskScore += 7; }
 
     const lim = a["limitation"];
     const hasAegumineRisk = lim === "Võimalik" || lim === "Ei tea";
-    if (lim === "Võimalik") { keyRisks.push("Võimalik aegumise risk — kontrolli tähtaegu enne kohtusse pöördumist."); riskScore += 20; }
+    if (lim === "Võimalik") { keyRisks.push("Võimalik aegumise risk — kontrolli tähtaegu."); riskScore += 20; }
     if (lim === "Ei tea") { keyRisks.push("Aegumise küsimus on kontrollimata — see võib olla kriitiline risk."); riskScore += 20; }
 
     const counter = a["counterarguments"];
-    if (counter === "Jah") { keyRisks.push("Vastaspoolel võib olla põhjendatud vastuväide — mõtle läbi enda nõrgaim lüli."); riskScore += 8; }
-    if (counter === "Ei tea") { keyRisks.push("Vastaspoole vastuväiteid pole hinnatud — see suurendab strateegilist riski."); riskScore += 10; }
+    if (counter === "Jah") { keyRisks.push("Vastaspoolel võib olla tugev vastuväide — mõtle läbi enda nõrgaim lüli."); riskScore += 8; }
+    if (counter === "Ei tea") { keyRisks.push("Vastaspoole vastuväiteid pole hinnatud."); riskScore += 10; }
 
     const cost = a["cost_risk"];
-    if (cost === "Ei") { keyRisks.push("Menetluskulude risk on arvestamata — kohtusse pöördumine on rahaline risk."); riskScore += 10; }
-    if (cost === "Osaliselt") { keyRisks.push("Menetluskulude risk vajab täpsemat läbi mõtlemist (riigilõiv, vastaspoole kulud, ekspertiis)."); riskScore += 5; }
+    if (cost === "Ei") { keyRisks.push("Menetluskulude risk on arvestamata."); riskScore += 10; }
+    if (cost === "Osaliselt") { keyRisks.push("Menetluskulude risk vajab täpsemat läbi mõtlemist."); riskScore += 5; }
 
     return {
       riskScore: Math.min(100, riskScore),
@@ -529,14 +519,12 @@
       }
     });
 
-    const stageScorePct = max === 0 ? 0 : Math.round((got / max) * 100);
-    return { stageScorePct };
+    return { stageScorePct: max === 0 ? 0 : Math.round((got / max) * 100) };
   }
 
   function saveState() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
   }
-
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -546,9 +534,3 @@
     }
   }
 })();
-/* PEIDA progressi/etappide UI (kui see sul veel kuskil renderdub) */
-.progress-wrap,
-.progress-meta,
-.progressbar {
-  display: none !important;
-}
