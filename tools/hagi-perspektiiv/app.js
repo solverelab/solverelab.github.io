@@ -483,6 +483,7 @@
     if (lim === "Ei tea") { keyRisks.push("Aegumise küsimus on kontrollimata — see võib olla kriitiline risk."); riskScore += 20; }
 
     const counter = a["counterarguments"];
+    // PARANDUS: "nõrgaim lüli"
     if (counter === "Jah") { keyRisks.push("Vastaspoolel võib olla tugev vastuväide — mõtle läbi enda nõrgaim lüli."); riskScore += 8; }
     if (counter === "Ei tea") { keyRisks.push("Vastaspoole vastuväiteid pole hinnatud."); riskScore += 10; }
 
