@@ -1,394 +1,360 @@
-window.addEventListener("DOMContentLoaded", () => {
+(function () {
+  "use strict";
+
+  // -------- Helpers --------
   const $ = (sel) => document.querySelector(sel);
-
-  const startBtn   = $("#startBtn");
-  const formCard   = $("#formCard");
-  const resultCard = $("#resultCard");
-  const questionsEl= $("#questions");
-
-  const calcBtn  = $("#calcBtn");
-  const resetBtn = $("#resetBtn");
-
-  const riskBadge   = $("#riskBadge");
-  const scoreLine   = $("#scoreLine");
-  const missingList = $("#missingList");
-  const nextSteps   = $("#nextSteps");
-  const draftEl     = $("#draft");
-
-  const claimAmountEl = $("#claimAmount");
-  const keyDateEl     = $("#keyDate");
-  const factsShortEl  = $("#factsShort");
-
-  const yearEl = $("#year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  const required = [startBtn, formCard, resultCard, questionsEl, calcBtn, resetBtn, riskBadge, scoreLine, missingList, nextSteps, draftEl];
-  if (required.some(x => !x)) {
-    console.error("Puuduvad vajalikud elemendid index.html-is. Kontrolli ID-sid ja et app.js on sama kausta index.html-iga.");
-    return;
-  }
-
-  function getClaimType() {
-    const selected = document.querySelector('input[name="claimType"]:checked');
-    return selected ? selected.value : "debt";
-  }
-
-  // -----------------------------
-  // Küsimused: lihtne keel + selgitus
-  // -----------------------------
-  const QUESTIONS = {
-    base: [
-      {
-        id: "party_known",
-        title: "1. Kelle vastu Sa nõude esitad?",
-        question: "Kas Sa tead täpselt, kellelt raha või kohustuse täitmist nõuad (õige inimene või ettevõte)?",
-        example: "",
-        explanation: "On oluline esitada nõue õigele isikule. Vale kostja korral võib kohus hagi jätta rahuldamata isegi siis, kui Sul on õigus.",
-        weight: 14,
-        missingText: "Tuvasta vastaspool (nimi, isikukood/registrikood, aadress)."
-      },
-      {
-        id: "claim_defined",
-        title: "2. Mida Sa täpselt nõuad?",
-        question: "Kas suudad ühe lausega selgelt öelda, mida Sa nõuad ja mis põhjusel?",
-        example: "Näide: „Soovin 3 500 eurot tasumata töö eest.“",
-        explanation: "Nõue peab olema selge ja arusaadav. Kohus peab aru saama, mida täpselt taotled.",
-        weight: 14,
-        missingText: "Sõnasta nõue: mida nõuad (summa/tegevus) ja mis alusel."
-      },
-      {
-        id: "amount_known",
-        title: "3. Kas nõutav summa on selgelt välja arvutatud?",
-        question: "Kas nõutav summa on täpselt teada või on olemas arvutus (nt arve, hinnakiri, kalkulatsioon)?",
-        example: "",
-        explanation: "Rahasumma peab põhinema dokumentidel või selgel arvutusel. Ilma selleta võib nõue jääda tõendamata.",
-        weight: 12,
-        missingText: "Koosta summade arvutus ja lisa alusdokumendid (arved, kalkulatsioon)."
-      },
-      {
-        id: "timeline",
-        title: "4. Kas sündmuste järjekord on selge?",
-        question: "Kas Sul on kirjas kuupäevad ja sündmused: kokkulepe, tähtaeg, rikkumine ja edasised teavitused?",
-        example: "",
-        explanation: "Kohus hindab asjaolusid ajaliselt. Selge kronoloogia aitab näidata, millal ja kuidas kohustus jäi täitmata.",
-        weight: 10,
-        missingText: "Pane kirja ajatelg (kuupäevad ja sündmused) + viited tõenditele."
-      }
-    ],
-
-    // Võlanõue (Sinu 5–8)
-    debt: [
-      {
-        id: "agreement",
-        title: "5. Kas kokkulepet saab tõendada?",
-        question: "Kas Sul on dokument või muu tõend kokkuleppe kohta (leping, e-kiri, sõnumid, arve vms)?",
-        example: "",
-        explanation: "Isegi suuline kokkulepe võib olla kehtiv, kuid seda peab suutma tõendada.",
-        weight: 16,
-        missingText: "Kogu kokku kokkuleppe tõendid (leping, e-kiri, sõnumid, arve)."
-      },
-      {
-        id: "performance",
-        title: "6. Kas oled ise oma kohustuse täitnud?",
-        question: "Kas saad tõendada, et täitsid oma osa kokkuleppest (nt tegid töö, andsid kauba üle)?",
-        example: "",
-        explanation: "Üldjuhul saab nõuda tasu või täitmist siis, kui oled ise oma kohustuse täitnud.",
-        weight: 12,
-        missingText: "Lisa tõendid Sinu soorituse kohta (üleandmine, akt, fotod, kirjavahetus)."
-      },
-      {
-        id: "invoice_or_ack",
-        title: "7. Kas kohustuse suurust näitav dokument on olemas?",
-        question: "Kas Sul on arve või muu dokument, mis näitab, kui suur kohustus oli?",
-        example: "",
-        explanation: "Dokument aitab tõendada nõude suurust ja selle aluseid.",
-        weight: 12,
-        missingText: "Lisa selge alusdokument (arve/võlatunnistus/makseplaan)."
-      },
-      {
-        id: "demand_sent",
-        title: "8. Kas oled enne kohtusse pöördumist teavitanud?",
-        question: "Kas oled teisele poolele kirjalikult teada andnud, et nõuad tasumist või kohustuse täitmist (nt meeldetuletus, maksenõue)?",
-        example: "",
-        explanation: "Kuigi see ei ole alati kohustuslik, näitab eelnev teavitamine, et andsid võimaluse vaidlus lahendada ilma kohtuta.",
-        weight: 8,
-        missingText: "Saada enne hagi kirjalik nõue (tähtaeg + summa + alus + makseandmed)."
-      }
-    ],
-
-    // Kahju hüvitamine (lihtsustatud, mittejuristi keeles)
-    damage: [
-      {
-        id: "wrongful_act",
-        title: "5. Mis läks valesti?",
-        question: "Kas suudad selgelt kirjeldada, mida teine pool tegi või jättis tegemata (lepingurikkumine või muu tegu)?",
-        example: "",
-        explanation: "Kohus peab aru saama, milles rikkumine seisnes ja millal see toimus.",
-        weight: 16,
-        missingText: "Kirjelda rikkumine/tegu (mis, millal, kuidas, kes) + viited tõenditele."
-      },
-      {
-        id: "damage_amount",
-        title: "6. Kas kahju suurus on tõendatav?",
-        question: "Kas Sul on arved, hinnapakkumised või muu arvutus, mis näitab kahju suurust?",
-        example: "",
-        explanation: "Kahju summa peab olema tõendatav – muidu võib kohus seda mitte välja mõista.",
-        weight: 14,
-        missingText: "Kogu kahju tõendid (arved/hinnapakkumised/kalkulatsioon)."
-      },
-      {
-        id: "causation",
-        title: "7. Kas tegu ja kahju on omavahel seotud?",
-        question: "Kas saad selgitada, kuidas teise poole tegu põhjustas kahju (tegu → tagajärg)?",
-        example: "",
-        explanation: "Kui seos pole arusaadav või tõendatav, võib nõue nõrgaks jääda.",
-        weight: 10,
-        missingText: "Kirjelda põhjuslik seos ja lisa seda toetavad tõendid."
-      }
-    ]
+  const el = (tag, cls) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    return n;
   };
 
-  function buildQuestionSet() {
-    const t = getClaimType();
-    return [...QUESTIONS.base, ...(t === "debt" ? QUESTIONS.debt : QUESTIONS.damage)];
+  function safeNumberFromText(txt) {
+    if (!txt) return null;
+    const cleaned = String(txt).replace(/\s/g, "").replace(",", ".");
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : null;
   }
 
-  let state = {}; // id -> "yes" | "no" | "na"
+  function formatDateISOToEE(iso) {
+    if (!iso) return "";
+    // iso = yyyy-mm-dd
+    const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return iso;
+    return `${m[3]}.${m[2]}.${m[1]}`;
+  }
 
+  // -------- DOM --------
+  const startBtn = $("#startBtn");
+  const formCard = $("#formCard");
+  const resultCard = $("#resultCard");
+  const questionsWrap = $("#questions");
+
+  const resetBtn = $("#resetBtn");
+  const calcBtn = $("#calcBtn");
+
+  const riskBadge = $("#riskBadge");
+  const scoreLine = $("#scoreLine");
+  const missingList = $("#missingList");
+  const nextSteps = $("#nextSteps");
+
+  const draft = $("#draft");
+  const copyBtn = $("#copyBtn");
+  const printBtn = $("#printBtn");
+
+  const yearEl = $("#year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  // Optional inputs
+  const claimAmountInput = $("#claimAmount");
+  const keyDateInput = $("#keyDate");
+  const factsShortInput = $("#factsShort");
+
+  // -------- Questions (non-jurist friendly) --------
+  // NOTE: You asked earlier to avoid forcing the defendant name: we keep it optional.
+  const QUESTIONS = [
+    {
+      id: "q1",
+      title: "1. Kelle vastu Sa nõude esitad?",
+      q: "Kas Sa tead täpselt, kellelt raha või kohustuse täitmist nõuad (õige inimene või ettevõte)?",
+      explain: "Oluline on esitada nõue õigele isikule. Vale vastaspoole korral võib nõue jääda rahuldamata ka siis, kui Sul on sisuliselt õigus.",
+      weight: 2,
+    },
+    {
+      id: "q2",
+      title: "2. Mida Sa täpselt nõuad?",
+      q: "Kas suudad ühe lausega selgelt öelda, mida Sa nõuad ja mis põhjusel? (nt „Soovin 3 500 eurot tasumata töö eest.“)",
+      explain: "Nõue peab olema selge ja arusaadav. Kohus peab aru saama, mida täpselt taotled.",
+      weight: 2,
+    },
+    {
+      id: "q3",
+      title: "3. Kas nõutav summa on selgelt välja arvutatud?",
+      q: "Kas nõutav summa on täpselt teada või on olemas arvutus (nt arve, hinnakiri, kalkulatsioon)?",
+      explain: "Rahasumma peab põhinema dokumentidel või selgel arvutusel. Ilma selleta võib nõue jääda tõendamata.",
+      weight: 2,
+    },
+    {
+      id: "q4",
+      title: "4. Kas sündmuste järjekord on selge?",
+      q: "Kas Sul on kirjas kuupäevad ja sündmused: kokkulepe, tähtaeg, rikkumine ja edasised teavitused?",
+      explain: "Kohus hindab asjaolusid ajaliselt. Selge kronoloogia aitab näidata, millal ja kuidas kohustus jäi täitmata.",
+      weight: 1,
+    },
+    {
+      id: "q5",
+      title: "5. Kas kokkulepet saab tõendada?",
+      q: "Kas Sul on dokument või muu tõend kokkuleppe kohta (leping, e-kiri, sõnumid, arve vms)?",
+      explain: "Isegi suuline kokkulepe võib olla kehtiv, kuid seda peab suutma tõendada.",
+      weight: 2,
+    },
+    {
+      id: "q6",
+      title: "6. Kas oled ise oma kohustuse täitnud?",
+      q: "Kas saad tõendada, et täitsid oma osa kokkuleppest (nt tegid töö, andsid kauba üle)?",
+      explain: "Üldjuhul saab nõuda täitmist või tasu siis, kui oled ise oma kohustuse täitnud.",
+      weight: 2,
+    },
+    {
+      id: "q7",
+      title: "7. Kas kohustuse suurust näitav dokument on olemas?",
+      q: "Kas Sul on arve või muu dokument, mis näitab, kui suur kohustus oli?",
+      explain: "Dokument aitab tõendada nõude suurust ja selle aluseid.",
+      weight: 1,
+    },
+    {
+      id: "q8",
+      title: "8. Kas oled enne kohtusse pöördumist teavitanud?",
+      q: "Kas oled teisele poolele kirjalikult teada andnud, et nõuad tasumist või kohustuse täitmist (nt meeldetuletus, maksenõue)?",
+      explain: "See ei ole alati kohustuslik, kuid näitab, et andsid võimaluse vaidlus lahendada ilma kohtuta.",
+      weight: 1,
+    },
+  ];
+
+  const OPTIONS = [
+    { value: "yes", label: "Jah", score: 0 },
+    { value: "no", label: "Ei", score: 1 },
+    { value: "unsure", label: "Ei ole kindel", score: 0.5 },
+  ];
+
+  // -------- Render questions --------
   function renderQuestions() {
-    const qset = buildQuestionSet();
-    questionsEl.innerHTML = "";
+    if (!questionsWrap) return;
+    questionsWrap.innerHTML = "";
 
-    qset.forEach((q) => {
-      const wrap = document.createElement("div");
-      wrap.className = "q";
+    QUESTIONS.forEach((item) => {
+      const block = el("div", "qblock");
 
-      const left = document.createElement("div");
-      left.className = "qtext";
+      const h = el("h3", "qtitle");
+      h.textContent = item.title;
+      block.appendChild(h);
 
-      const title = document.createElement("div");
-      title.style.fontWeight = "800";
-      title.style.marginBottom = "6px";
-      title.textContent = q.title;
+      const p = el("p", "qtext");
+      p.textContent = item.q;
+      block.appendChild(p);
 
-      const qText = document.createElement("div");
-      qText.textContent = q.question;
+      const row = el("div", "qoptions");
+      OPTIONS.forEach((opt) => {
+        const label = el("label", "qopt");
+        const input = el("input");
+        input.type = "radio";
+        input.name = item.id;
+        input.value = opt.value;
 
-      left.appendChild(title);
-      left.appendChild(qText);
+        // default: "unsure"
+        if (opt.value === "unsure") input.checked = true;
 
-      if (q.example) {
-        const ex = document.createElement("div");
-        ex.className = "qmeta";
-        ex.textContent = q.example;
-        left.appendChild(ex);
-      }
-
-      const expl = document.createElement("div");
-      expl.className = "qmeta";
-      expl.innerHTML = `<strong>Selgitus:</strong> ${q.explanation}`;
-      left.appendChild(expl);
-
-      const right = document.createElement("div");
-      right.className = "answers";
-
-      const opts = [
-        { key: "yes", label: "Jah" },
-        { key: "no",  label: "Ei" },
-        { key: "na",  label: "Ei ole kindel" }
-      ];
-
-      opts.forEach((opt) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = opt.label;
-        if (state[q.id] === opt.key) b.classList.add("active");
-        b.addEventListener("click", () => {
-          state[q.id] = opt.key;
-          renderQuestions();
-          refreshDraftIfVisible();
-        });
-        right.appendChild(b);
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(" " + opt.label));
+        row.appendChild(label);
       });
+      block.appendChild(row);
 
-      wrap.appendChild(left);
-      wrap.appendChild(right);
-      questionsEl.appendChild(wrap);
+      const exp = el("p", "qexplain");
+      exp.textContent = "Selgitus: " + item.explain;
+      block.appendChild(exp);
+
+      questionsWrap.appendChild(block);
     });
   }
 
-  function uniq(arr) {
-    return [...new Set((arr || []).filter(Boolean))];
+  function getAnswers() {
+    const answers = {};
+    QUESTIONS.forEach((q) => {
+      const chosen = document.querySelector(`input[name="${q.id}"]:checked`);
+      answers[q.id] = chosen ? chosen.value : "unsure";
+    });
+    return answers;
   }
 
-  function score() {
-    const qset = buildQuestionSet();
-    let total = 0;
+  // -------- Risk calc --------
+  function calcRisk(answers) {
+    let raw = 0;
+    let max = 0;
+
     const missing = [];
+    QUESTIONS.forEach((q) => {
+      const v = answers[q.id] || "unsure";
+      const opt = OPTIONS.find((o) => o.value === v) || OPTIONS[2];
 
-    qset.forEach((q) => {
-      const ans = state[q.id] || "na";
-      if (ans === "yes") total += q.weight;
-      else missing.push(q.missingText);
+      raw += opt.score * q.weight;
+      max += 1 * q.weight;
+
+      if (v === "no") missing.push(q.title.replace(/^\d+\.\s*/, ""));
+      if (v === "unsure") missing.push(q.title.replace(/^\d+\.\s*/, "") + " (vajab täpsustamist)");
     });
 
-    total = Math.max(0, Math.min(100, total));
-    return { total, missing: uniq(missing) };
+    const ratio = max > 0 ? raw / max : 0;
+
+    let level = "Madal risk";
+    let badgeClass = "badge ok";
+    if (ratio >= 0.60) { level = "Kõrge risk"; badgeClass = "badge bad"; }
+    else if (ratio >= 0.30) { level = "Keskmine risk"; badgeClass = "badge mid"; }
+
+    const scorePct = Math.round((ratio * 100));
+
+    return { ratio, scorePct, level, badgeClass, missing };
   }
 
-  function getDraftFields() {
-    const amountRaw = (claimAmountEl?.value || "").trim();
-    const keyDate = (keyDateEl?.value || "").trim();
-    const factsShort = (factsShortEl?.value || "").trim();
-    return {
-      amount: amountRaw ? `${amountRaw} EUR` : "",
-      keyDate,
-      factsShort
-    };
-  }
-
-  function buildDraft(total) {
-    const claimType = getClaimType();
-    const f = getDraftFields();
-
-    const title = claimType === "debt"
-      ? "Hagiavaldus (võlanõue) – struktuuri mustand"
-      : "Hagiavaldus (kahju hüvitamine) – struktuuri mustand";
-
-    const typeLine = claimType === "debt"
-      ? "Nõude liik: tasumata rahaline kohustus (leping/arve/laen vms)."
-      : "Nõude liik: kahju hüvitamine (lepingurikkumine/delikt vms).";
-
-    return [
-      title, "",
-      "1. Pooled",
-      "- Hageja: [nimi, isikukood/reg nr, aadress, kontakt]",
-      "- Kostja: [nimi, isikukood/reg nr, aadress, kontakt]", "",
-      "2. Nõue (petitum)",
-      `- Nõuan kostjalt: ${f.amount ? f.amount : "[summa] eurot"} + [viivis/intress kui kohaldub] + menetluskulud.`,
-      "- Arvutus: [tabel / valem / lisad].", "",
-      "3. Asjaolud (ajatelg)",
-      `- ${f.keyDate ? f.keyDate : "[kuupäev]"} – sündmus / tähtaeg: ${f.factsShort ? f.factsShort : "..."} (tõend: ...)`,
-      "- [kuupäev] – rikkumine ... (tõend: ...)",
-      "- [kuupäev] – teavitused/nõuded ... (tõend: ...)", "",
-      "4. Õiguslik alus (üldine raam)",
-      `- ${typeLine}`, "",
-      "5. Tõendid",
-      "- 01 [leping/kirjavahetus]",
-      "- 02 [arve/kalkulatsioon/hinnapakkumine]",
-      "- 03 [maksanõue/meeldetuletus]",
-      "- 04 [maksesed/aktid/fotod/tunnistajad/logid]", "",
-      "6. Taotlused",
-      "- Palun võtta hagi menetlusse.",
-      "- Palun mõista kostjalt välja menetluskulud.", "",
-      "7. Lisad",
-      "- Lisade loetelu (numbritega, sama mis tõendite loendis).", "",
-      `Märkus: see on struktuur. Skoor: ${total}/100`
-    ].join("\n");
-  }
-
-  function buildNextSteps(total) {
+  function buildNextSteps(riskObj) {
     const steps = [];
-    steps.push("Koosta 1–2 lehekülje kokkuvõte: pooled, ajatelg, nõue (summa + arvutus), viited tõenditele.");
-    steps.push("Koonda tõendid ühte kausta ja nimeta failid loogiliselt (01_leping.pdf, 02_arve.pdf, 03_makse.pdf, ...).");
+    // Generic, safe steps
+    steps.push("Kogu kokku asjakohased dokumendid ja suhtlus (e-kirjad, sõnumid, arved, lepingud).");
+    steps.push("Pane kirja lühike ajajoon: kokkulepe → tähtaeg → rikkumine → teavitused.");
+    steps.push("Tee selgeks nõude summa: arvutus + alusdokumendid.");
+    steps.push("Kui võimalik, saada vastaspoolele kirjalik meeldetuletus/maksenõue (koos tähtajaga).");
 
-    if (getClaimType() === "debt") {
-      steps.push("Saada kirjalik maksenõue: summa, alus, tähtaeg, makseandmed, viide tõenditele.");
-    } else {
-      steps.push("Pane kirja rikkumine + põhjuslik seos + kahju suuruse tõendid (arved/hinnapakkumised/kalkulatsioon).");
+    if (riskObj.level === "Keskmine risk" || riskObj.level === "Kõrge risk") {
+      steps.push("Täpsusta nõude adressaat (õige isik/ettevõte) ja vajadusel kontrolli andmeid (äriregister vms).");
+      steps.push("Kui risk püsib kõrge, kaalu professionaalset ülevaatust (dokumendid + strateegia).");
     }
-
-    if (total < 45) steps.push("Kui risk on kõrge, täienda enne hagi peamisi tõendeid ja ajatelge.");
-    else if (total < 70) steps.push("Enne hagi täienda 1–3 nõrka kohta (tõendid, ajatelg, vastuväidete maandamine).");
-    else steps.push("Kui põhidokumendid on koos, saad koostada hagi mustandi ja taotlused.");
 
     return steps;
   }
 
-  function setDraftValue() {
-    const { total } = score();
-    draftEl.value = buildDraft(total);
+  // -------- Draft generation (simple skeleton) --------
+  function buildDraft() {
+    const claimType = (document.querySelector('input[name="claimType"]:checked') || {}).value || "debt";
+    const amount = safeNumberFromText(claimAmountInput ? claimAmountInput.value : "") ;
+    const keyDate = keyDateInput ? keyDateInput.value : "";
+    const factsShort = factsShortInput ? factsShortInput.value : "";
+
+    const amountLine = amount != null ? `${amount.toFixed(2)} EUR` : "[summa] EUR";
+    const dateLine = keyDate ? formatDateISOToEE(keyDate) : "[kuupäev]";
+
+    const title = claimType === "damage" ? "Hagiavaldus (kahju hüvitamine) — struktuuri mustand" : "Hagiavaldus (võlanõue) — struktuuri mustand";
+
+    return [
+      title,
+      "",
+      "1. Pooled",
+      "- Hageja: [nimi, isikukood/reg nr, aadress, kontakt]",
+      "- Kostja: [nimi, isikukood/reg nr, aadress, kontakt]  (valikuline — täida, kui tead)",
+      "",
+      "2. Nõue (petitum)",
+      `- Nõuan kostjalt: ${amountLine} + [viivis/intress kui kohaldub] + menetluskulud.`,
+      "- Arvutus: [tabel / valem / lisad].",
+      "",
+      "3. Asjaolud (ajatelg)",
+      `- ${dateLine} — sündmus / tähtaeg: [kirjeldus] (tõend: ...)`,
+      "- [kuupäev] — rikkumine ... (tõend: ...)",
+      "- [kuupäev] — teavitused/nõuded ... (tõend: ...)",
+      "",
+      "4. Õiguslik alus (lühidalt)",
+      "- [leping / seadus / delikt] (selgita 2–5 lausega, miks on õigus nõuda).",
+      "",
+      "5. Tõendid",
+      "- Tõend 1: ...",
+      "- Tõend 2: ...",
+      "",
+      "6. Lisad",
+      "- Lisa 1: ...",
+      "- Lisa 2: ...",
+      "",
+      "Lühike faktikirjeldus (Sinu sisend):",
+      factsShort ? `- ${factsShort}` : "- [kirjuta 1–3 lauset]"
+    ].join("\n");
   }
 
-  function refreshDraftIfVisible() {
-    if (!resultCard.classList.contains("hidden")) setDraftValue();
+  // -------- Events --------
+  function show(elm) { if (elm) elm.classList.remove("hidden"); }
+  function hide(elm) { if (elm) elm.classList.add("hidden"); }
+
+  if (startBtn) {
+    startBtn.addEventListener("click", function () {
+      renderQuestions();
+      show(formCard);
+      hide(resultCard);
+      // scroll to questions
+      formCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
-  function renderResult() {
-    const { total, missing } = score();
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      // reset optional fields
+      if (claimAmountInput) claimAmountInput.value = "";
+      if (keyDateInput) keyDateInput.value = "";
+      if (factsShortInput) factsShortInput.value = "";
 
-    riskBadge.textContent =
-      total >= 70 ? "ROHELINE — hea lähtekoht" :
-      total >= 45 ? "KOLLANE — keskmine risk" :
-      "PUNANE — kõrge risk";
-
-    scoreLine.textContent = `Skoor: ${total}/100`;
-
-    missingList.innerHTML = "";
-    (missing.length ? missing : ["Tuvastatud nõrkusi ei tulnud vastustest välja (see ei välista erandeid)."])
-      .slice(0, 12)
-      .forEach((m) => {
-        const li = document.createElement("li");
-        li.textContent = m;
-        missingList.appendChild(li);
+      // reset questions to "unsure"
+      QUESTIONS.forEach((q) => {
+        const unsure = document.querySelector(`input[name="${q.id}"][value="unsure"]`);
+        if (unsure) unsure.checked = true;
       });
 
-    nextSteps.innerHTML = "";
-    buildNextSteps(total).slice(0, 8).forEach((s) => {
-      const li = document.createElement("li");
-      li.textContent = s;
-      nextSteps.appendChild(li);
+      hide(resultCard);
     });
-
-    setDraftValue();
-
-    resultCard.classList.remove("hidden");
-    resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // --- Events ---
-  startBtn.addEventListener("click", () => {
-    formCard.classList.remove("hidden");
-    resultCard.classList.add("hidden");
-    state = {};
-    renderQuestions();
-    formCard.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
+  if (calcBtn) {
+    calcBtn.addEventListener("click", function () {
+      const answers = getAnswers();
+      const risk = calcRisk(answers);
 
-  calcBtn.addEventListener("click", renderResult);
+      // badge
+      if (riskBadge) {
+        riskBadge.className = risk.badgeClass;
+        riskBadge.textContent = risk.level;
+      }
+      if (scoreLine) scoreLine.textContent = `Skoor: ${risk.scorePct} / 100`;
 
-  resetBtn.addEventListener("click", () => {
-    state = {};
-    resultCard.classList.add("hidden");
-    renderQuestions();
-  });
+      // missing
+      if (missingList) {
+        missingList.innerHTML = "";
+        if (risk.missing.length === 0) {
+          const li = el("li");
+          li.textContent = "Olulised punktid on esialgselt kaetud.";
+          missingList.appendChild(li);
+        } else {
+          risk.missing.slice(0, 12).forEach((m) => {
+            const li = el("li");
+            li.textContent = m;
+            missingList.appendChild(li);
+          });
+        }
+      }
 
-  const copyBtn = $("#copyBtn");
+      // next steps
+      if (nextSteps) {
+        nextSteps.innerHTML = "";
+        buildNextSteps(risk).forEach((s) => {
+          const li = el("li");
+          li.textContent = s;
+          nextSteps.appendChild(li);
+        });
+      }
+
+      // draft
+      if (draft) draft.value = buildDraft();
+
+      show(resultCard);
+      resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   if (copyBtn) {
-    copyBtn.addEventListener("click", async () => {
+    copyBtn.addEventListener("click", async function () {
+      if (!draft) return;
       try {
-        await navigator.clipboard.writeText(draftEl.value);
-        copyBtn.textContent = "Kopeeritud!";
-        setTimeout(() => (copyBtn.textContent = "Kopeeri"), 1200);
-      } catch {
-        alert("Kopeerimine ei õnnestunud. Vali tekst ja kopeeri käsitsi.");
+        await navigator.clipboard.writeText(draft.value);
+        alert("Mustand kopeeritud.");
+      } catch (e) {
+        // fallback
+        draft.focus();
+        draft.select();
+        document.execCommand("copy");
+        alert("Mustand kopeeritud.");
       }
     });
   }
 
-  const printBtn = $("#printBtn");
-  if (printBtn) printBtn.addEventListener("click", () => window.print());
-
-  document.querySelectorAll('input[name="claimType"]').forEach((r) => {
-    r.addEventListener("change", () => {
-      state = {};
-      resultCard.classList.add("hidden");
-      if (!formCard.classList.contains("hidden")) renderQuestions();
+  if (printBtn) {
+    printBtn.addEventListener("click", function () {
+      window.print();
     });
-  });
+  }
 
-  [claimAmountEl, keyDateEl, factsShortEl].forEach((el) => {
-    if (!el) return;
-    el.addEventListener("input", refreshDraftIfVisible);
-  });
-});
+  // Render questions only after start; but if user reloads mid-page, keep safe:
+  // do nothing here.
+})();
