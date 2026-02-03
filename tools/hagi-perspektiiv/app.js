@@ -1,60 +1,641 @@
-.card { margin-top: 16px; }
+(() => {
+  const STAGES = [
+    {
+      id: "facts",
+      chip: "Faktiline struktuur",
+      title: "Etapp I — Faktiline struktuur",
+      intro: "Selles etapis kontrollime, kas nõude faktiline alus on kohtumenetluseks piisavalt selge ja struktureeritud.",
+      questions: [
+        {
+          id: "chronology",
+          text: "Kas Sul on sündmuste selge kronoloogia?",
+          hint: "Kronoloogia tähendab loogilist ja ajaliselt järjestatud ülevaadet: mis juhtus, millal, kes osales ja mis oli tagajärg.",
+          weight: 2
+        },
+        {
+          id: "breach",
+          text: "Kas vastaspool rikkus konkreetset kohustust?",
+          hint: "Kahju hüvitamist saab nõuda siis, kui teine pool rikkus lepingut, seadusest tulenevat kohustust või käitus hooletult. Kui rikkumist ei saa selgelt kirjeldada, on nõue nõrk.",
+          weight: 2,
+          answers: ["Jah", "Võimalik", "Ei tea"]
+        },
+        {
+          id: "causation",
+          text: "Kas rikkumine põhjustas Sinu kahju?",
+          hint: "Põhjuslik seos tähendab, et kahju peab olema rikkumise tagajärg. Kui kahju tekkis muul põhjusel või oleks tekkinud niikuinii, suureneb risk.",
+          weight: 2
+        }
+      ]
+    },
+    {
+      id: "loss",
+      chip: "Kahju ja summa",
+      title: "Etapp II — Kahju ja nõudesumma",
+      intro: "Selles etapis kontrollime, kas kahju on kohtus esitataval kujul arvutatav ja dokumentidega toetatud.",
+      questions: [
+        {
+          id: "calculable",
+          text: "Kas kahju on rahaliselt arvutatav?",
+          hint: "Kohtus tuleb esitada konkreetne nõudesumma. Üldine soov “õiglust saada” ei ole nõue — kahju peab olema arvutatav.",
+          weight: 2,
+          answers: ["Jah", "Ligikaudselt", "Ei"]
+        },
+        {
+          id: "loss_docs",
+          text: "Kas Sul on dokumendid, mis kahju tõendavad?",
+          hint: "Arved, hinnapakkumised, eksperthinnang või muud alusdokumendid muudavad kahju tõendamise oluliselt tugevamaks.",
+          weight: 2
+        }
+      ]
+    },
+    {
+      id: "evidence",
+      chip: "Tõendid",
+      title: "Etapp III — Tõendite kontroll",
+      intro: "Selles etapis hindame, kas olemasolevad tõendid on piisavad ja kooskõlas.",
+      questions: [
+        {
+          id: "objective_evidence",
+          text: "Millised objektiivsed tõendid Sul olemas on?",
+          hint: "Objektiivsed tõendid (leping, kirjavahetus, arved, fotod, tunnistajad) on tugevamad kui üksnes suuline väide.",
+          type: "multi",
+          options: [
+            { value: "leping", label: "Leping" },
+            { value: "kirjavahetus", label: "Kirjavahetus" },
+            { value: "arved", label: "Arved" },
+            { value: "fotod", label: "Fotod" },
+            { value: "tunnistajad", label: "Tunnistajad" },
+            { value: "puuduvad", label: "Puuduvad" }
+          ],
+          weight: 2
+        },
+        {
+          id: "evidence_consistent",
+          text: "Kas tõendid on omavahel kooskõlas?",
+          hint: "Kui tõendid räägivad üksteisele vastu või on ebaselged, võib see nõude usaldusväärsust vähendada.",
+          weight: 2,
+          answers: ["Jah", "Vajavad täpsustamist", "On vastuolulised"]
+        }
+      ]
+    },
+    {
+      id: "legal",
+      chip: "Õiguslik alus",
+      title: "Etapp IV — Õiguslik raamistik",
+      intro: "Selles etapis kontrollime, kas Sa suudad põhjendada, miks seadus annab Sulle õiguse nõuda, ning kas on aegumise risk.",
+      questions: [
+        {
+          id: "legal_basis",
+          text: "Kas tead, miks seadus annab Sulle õiguse nõuda?",
+          hint: "Õiguslik alus tähendab lihtsat põhjendust: millist õigust rikuti ja miks see annab Sulle nõudeõiguse.",
+          weight: 2
+        },
+        {
+          id: "limitation",
+          text: "Kas nõue võib olla aegunud?",
+          hint: "Enamik nõudeid tuleb esitada kindla aja jooksul. Kui tähtaeg on möödunud ja vastaspool sellele tugineb, ei saa kohus nõuet rahuldada.",
+          weight: 2,
+          answers: ["Ei", "Võimalik", "Ei tea"]
+        }
+      ]
+    },
+    {
+      id: "risk",
+      chip: "Riskihinnang",
+      title: "Etapp V — Menetlusrisk ja otsus",
+      intro: "Selles etapis hinnatakse vastaspoole võimalikke vastuväiteid ja menetluskulude riski.",
+      questions: [
+        {
+          id: "counterarguments",
+          text: "Kas vastaspool võib esitada põhjendatud vastuväite?",
+          hint: "Kohtuvaidlus tähendab kahe poole argumentide võrdlemist. Mõtle läbi, mis on vastaspoole kõige tugevam vastuväide.",
+          weight: 2,
+          answers: ["Ei", "Jah", "Ei tea"]
+        },
+        {
+          id: "cost_risk",
+          text: "Kas oled arvestanud menetluskulude riskiga?",
+          hint: "Kui hagi jäetakse rahuldamata, võib tekkida kohustus kanda vastaspoole menetluskulud. Kohtusse pöördumine on rahaline risk.",
+          weight: 2
+        }
+      ]
+    }
+  ];
 
-.badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px; }
-.badge {
-  display:inline-flex; align-items:center; gap:6px;
-  padding: 4px 10px; border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
-  font-size: 13px;
-}
-.badge.subtle { opacity: .75; }
+  const DEFAULT_ANSWERS = ["Jah", "Osaliselt", "Ei"];
+  const SCORE_MAP = {
+    "Jah": 2, "Osaliselt": 1, "Ei": 0,
+    "Võimalik": 1, "Ei tea": 0,
+    "Ligikaudselt": 1,
+    "Vajavad täpsustamist": 1, "On vastuolulised": 0
+  };
 
-.disclaimer { margin-top: 10px; }
-.disclaimer summary { cursor:pointer; }
+  const STORAGE_KEY = "solverelab_hagi_perspektiiv_v2";
 
-.progress-wrap { display:flex; gap:8px; flex-wrap:wrap; }
-.step-chip {
-  padding: 6px 10px; border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
-  font-size: 13px;
-  user-select:none;
-}
-.step-chip.active { border-width: 2px; }
-.step-chip.done { opacity: .85; }
-.step-chip button { all: unset; cursor:pointer; }
+  let state = loadState() || { stageIndex: 0, answers: {} };
 
-.progress-meta { display:flex; justify-content:space-between; margin-top: 10px; gap: 12px; flex-wrap:wrap; }
-.progressbar { height: 10px; border-radius: 999px; overflow:hidden; border: 1px solid rgba(0,0,0,.12); margin-top: 10px; }
-.progressbar-fill { height: 100%; }
+  const progressWrap = document.getElementById("progressWrap");
+  const progressText = document.getElementById("progressText");
+  const completionText = document.getElementById("completionText");
+  const progressbarFill = document.getElementById("progressbarFill");
+  const progressbar = document.querySelector(".progressbar");
 
-.stage-head { margin-bottom: 14px; }
+  const stageTitle = document.getElementById("stageTitle");
+  const stageIntro = document.getElementById("stageIntro");
+  const questionForm = document.getElementById("questionForm");
 
-.questions { display:flex; flex-direction:column; gap: 14px; }
-.q {
-  padding: 12px; border-radius: 12px;
-  border: 1px solid rgba(0,0,0,.10);
-}
-.q h3 { margin: 0 0 6px 0; font-size: 16px; }
-.q .hint { margin: 0 0 10px 0; opacity: .8; }
-.q .opts { display:flex; gap: 10px; flex-wrap:wrap; }
-.opt {
-  display:flex; align-items:center; gap:8px;
-  padding: 8px 10px; border-radius: 10px;
-  border: 1px solid rgba(0,0,0,.12);
-}
-.opt input { transform: translateY(1px); }
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const jumpToReportBtn = document.getElementById("jumpToReportBtn");
 
-.actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; }
-.secondary-actions { margin-top: 10px; }
+  const reportCard = document.getElementById("reportCard");
+  const reportBadges = document.getElementById("reportBadges");
+  const overallAssessment = document.getElementById("overallAssessment");
+  const keyRisks = document.getElementById("keyRisks");
+  const nextSteps = document.getElementById("nextSteps");
+  const stageSummary = document.getElementById("stageSummary");
 
-.report-grid { display:grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
-@media (min-width: 900px) { .report-grid { grid-template-columns: 1fr 1fr; } }
+  const backToToolBtn = document.getElementById("backToToolBtn");
+  const downloadReportBtn = document.getElementById("downloadReportBtn");
+  const printBtn = document.getElementById("printBtn");
 
-.report-box {
-  border: 1px solid rgba(0,0,0,.10);
-  border-radius: 12px;
-  padding: 12px;
-}
-.report-badges { display:flex; gap:8px; flex-wrap:wrap; margin-top: 8px; }
+  renderProgressChips();
+  renderStage();
+  updateProgress();
 
-.h4 { margin: 0 0 8px 0; font-size: 15px; }
+  prevBtn.addEventListener("click", () => {
+    if (state.stageIndex > 0) {
+      state.stageIndex -= 1;
+      saveState();
+      reportCard.hidden = true;
+      renderStage();
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (state.stageIndex < STAGES.length - 1) {
+      state.stageIndex += 1;
+      saveState();
+      reportCard.hidden = true;
+      renderStage();
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      openReport();
+    }
+  });
+
+  resetBtn.addEventListener("click", () => {
+    state = { stageIndex: 0, answers: {} };
+    saveState();
+    reportCard.hidden = true;
+    renderProgressChips();
+    renderStage();
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  jumpToReportBtn.addEventListener("click", openReport);
+
+  backToToolBtn.addEventListener("click", () => {
+    reportCard.hidden = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  downloadReportBtn.addEventListener("click", () => {
+    const txt = buildReportText();
+    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `solverelab-noude-eelanaluuus-${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  printBtn.addEventListener("click", () => window.print());
+
+  function renderProgressChips() {
+    progressWrap.innerHTML = "";
+    STAGES.forEach((st, idx) => {
+      const chip = document.createElement("div");
+      chip.className = "step-chip";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = `${idx + 1}. ${st.chip}`;
+      btn.addEventListener("click", () => {
+        state.stageIndex = idx;
+        saveState();
+        reportCard.hidden = true;
+        renderStage();
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      chip.appendChild(btn);
+      progressWrap.appendChild(chip);
+    });
+  }
+
+  function renderStage() {
+    const st = STAGES[state.stageIndex];
+    stageTitle.textContent = st.title;
+    stageIntro.textContent = st.intro;
+
+    questionForm.innerHTML = "";
+    st.questions.forEach((q) => questionForm.appendChild(renderQuestion(q)));
+
+    prevBtn.disabled = state.stageIndex === 0;
+    nextBtn.textContent = state.stageIndex === STAGES.length - 1 ? "Vaata raportit →" : "Järgmine etapp →";
+
+    const chips = [...progressWrap.querySelectorAll(".step-chip")];
+    chips.forEach((c, idx) => {
+      c.classList.toggle("active", idx === state.stageIndex);
+      c.classList.toggle("done", stageCompletion(idx) === 1);
+    });
+  }
+
+  function renderQuestion(q) {
+    const wrap = document.createElement("div");
+    wrap.className = "q";
+
+    const h = document.createElement("h3");
+    h.textContent = q.text;
+
+    const hint = document.createElement("p");
+    hint.className = "hint";
+    hint.textContent = q.hint;
+
+    const opts = document.createElement("div");
+    opts.className = "opts";
+
+    if (q.type === "multi") {
+      const current = Array.isArray(state.answers[q.id]) ? state.answers[q.id] : [];
+      q.options.forEach((opt) => {
+        const label = document.createElement("label");
+        label.className = "opt";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = q.id;
+        input.value = opt.value;
+        input.checked = current.includes(opt.value);
+
+        input.addEventListener("change", () => {
+          let arr = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
+
+          if (input.checked) {
+            if (opt.value === "puuduvad") arr = ["puuduvad"];
+            else {
+              arr = arr.filter(v => v !== "puuduvad");
+              if (!arr.includes(opt.value)) arr.push(opt.value);
+            }
+          } else {
+            arr = arr.filter(v => v !== opt.value);
+          }
+
+          state.answers[q.id] = arr;
+          saveState();
+          updateProgress();
+        });
+
+        const span = document.createElement("span");
+        span.textContent = opt.label;
+
+        label.appendChild(input);
+        label.appendChild(span);
+        opts.appendChild(label);
+      });
+    } else {
+      const answers = q.answers || DEFAULT_ANSWERS;
+      const current = state.answers[q.id] || "";
+
+      answers.forEach((a) => {
+        const label = document.createElement("label");
+        label.className = "opt";
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = q.id;
+        input.value = a;
+        input.checked = current === a;
+
+        input.addEventListener("change", () => {
+          state.answers[q.id] = a;
+          saveState();
+          updateProgress();
+        });
+
+        const span = document.createElement("span");
+        span.textContent = a;
+
+        label.appendChild(input);
+        label.appendChild(span);
+        opts.appendChild(label);
+      });
+    }
+
+    wrap.appendChild(h);
+    wrap.appendChild(hint);
+    wrap.appendChild(opts);
+    return wrap;
+  }
+
+  function updateProgress() {
+    const total = countAllQuestions();
+    const answered = countAnsweredQuestions();
+    const pct = total === 0 ? 0 : Math.round((answered / total) * 100);
+
+    progressText.textContent = `Etapp ${state.stageIndex + 1} / ${STAGES.length}`;
+    completionText.textContent = `Täidetud: ${pct}%`;
+    progressbarFill.style.width = `${pct}%`;
+    progressbar.setAttribute("aria-valuenow", String(pct));
+
+    const chips = [...progressWrap.querySelectorAll(".step-chip")];
+    chips.forEach((c, idx) => c.classList.toggle("done", stageCompletion(idx) === 1));
+  }
+
+  function openReport() {
+    renderReport();
+    reportCard.hidden = false;
+    reportCard.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function renderReport() {
+    const summary = evaluate();
+
+    reportBadges.innerHTML = "";
+    reportBadges.appendChild(makeBadge(`Riskitase: ${summary.riskLevel}`));
+    reportBadges.appendChild(makeBadge(`Täidetud: ${summary.completedPct}%`, true));
+    reportBadges.appendChild(makeBadge(`Kuupäev: ${new Date().toLocaleDateString("et-EE")}`, true));
+
+    overallAssessment.textContent = summary.overallText;
+
+    keyRisks.innerHTML = "";
+    summary.keyRisks.forEach((r) => {
+      const li = document.createElement("li");
+      li.textContent = r;
+      keyRisks.appendChild(li);
+    });
+
+    nextSteps.innerHTML = "";
+    summary.nextSteps.forEach((s) => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      nextSteps.appendChild(li);
+    });
+
+    stageSummary.innerHTML = "";
+    summary.stageSummaries.forEach((st) => {
+      const div = document.createElement("div");
+      div.className = "muted";
+      div.style.marginBottom = "8px";
+      div.innerHTML = `<strong>${st.title}:</strong> ${st.text}`;
+      stageSummary.appendChild(div);
+    });
+  }
+
+  function makeBadge(text, subtle = false) {
+    const span = document.createElement("span");
+    span.className = subtle ? "badge subtle" : "badge";
+    span.textContent = text;
+    return span;
+  }
+
+  function buildReportText() {
+    const s = evaluate();
+    const lines = [];
+    lines.push("NÕUDE EELANALÜÜSI RAPORT");
+    lines.push("Koostatud Solvere Lab struktureeritud metoodika alusel.");
+    lines.push(`Kuupäev: ${new Date().toLocaleDateString("et-EE")}`);
+    lines.push("");
+    lines.push(`Üldhinnang: ${s.riskLevel}`);
+    lines.push(s.overallText);
+    lines.push("");
+    lines.push("Peamised riskid:");
+    s.keyRisks.forEach((r) => lines.push(`- ${r}`));
+    lines.push("");
+    lines.push("Soovitatud järgmised sammud:");
+    s.nextSteps.forEach((n, i) => lines.push(`${i + 1}. ${n}`));
+    lines.push("");
+    lines.push("Kokkuvõte etappide kaupa:");
+    s.stageSummaries.forEach((st) => lines.push(`- ${st.title}: ${st.text}`));
+    lines.push("");
+    lines.push("Märkus: Raport on informatiivne ega asenda õigusnõustamist.");
+    return lines.join("\n");
+  }
+
+  function evaluate() {
+    const total = countAllQuestions();
+    const answered = countAnsweredQuestions();
+    const completedPct = total === 0 ? 0 : Math.round((answered / total) * 100);
+
+    const stageSummaries = STAGES.map((st) => {
+      const { stageScorePct } = scoreStage(st);
+
+      const text =
+        stageScorePct >= 75
+          ? "Eelduslikult piisav selles etapis."
+          : stageScorePct >= 45
+            ? "Siin on puudujääke — enne hagi esitamist tasub täpsustada."
+            : "Siin on kriitilisi lünki — enne kohtusse pöördumist on vaja tugevdada.";
+
+      return { title: st.chip, text, pct: stageScorePct };
+    });
+
+    const flags = collectFlags();
+    const riskScore = flags.riskScore;
+
+    const riskLevel =
+      riskScore <= 33 ? "Madal" :
+      riskScore <= 66 ? "Keskmine" :
+      "Kõrge";
+
+    const overallText =
+      riskLevel === "Madal"
+        ? "Nõudel on eelduslikult selge faktiline ja õiguslik alus. Peamine fookus peaks olema dokumentide korrastamisel ja vastaspoole võimalike vastuväidete läbi mõtlemisel."
+        : riskLevel === "Keskmine"
+          ? "Nõude aluses esineb puudujääke, mis võivad kohtumenetluses tekitada riski. Soovitav on enne hagi esitamist täpsustada faktid, tugevdada tõendibaasi ja selgitada õiguslikku loogikat."
+          : "Nõude faktiline või õiguslik alus on praegusel kujul ebapiisav. Soovitav on hagi esitamist edasi lükata, koguda puuduolevad tõendid ja kontrollida nõude eeldused (sh tähtaeg).";
+
+    const keyRisks = flags.keyRisks.length
+      ? flags.keyRisks
+      : ["Olulisi kriitilisi riske ei tuvastatud olemasolevate vastuste põhjal."];
+
+    const nextSteps = buildNextSteps(riskLevel, flags);
+
+    return { riskLevel, completedPct, overallText, keyRisks, nextSteps, stageSummaries };
+  }
+
+  function buildNextSteps(riskLevel, flags) {
+    const steps = [];
+
+    if (flags.hasAegumineRisk) {
+      steps.push("Kontrolli nõude tähtaegu (aegumine). Kui tähtaeg võib olla möödunud, on see kriitiline risk.");
+    }
+
+    steps.push("Koosta kirjalik kronoloogia (mis juhtus, millal, kes osales, mis oli tagajärg).");
+    steps.push("Koosta tõendite loetelu ja seosta iga väide vähemalt ühe tõendiga (leping, kirjavahetus, arved, fotod, tunnistajad).");
+
+    if (flags.hasKahjuProblem) {
+      steps.push("Koosta kahju arvutus (summad, kuupäevad, alusdokumendid) nii, et nõudesumma oleks selge ja põhjendatav.");
+    }
+
+    if (flags.hasEvidenceConflict) {
+      steps.push("Korrasta vastuolud tõendites: täpsusta, mis on vaieldamatu ja mis vajab selgitamist.");
+    }
+
+    if (flags.hasLegalBasisGap) {
+      steps.push("Sõnasta lihtne õiguslik loogika: mis kohustust rikuti ja miks see annab nõudeõiguse (leping / seadusest tulenev kohustus / hooletus).");
+    }
+
+    if (riskLevel === "Madal") {
+      steps.push("Koosta kirjalik nõue vastaspoolele enne kohtusse pöördumist ja tee realistlik kompromissihinnang.");
+      steps.push("Kui lähed kohtusse: vormista hagi struktuuris: kronoloogia → rikkumine → põhjuslik seos → kahju → tõendid.");
+    } else if (riskLevel === "Keskmine") {
+      steps.push("Enne hagi esitamist tugevdada nõude alus: täpsusta faktid, lisa dokumendid, kontrolli tähtaegu, mõtle läbi vastuväited.");
+      steps.push("Kaalu professionaalset nõu, kui riskid puudutavad tähtaegu, põhjuslikku seost või kahju arvestust.");
+    } else {
+      steps.push("Ära esita hagi enne, kui kriitilised lüngad on täidetud (kronoloogia/tõendid/kahju/õiguslik loogika).");
+      steps.push("Kaalu kohtuvälist lahendust (läbirääkimised, kompromiss), kui tõendibaas ei võimalda nõuet veenvalt tõendada.");
+      steps.push("Kui risk on seotud tähtaegadega või tõendite puudumisega, küsi enne menetluse algust professionaalset nõu.");
+    }
+
+    return [...new Set(steps)];
+  }
+
+  function collectFlags() {
+    const a = state.answers;
+    const keyRisks = [];
+    let riskScore = 0;
+
+    const chronology = a["chronology"];
+    if (chronology === "Ei") { keyRisks.push("Kronoloogia on ebaselge — nõude faktiline alus võib jääda segaseks."); riskScore += 18; }
+    if (chronology === "Osaliselt") { keyRisks.push("Kronoloogia vajab täpsustamist — täida lüngad ja fikseeri kuupäevad."); riskScore += 10; }
+
+    const breach = a["breach"];
+    if (breach === "Ei tea") { keyRisks.push("Rikkumine on ebaselge — määra, millist kohustust rikuti."); riskScore += 18; }
+    if (breach === "Võimalik") { keyRisks.push("Rikkumine on osaliselt selge — sõnasta konkreetne kohustus ja rikkumise tegu/tegematajätmine."); riskScore += 10; }
+
+    const causation = a["causation"];
+    if (causation === "Ei") { keyRisks.push("Põhjuslik seos on nõrk — selgita, kuidas rikkumine põhjustas konkreetse kahju."); riskScore += 18; }
+    if (causation === "Osaliselt") { keyRisks.push("Põhjuslik seos vajab täpsustamist — kirjuta seos samm-sammult lahti."); riskScore += 10; }
+
+    const calculable = a["calculable"];
+    if (calculable === "Ei") { keyRisks.push("Kahju ei ole arvutatav — nõudesumma peab olema konkreetne ja põhjendatav."); riskScore += 16; }
+    if (calculable === "Ligikaudselt") { keyRisks.push("Kahju on osaliselt arvutatav — vaja täpsemat arvutust ja alusdokumente."); riskScore += 8; }
+
+    const lossDocs = a["loss_docs"];
+    if (lossDocs === "Ei") { keyRisks.push("Kahju tõendavad dokumendid puuduvad — väited võivad jääda tõendamata."); riskScore += 16; }
+    if (lossDocs === "Osaliselt") { keyRisks.push("Kahju dokumendid on osalised — kogu arved/hinnapakkumised/eksperthinnangud."); riskScore += 8; }
+
+    const ev = Array.isArray(a["objective_evidence"]) ? a["objective_evidence"] : [];
+    if (ev.includes("puuduvad") || ev.length === 0) { keyRisks.push("Objektiivseid tõendeid on vähe — tugevda dokumentaalset tõendibaasi."); riskScore += 14; }
+
+    const evidenceCons = a["evidence_consistent"];
+    const hasEvidenceConflict = evidenceCons === "On vastuolulised";
+    if (hasEvidenceConflict) { keyRisks.push("Tõendid on vastuolulised — enne menetlust korrasta vastuolud ja täpsusta selgitused."); riskScore += 14; }
+    if (evidenceCons === "Vajavad täpsustamist") { keyRisks.push("Tõendid vajavad täpsustamist — seosta tõendid konkreetsete väidetega."); riskScore += 7; }
+
+    const legalBasis = a["legal_basis"];
+    const hasLegalBasisGap = legalBasis === "Ei" || legalBasis === "Osaliselt";
+    if (legalBasis === "Ei") { keyRisks.push("Õiguslik loogika on ebaselge — selgita, miks tekib nõudeõigus."); riskScore += 14; }
+    if (legalBasis === "Osaliselt") { keyRisks.push("Õiguslik loogika vajab täpsustamist — sõnasta kohustus ja rikkumine lihtsate lausetena."); riskScore += 7; }
+
+    const lim = a["limitation"];
+    const hasAegumineRisk = lim === "Võimalik" || lim === "Ei tea";
+    if (lim === "Võimalik") { keyRisks.push("Võimalik aegumise risk — kontrolli tähtaegu enne kohtusse pöördumist."); riskScore += 20; }
+    if (lim === "Ei tea") { keyRisks.push("Aegumise küsimus on kontrollimata — see võib olla kriitiline risk."); riskScore += 20; }
+
+    const counter = a["counterarguments"];
+    if (counter === "Jah") { keyRisks.push("Vastaspoolel võib olla põhjendatud vastuväide — mõtle läbi enda nõrgaim lüli."); riskScore += 8; }
+    if (counter === "Ei tea") { keyRisks.push("Vastaspoole vastuväiteid pole hinnatud — see suurendab strateegilist riski."); riskScore += 10; }
+
+    const cost = a["cost_risk"];
+    if (cost === "Ei") { keyRisks.push("Menetluskulude risk on arvestamata — kohtusse pöördumine on rahaline risk."); riskScore += 10; }
+    if (cost === "Osaliselt") { keyRisks.push("Menetluskulude risk vajab täpsemat läbi mõtlemist (riigilõiv, vastaspoole kulud, ekspertiis)."); riskScore += 5; }
+
+    return {
+      riskScore: Math.min(100, riskScore),
+      keyRisks: [...new Set(keyRisks)],
+      hasAegumineRisk,
+      hasKahjuProblem: (calculable === "Ei" || calculable === "Ligikaudselt" || lossDocs === "Ei" || lossDocs === "Osaliselt"),
+      hasEvidenceConflict,
+      hasLegalBasisGap
+    };
+  }
+
+  function scoreStage(stage) {
+    let max = 0;
+    let got = 0;
+
+    stage.questions.forEach((q) => {
+      const w = q.weight || 1;
+      max += 2 * w;
+
+      const ans = state.answers[q.id];
+      if (q.type === "multi") {
+        const arr = Array.isArray(ans) ? ans : [];
+        const score = (arr.length === 0 || arr.includes("puuduvad")) ? 0 : 2;
+        got += score * w;
+      } else {
+        const score = SCORE_MAP[ans];
+        if (score !== undefined) got += score * w;
+      }
+    });
+
+    const stageScorePct = max === 0 ? 0 : Math.round((got / max) * 100);
+    return { got, max, stageScorePct };
+  }
+
+  function stageCompletion(idx) {
+    const st = STAGES[idx];
+    const total = st.questions.length;
+    let answered = 0;
+    st.questions.forEach((q) => {
+      const ans = state.answers[q.id];
+      if (q.type === "multi") {
+        if (Array.isArray(ans) && ans.length > 0) answered++;
+      } else {
+        if (typeof ans === "string" && ans.length > 0) answered++;
+      }
+    });
+    return total === 0 ? 0 : answered / total;
+  }
+
+  function countAllQuestions() {
+    return STAGES.reduce((sum, st) => sum + st.questions.length, 0);
+  }
+
+  function countAnsweredQuestions() {
+    let n = 0;
+    STAGES.forEach((st) => {
+      st.questions.forEach((q) => {
+        const ans = state.answers[q.id];
+        if (q.type === "multi") {
+          if (Array.isArray(ans) && ans.length > 0) n++;
+        } else {
+          if (typeof ans === "string" && ans.length > 0) n++;
+        }
+      });
+    });
+    return n;
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+})();
