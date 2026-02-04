@@ -876,6 +876,157 @@ const COMPONENT_TEXT = {
   bindNavAndInfo();
   bindAnswerPersistence();
   initFromStorage();
+
+    // --- II FAAS: Action plan generator (uses I faasi scores) ---
+  const btnPlanOpen = document.getElementById("btnPlanOpen");
+  const btnPlanClose = document.getElementById("btnPlanClose");
+  const actionPlanCard = document.getElementById("actionPlanCard");
+  const planBlocks = document.getElementById("planBlocks");
+  const planConditionsList = document.getElementById("planConditionsList");
+
+  function decisionConditionsFromScores(scores){
+    const out = [];
+
+    if (scores.limitation <= 1) out.push("Aegumise küsimus vajab kontrolli.");
+    if (scores.evidence <= 1) out.push("Tõendibaasi tuleb täiendada.");
+    if (scores.basis <= 1 || scores.breach <= 1 || scores.damage <= 1){
+      const parts = [];
+      if (scores.basis <= 1) parts.push("alus");
+      if (scores.breach <= 1) parts.push("rikkumine");
+      if (scores.damage <= 1) parts.push("kahju");
+      out.push(`Nõude tuum vajab täpsustamist (${parts.join(", ")}).`);
+    }
+    if (scores.defenses === 0) out.push("Vastuväidete käsitlus on vajalik.");
+
+    // max 3
+    return out.slice(0, 3);
+  }
+
+  const TASKS = {
+    basis: {
+      title: "Nõude alus",
+      items: [
+        "Sõnasta kohustus ühe lausega (kes, mida, millal).",
+        "Tuvasta kohustuse allikas (leping / kirjavahetus / seadus / muu).",
+        "Kirjelda 3–5 bulletiga, mis oli kohustuse sisu.",
+        "Määra, mis on nõude ese (raha / täitmine / muu).",
+      ],
+    },
+    breach: {
+      title: "Rikkumine",
+      items: [
+        "Kirjelda rikkumine faktina (mida ei tehtud / tehti valesti / hilines).",
+        "Seo rikkumine konkreetse kohustuse punktiga (või kokkuleppega).",
+        "Koosta kronoloogia: kuupäevad + teod + allikad.",
+        "Tuvasta rikkumise moment (millal rikkumine tekkis).",
+      ],
+    },
+    damage: {
+      title: "Kahju",
+      items: [
+        "Koosta arvutuskäik (valem + sisendid).",
+        "Kogu alusdokumendid (arved, pakkumised, kalkulatsioonid).",
+        "Erista kulud: tegelik kahju vs hinnangulised kulud.",
+        "Kirjelda lühidalt põhjuslik seos (miks rikkumine tekitas kahju).",
+      ],
+    },
+    evidence: {
+      title: "Tõendid",
+      items: [
+        "Koosta tõendite nimekiri (min 3: leping/kirjavahetus/arve/akt/foto jne).",
+        "Seo iga tõend konkreetse väitega (mida see tõendab).",
+        "Tuvasta lüngad: millise väite kohta on tõend puudu.",
+        "Koonda failid ühtseks struktuuriks (nt 01_leping, 02_kirjavahetus…).",
+      ],
+    },
+    defenses: {
+      title: "Vastuväited",
+      items: [
+        "Pane kirja 2–3 kõige tõenäolisemat vastuväidet.",
+        "Kirjuta igale vastuväitele 2–3 lausega vastus (fakt + tõend).",
+        "Märgi, milline vastuväide on nõrgim lüli ja mida selle leevendamiseks vaja.",
+      ],
+    },
+    limitation: {
+      title: "Aegumine",
+      items: [
+        "Pane kirja olulised kuupäevad (kokkulepe, rikkumine, kahju ilmnemine, teavitused).",
+        "Tuvasta, millal nõue muutus sissenõutavaks (praktiline kontrollpunkt).",
+        "Kogu info tähtaja katkemise/peatumise kohta (kui oli).",
+        "Tee kiire kontroll, kas nõude liigile võib kohalduda eritähtaeg.",
+      ],
+    },
+  };
+
+  function renderActionPlan(scores){
+    // Clear
+    planBlocks.innerHTML = "";
+    planConditionsList.innerHTML = "";
+
+    // Conditions
+    const conds = decisionConditionsFromScores(scores);
+    if (conds.length === 0){
+      const li = document.createElement("li");
+      li.textContent = "Kriitilisi tingimusi ei tuvastatud. Vajadusel täpsusta üksikuid detaile enne edasist sammu.";
+      planConditionsList.appendChild(li);
+    } else {
+      for (const c of conds){
+        const li = document.createElement("li");
+        li.textContent = c;
+        planConditionsList.appendChild(li);
+      }
+    }
+
+    // Blocks: only for <= 1
+    const order = ["basis","breach","damage","evidence","defenses","limitation"];
+    for (const key of order){
+      if (scores[key] > 1) continue;
+
+      const block = document.createElement("div");
+      block.className = "qblock";
+      block.style.marginTop = "12px";
+
+      const h = document.createElement("h3");
+      h.className = "qtitle";
+      h.textContent = TASKS[key].title;
+
+      const ul = document.createElement("ul");
+      ul.className = "list";
+      ul.style.margin = "8px 0 0 18px";
+
+      for (const item of TASKS[key].items){
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      }
+
+      block.appendChild(h);
+      block.appendChild(ul);
+      planBlocks.appendChild(block);
+    }
+  }
+
+  function openPlan(){
+    const saved = getSaved();
+    if (!saved) return;
+
+    // scores are saved as numbers 0-3 already
+    const scores = {};
+    for (const f of FIELDS){
+      scores[f] = Number(saved[f]);
+    }
+
+    renderActionPlan(scores);
+    actionPlanCard.hidden = false;
+    actionPlanCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function closePlan(){
+    actionPlanCard.hidden = true;
+  }
+
+  btnPlanOpen?.addEventListener("click", openPlan);
+  btnPlanClose?.addEventListener("click", closePlan);
 })();
 </script>
 
