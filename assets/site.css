@@ -191,3 +191,238 @@ textarea{
 .qoptions{display:flex; gap:16px; flex-wrap:wrap; margin:6px 0 10px}
 .qopt{color:var(--muted)}
 .qexplain{margin:0; color:rgba(234,242,255,.70); font-size:13px; line-height:1.5}
+/* =========================
+   Tool UI (noode-eelanaluus)
+   ========================= */
+
+/* Page header spacing on tool page */
+.pagehead { margin-bottom: 18px; }
+
+/* Neutral notice variant (keeps your existing .notice look) */
+.notice--neutral {}
+
+/* Progress */
+.progresswrap { margin: 14px 0 18px; }
+.progressbar{
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.04);
+  overflow: hidden;
+}
+.progressbar__fill{
+  height: 100%;
+  width: 0%;
+  background: rgba(125,211,252,.35);
+}
+.progressmeta{
+  display:flex;
+  justify-content:space-between;
+  margin-top: 8px;
+  color: rgba(234,242,255,.72);
+  font-size: 13px;
+}
+
+/* Steps */
+.steps { margin-top: 10px; }
+
+.step{
+  margin-top: 12px;
+  padding: 18px 18px;
+  border-radius: var(--radius2);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  box-shadow: var(--shadow);
+}
+
+.step__head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.step__head h2{
+  margin: 0;
+  font-size: 20px;
+}
+
+.step__nav{
+  display:flex;
+  justify-content:space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* Weighted steps: very subtle emphasis */
+.step--weighted{
+  border-color: rgba(125,211,252,.22);
+}
+
+/* Info toggle */
+.infoToggle{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.04);
+  color: rgba(234,242,255,.78);
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+}
+.infoToggle:hover{
+  background: rgba(255,255,255,.08);
+}
+
+.step__info{
+  margin: 10px 0 12px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  color: rgba(234,242,255,.78);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Question fieldset */
+.q{
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.q__legend{
+  font-weight: 700;
+  margin: 0 0 10px;
+  line-height: 1.45;
+}
+
+/* Options */
+.opt{
+  display:flex;
+  align-items:flex-start;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.opt:hover{
+  background: rgba(255,255,255,.06);
+}
+.opt input{
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+.opt span{
+  color: rgba(234,242,255,.86);
+  line-height: 1.45;
+}
+
+/* Buttons: primary variant */
+.btn-primary{
+  background: rgba(125,211,252,.14);
+  border-color: rgba(125,211,252,.32);
+}
+.btn-primary:hover{
+  background: rgba(125,211,252,.20);
+}
+
+/* Results */
+.results{ margin-top: 18px; }
+.results__head h2{ margin: 0 0 8px; font-size: 22px; }
+.results__head .muted{ margin: 0 0 14px; }
+
+.overall{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  padding: 18px 18px;
+}
+.overall__badge{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 20px;
+}
+.overall__title{
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.overall__desc{
+  margin-top: 4px;
+  color: rgba(234,242,255,.72);
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* Grid 2x3 */
+.grid-2x3{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+@media (max-width: 720px){
+  .grid-2x3{ grid-template-columns: 1fr; }
+}
+
+/* Metric cards */
+.metric{
+  padding: 16px 16px;
+}
+.metric__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.metric__name{
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.metric__dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.10);
+}
+.metric__label{
+  font-weight: 700;
+  color: rgba(234,242,255,.82);
+}
+.metric__note{
+  margin-top: 6px;
+  color: rgba(234,242,255,.72);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.metric--weighted{
+  border-color: rgba(125,211,252,.22);
+}
+
+/* data-level styling (subtle, professional) */
+.card[data-level="strong"] .metric__dot,
+.metric[data-level="strong"] .metric__dot{ background: rgba(34,197,94,.55); border-color: rgba(34,197,94,.35); }
+.metric[data-level="moderate"] .metric__dot{ background: rgba(245,158,11,.60); border-color: rgba(245,158,11,.35); }
+.metric[data-level="weak"] .metric__dot{ background: rgba(239,68,68,.55); border-color: rgba(239,68,68,.35); }
+.metric[data-level="critical"] .metric__dot{ background: rgba(239,68,68,.75); border-color: rgba(239,68,68,.45); }
+
+/* Overall card border cue */
+.overall[data-level="strong"]{ border-color: rgba(34,197,94,.25); }
+.overall[data-level="moderate"]{ border-color: rgba(245,158,11,.25); }
+.overall[data-level="weak"]{ border-color: rgba(239,68,68,.25); }
+
+/* Results note spacing */
+.results__note{ margin-top: 14px; }
+
