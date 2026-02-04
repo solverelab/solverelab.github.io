@@ -313,92 +313,132 @@
 
   </section>
 
-  <!-- RESULTS -->
-  <section class="results" id="results" aria-label="Tulemus" hidden>
-    <header class="results__head">
-      <h2>Tulemus</h2>
-      <p class="muted">
-        Hinnang põhineb kaalutud riskikomponentidel, sealhulgas tõendite olemasolul ja aegumisküsimusel.
-      </p>
-    </header>
+<!-- RESULTS -->
+<section class="results" id="results" aria-label="Tulemus" hidden>
 
-    <!-- Overall -->
-    <div class="card overall" id="overallCard" data-level="unknown">
-      <div class="overall__badge" id="overallBadge" aria-label="Üldhinnangu indikaator">—</div>
-      <div class="overall__text">
-        <div class="overall__title" id="overallTitle">Üldine riskiprofiil</div>
-        <div class="overall__desc" id="overallDesc">Täida küsimustik, et kuvada hinnang.</div>
+  <header class="results__head">
+    <h2>Tulemus</h2>
+    <p class="muted">
+      Hinnang põhineb kaalutud riskikomponentidel, sealhulgas tõendite olemasolul ja aegumisküsimusel.
+    </p>
+  </header>
+
+  <!-- Overall -->
+  <div class="card overall" id="overallCard" data-level="unknown">
+    <div class="overall__badge" id="overallBadge" aria-label="Üldhinnangu indikaator">—</div>
+    <div class="overall__text">
+      <div class="overall__title" id="overallTitle">Üldine riskiprofiil</div>
+      <div class="overall__desc" id="overallDesc">
+        Täida küsimustik, et kuvada hinnang.
       </div>
     </div>
+  </div>
 
-    <!-- Grid (2x3) -->
-    <div class="grid grid-2x3" id="riskGrid">
-      <div class="card metric" id="m-basis" data-level="unknown">
-        <div class="metric__head">
-          <div class="metric__name">Nõude alus</div>
-          <div class="metric__dot" aria-hidden="true"></div>
-        </div>
-        <div class="metric__label" id="m-basis-label">—</div>
-        <div class="metric__note" id="m-basis-note">—</div>
-      </div>
+  <!-- Grid (2x3) -->
+  <div class="grid grid-2x3" id="riskGrid">
 
-      <div class="card metric" id="m-breach" data-level="unknown">
-        <div class="metric__head">
-          <div class="metric__name">Rikkumine</div>
-          <div class="metric__dot" aria-hidden="true"></div>
-        </div>
-        <div class="metric__label" id="m-breach-label">—</div>
-        <div class="metric__note" id="m-breach-note">—</div>
+    <div class="card metric" id="m-basis" data-level="unknown">
+      <div class="metric__head">
+        <div class="metric__name">Nõude alus</div>
+        <div class="metric__dot"></div>
       </div>
-
-      <div class="card metric" id="m-damage" data-level="unknown">
-        <div class="metric__head">
-          <div class="metric__name">Kahju</div>
-          <div class="metric__dot" aria-hidden="true"></div>
-        </div>
-        <div class="metric__label" id="m-damage-label">—</div>
-        <div class="metric__note" id="m-damage-note">—</div>
-      </div>
-
-      <div class="card metric" id="m-defenses" data-level="unknown">
-        <div class="metric__head">
-          <div class="metric__name">Vastuväited</div>
-          <div class="metric__dot" aria-hidden="true"></div>
-        </div>
-        <div class="metric__label" id="m-defenses-label">—</div>
-        <div class="metric__note" id="m-defenses-note">—</div>
-      </div>
-
-      <div class="card metric metric--weighted" id="m-evidence" data-level="unknown">
-        <div class="metric__head">
-          <div class="metric__name">Tõendid</div>
-          <div class="metric__dot" aria-hidden="true"></div>
-        </div>
-        <div class="metric__label" id="m-evidence-label">—</div>
-        <div class="metric__note" id="m-evidence-note">—</div>
-      </div>
-
-      <div class="card metric metric--weighted" id="m-limitation" data-level="unknown">
-        <div class="metric__head">
-          <div class="metric__name">Aegumine</div>
-          <div class="metric__dot" aria-hidden="true"></div>
-        </div>
-        <div class="metric__label" id="m-limitation-label">—</div>
-        <div class="metric__note" id="m-limitation-note">—</div>
-      </div>
+      <div class="metric__label" id="m-basis-label">—</div>
+      <div class="metric__note" id="m-basis-note">—</div>
     </div>
 
-    <div class="notice notice--neutral results__note" role="note">
-      Tegemist on informatiivse eelanalüüsiga ega asenda õigusnõustamist.
-      Sügavam struktureeritud analüüs (hagi eelhindamise protokoll) on arendamisel.
+    <div class="card metric" id="m-breach" data-level="unknown">
+      <div class="metric__head">
+        <div class="metric__name">Rikkumine</div>
+        <div class="metric__dot"></div>
+      </div>
+      <div class="metric__label" id="m-breach-label">—</div>
+      <div class="metric__note" id="m-breach-note">—</div>
     </div>
 
-    <div class="actions">
-      <button type="button" class="btn" id="btnEdit">Muuda vastuseid</button>
-      <button type="button" class="btn" id="btnResetBottom">Lähtesta</button>
+    <div class="card metric" id="m-damage" data-level="unknown">
+      <div class="metric__head">
+        <div class="metric__name">Kahju</div>
+        <div class="metric__dot"></div>
+      </div>
+      <div class="metric__label" id="m-damage-label">—</div>
+      <div class="metric__note" id="m-damage-note">—</div>
     </div>
+
+    <div class="card metric" id="m-defenses" data-level="unknown">
+      <div class="metric__head">
+        <div class="metric__name">Vastuväited</div>
+        <div class="metric__dot"></div>
+      </div>
+      <div class="metric__label" id="m-defenses-label">—</div>
+      <div class="metric__note" id="m-defenses-note">—</div>
+    </div>
+
+    <div class="card metric metric--weighted" id="m-evidence" data-level="unknown">
+      <div class="metric__head">
+        <div class="metric__name">Tõendid</div>
+        <div class="metric__dot"></div>
+      </div>
+      <div class="metric__label" id="m-evidence-label">—</div>
+      <div class="metric__note" id="m-evidence-note">—</div>
+    </div>
+
+    <div class="card metric metric--weighted" id="m-limitation" data-level="unknown">
+      <div class="metric__head">
+        <div class="metric__name">Aegumine</div>
+        <div class="metric__dot"></div>
+      </div>
+      <div class="metric__label" id="m-limitation-label">—</div>
+      <div class="metric__note" id="m-limitation-note">—</div>
+    </div>
+
+  </div>
+
+  <!-- Info notice -->
+  <div class="notice notice--neutral results__note">
+    Tegemist on informatiivse eelanalüüsiga ega asenda õigusnõustamist.
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button type="button" class="btn" id="btnPlanOpen">
+      Ava tööplaan
+    </button>
+    <button type="button" class="btn" id="btnEdit">
+      Muuda vastuseid
+    </button>
+    <button type="button" class="btn secondary" id="btnResetBottom">
+      Lähtesta
+    </button>
+  </div>
+
+  <!-- II FAAS: Action plan -->
+  <section class="card" id="actionPlanCard" hidden>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <h3 style="margin:0;">Soovituslik tööplaan</h3>
+      <button type="button" class="btn secondary" id="btnPlanClose">
+        Sulge
+      </button>
+    </div>
+
+    <p class="muted">
+      Kuvatakse ainult need plokid, kus esines nõrk või kriitiline riskikoht.
+    </p>
+
+    <div class="notice" id="planConditions">
+      <strong>Enne edasist sammu</strong>
+      <ul class="list" id="planConditionsList"></ul>
+    </div>
+
+    <div id="planBlocks" style="margin-top:16px;"></div>
+
+    <p class="muted small" style="margin-top:14px;">
+      Märkus: käesolev tööplaan on informatiivne ega kujuta endast õigusnõustamist.
+    </p>
+
   </section>
 
+</section>
 </main>
 
 <script>
