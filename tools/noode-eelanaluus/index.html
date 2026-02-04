@@ -451,44 +451,49 @@
   const CRITICAL_FIELDS = ["evidence", "limitation"]; // if 0, cannot be Strong; both 0 => Weak
 
   // Component labels + 1-line notes (based on score 0-3)
-  const COMPONENT_TEXT = {
-    basis: {
-      3: { label: "Tugev", note: "Kohustus on selgelt tuvastatav." },
-      2: { label: "Piisav", note: "Kohustuse olemasolu on tuvastatav, kuid selle sisu vajab täpsustamist." },
-      1: { label: "Nõrk",  note: "Kohustuse sisu ei ole selgelt määratletav või vajab olulist täpsustamist." },
-      0: { label: "Kriitiline", note: "Kohustuse olemasolu ei ole esialgse hinnangu alusel tuvastatav." },
-    },
-    breach: {
-      3: { label: "Tugev", note: "Kohustuse olemasolu on selgelt tuvastatav ja määratletav." },
-      2: { label: "Piisav", note: "Rikkumine on tõenäoline, kuid vajab täpsust." },
-      1: { label: "Nõrk",  note: "Rikkumise olemasolu võib olla vaieldav." },
-      0: { label: "Kriitiline", note: "Rikkumist ei ole võimalik kindlalt tuvastada." },
-    },
-    damage: {
-      3: { label: "Tugev", note: "Nõude summa on arvutatav ja põhjendatud." },
-      2: { label: "Piisav", note: "Summa on määratav, kuid ebatäpsustega." },
-      1: { label: "Nõrk",  note: "Summa on ebamäärane ja vajab põhjendust." },
-      0: { label: "Kriitiline", note: "Summa ei ole rahaliselt määratletud." },
-    },
-    evidence: {
-      3: { label: "Tugev", note: "Olemas on mitu objektiivset tõendit." },
-      2: { label: "Piisav", note: "Olemas on mõned asjakohased tõendid." },
-      1: { label: "Nõrk",  note: "Tõendid on piiratud või kaudsed." },
-      0: { label: "Kriitiline", note: "Tõendid puuduvad või on ebapiisavad." },
-    },
-    defenses: {
-      3: { label: "Tugev", note: "Tugevad vastuväited on vähetõenäolised." },
-      2: { label: "Piisav", note: "Vastuväited on võimalikud." },
-      1: { label: "Nõrk",  note: "Vastuväited võivad olla tõenäolised." },
-      0: { label: "Kriitiline", note: "Tugevad vastuväited on väga tõenäolised." },
-    },
-    limitation: {
-      3: { label: "Tugev", note: "Aegumisohtu ei tuvastatud." },
-      2: { label: "Piisav", note: "Aegumisoht on ebatõenäoline." },
-      1: { label: "Nõrk",  note: "Aegumisoht on võimalik." },
-      0: { label: "Kriitiline", note: "Aegumisoht on tõenäoline." },
-    },
-  };
+const COMPONENT_TEXT = {
+  basis: {
+    3: { label: "Tugev", note: "Kohustuse olemasolu on selgelt tuvastatav ja määratletav." },
+    2: { label: "Piisav", note: "Kohustuse olemasolu on tuvastatav, kuid selle sisu vajab täpsustamist." },
+    1: { label: "Nõrk",  note: "Kohustuse sisu ei ole selgelt määratletav või vajab olulist täpsustamist." },
+    0: { label: "Kriitiline", note: "Kohustuse olemasolu ei ole esialgse hinnangu alusel tuvastatav." },
+  },
+
+  breach: {
+    3: { label: "Tugev", note: "Rikkumine on selgelt kirjeldatav ja seostatav konkreetse kohustusega." },
+    2: { label: "Piisav", note: "Rikkumine on tõenäoline, kuid vajab selgemat seost kohustusega." },
+    1: { label: "Nõrk",  note: "Rikkumise olemasolu või selle seos kohustusega võib olla vaieldav." },
+    0: { label: "Kriitiline", note: "Rikkumise olemasolu või selle seos kohustusega ei ole piisavalt tuvastatav." },
+  },
+
+  damage: {
+    3: { label: "Tugev", note: "Nõude suurus on rahaliselt määratletud ja põhjendatav." },
+    2: { label: "Piisav", note: "Nõude suurus on määratav, kuid arvutuskäik või põhjendus vajab täiendamist." },
+    1: { label: "Nõrk",  note: "Nõude suurus ei ole piisavalt määratletud või vajab täiendavat põhjendust." },
+    0: { label: "Kriitiline", note: "Nõude suurus ei ole rahaliselt määratletud ega põhjendatud." },
+  },
+
+  evidence: {
+    3: { label: "Tugev", note: "Olemas on mitmed asjakohased ja objektiivsed tõendid." },
+    2: { label: "Piisav", note: "Olemas on asjakohaseid tõendeid, kuid nende piisavus võib olla vaieldav." },
+    1: { label: "Nõrk",  note: "Tõendid on piiratud või kaudsed ning nende piisavus võib olla küsitav." },
+    0: { label: "Kriitiline", note: "Asjakohased tõendid puuduvad või ei toeta väidet piisaval määral." },
+  },
+
+  defenses: {
+    3: { label: "Tugev", note: "Olulised vastuväited ei ole esialgse hinnangu alusel tõenäolised." },
+    2: { label: "Piisav", note: "Võimalikud vastuväited võivad mõjutada nõude hinnangut." },
+    1: { label: "Nõrk",  note: "Võimalikud vastuväited võivad oluliselt mõjutada nõude hinnangut." },
+    0: { label: "Kriitiline", note: "Võimalikud vastuväited võivad oluliselt piirata nõude elujõulisust." },
+  },
+
+  limitation: {
+    3: { label: "Tugev", note: "Aegumise riski ei ole esialgse hinnangu alusel tuvastatud." },
+    2: { label: "Piisav", note: "Aegumise risk ei ole esialgse hinnangu alusel tõenäoline, kuid vajab kontrolli." },
+    1: { label: "Nõrk",  note: "Aegumise risk võib esineda ja vajab täiendavat kontrolli." },
+    0: { label: "Kriitiline", note: "Aegumise risk võib oluliselt piirata nõude maksmapanekut." },
+  },
+};
 
   // Overall labels (no percentages shown)
   const OVERALL_TEXT = {
