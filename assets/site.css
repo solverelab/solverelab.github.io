@@ -435,3 +435,17 @@ body.page-methodology{
     linear-gradient(180deg, #0b1220 0%, #0a1020 100%);
 }
 
+/* Reduce gradient banding (iOS/Safari "ribuline" effect) */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.06;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+}
+
+/* ensure content stays above overlay */
+body > * { position:relative; z-index:1; }
