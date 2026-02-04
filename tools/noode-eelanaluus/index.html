@@ -402,16 +402,10 @@
 </main>
 
 <script>
-/**
- * Skeleton JS hooks (no scoring implementation yet)
- * - Step navigation (Next/Back/Finish)
- * - Progress updates
- * - Info toggles
- * - Session persistence placeholders
- */
 (() => {
   const STORAGE_KEY = "solverelab_claim_precheck_v1";
 
+  // ---- Elements
   const stepsWrap = document.getElementById("steps");
   const steps = Array.from(document.querySelectorAll(".step"));
   const results = document.getElementById("results");
@@ -425,26 +419,132 @@
   const progressLabel = document.getElementById("progressLabel");
   const progressBar = document.querySelector(".progressbar");
 
+  const overallCard = document.getElementById("overallCard");
+  const overallBadge = document.getElementById("overallBadge");
+  const overallTitle = document.getElementById("overallTitle");
+  const overallDesc = document.getElementById("overallDesc");
+
+  // Grid card elements
+  const gridIds = {
+    basis:    { card: "m-basis",     label: "m-basis-label",     note: "m-basis-note" },
+    breach:   { card: "m-breach",    label: "m-breach-label",    note: "m-breach-note" },
+    damage:   { card: "m-damage",    label: "m-damage-label",    note: "m-damage-note" },
+    defenses: { card: "m-defenses",  label: "m-defenses-label",  note: "m-defenses-note" },
+    evidence: { card: "m-evidence",  label: "m-evidence-label",  note: "m-evidence-note" },
+    limitation:{card: "m-limitation",label: "m-limitation-label",note: "m-limitation-note" },
+  };
+
+  // ---- Model (names match radio groups)
+  const FIELDS = ["basis", "breach", "damage", "evidence", "defenses", "limitation"];
+
+  // Weights: evidence & limitation are double-weighted
+  const WEIGHTS = {
+    basis: 1,
+    breach: 1,
+    damage: 1,
+    defenses: 1,
+    evidence: 2,
+    limitation: 2,
+  };
+
+  // Critical “hard constraints”
+  const CRITICAL_FIELDS = ["evidence", "limitation"]; // if 0, cannot be Strong; both 0 => Weak
+
+  // Component labels + 1-line notes (based on score 0-3)
+  const COMPONENT_TEXT = {
+    basis: {
+      3: { label: "Tugev", note: "Kohustus on selgelt tuvastatav." },
+      2: { label: "Piisav", note: "Kohustus on olemas, kuid vajab selgust." },
+      1: { label: "Nõrk",  note: "Kohustuse sisu on ebaselge." },
+      0: { label: "Kriitiline", note: "Kohustuse alus ei ole selgelt tuvastatav." },
+    },
+    breach: {
+      3: { label: "Tugev", note: "Rikkumine on selgelt kirjeldatav." },
+      2: { label: "Piisav", note: "Rikkumine on tõenäoline, kuid vajab täpsust." },
+      1: { label: "Nõrk",  note: "Rikkumise olemasolu võib olla vaieldav." },
+      0: { label: "Kriitiline", note: "Rikkumist ei ole võimalik kindlalt tuvastada." },
+    },
+    damage: {
+      3: { label: "Tugev", note: "Nõude summa on arvutatav ja põhjendatud." },
+      2: { label: "Piisav", note: "Summa on määratav, kuid ebatäpsustega." },
+      1: { label: "Nõrk",  note: "Summa on ebamäärane ja vajab põhjendust." },
+      0: { label: "Kriitiline", note: "Summa ei ole rahaliselt määratletud." },
+    },
+    evidence: {
+      3: { label: "Tugev", note: "Olemas on mitu objektiivset tõendit." },
+      2: { label: "Piisav", note: "Olemas on mõned asjakohased tõendid." },
+      1: { label: "Nõrk",  note: "Tõendid on piiratud või kaudsed." },
+      0: { label: "Kriitiline", note: "Tõendid puuduvad või on ebapiisavad." },
+    },
+    defenses: {
+      3: { label: "Tugev", note: "Tugevad vastuväited on vähetõenäolised." },
+      2: { label: "Piisav", note: "Vastuväited on võimalikud." },
+      1: { label: "Nõrk",  note: "Vastuväited võivad olla tõenäolised." },
+      0: { label: "Kriitiline", note: "Tugevad vastuväited on väga tõenäolised." },
+    },
+    limitation: {
+      3: { label: "Tugev", note: "Aegumisohtu ei tuvastatud." },
+      2: { label: "Piisav", note: "Aegumisoht on ebatõenäoline." },
+      1: { label: "Nõrk",  note: "Aegumisoht on võimalik." },
+      0: { label: "Kriitiline", note: "Aegumisoht on tõenäoline." },
+    },
+  };
+
+  // Overall labels (no percentages shown)
+  const OVERALL_TEXT = {
+    strong:   { badge: "🟢", title: "Üldine riskiprofiil: tugev", desc: "Riskikomponendid on valdavalt piisavad ning kriitilisi piiranguid ei tuvastatud." },
+    moderate: { badge: "🟡", title: "Üldine riskiprofiil: mõõdukas", desc: "Esineb nõrku kohti või ebakindlust. Enne edasist sammu tasub komponentide sisu täpsustada." },
+    weak:     { badge: "🔴", title: "Üldine riskiprofiil: nõrk", desc: "Esineb kriitilisi puudusi või mitut olulist riskikohta. Nõude struktuur vajab läbimõtlemist ja täiendamist." },
+  };
+
+  // ---- State
   let currentStep = 1;
+
+  // ---- Helpers
+  function qs(sel, root = document) { return root.querySelector(sel); }
+  function qsa(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+
+  function getSaved() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function save(data) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function clearSaved() {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
+
+  function setProgress(step) {
+    const pct = Math.round((step - 1) / 6 * 100);
+    progressFill.style.width = pct + "%";
+    progressLabel.textContent = `Samm ${step} / 6`;
+    progressBar.setAttribute("aria-valuenow", String(step - 1));
+  }
 
   function showStep(n) {
     currentStep = n;
-    steps.forEach(s => s.hidden = (Number(s.dataset.step) !== n));
+
     stepsWrap.hidden = false;
     results.hidden = true;
 
-    const pct = Math.round((n - 1) / 6 * 100);
-    progressFill.style.width = pct + "%";
-    progressLabel.textContent = `Samm ${n} / 6`;
-    progressBar.setAttribute("aria-valuenow", String(n - 1));
+    steps.forEach(s => s.hidden = (Number(s.dataset.step) !== n));
 
-    // Optional: scroll to steps
+    setProgress(n);
+
     stepsWrap.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function showResults() {
-    stepsWrap.hidden = false; // keep in DOM; we’ll scroll to results
+    stepsWrap.hidden = false;
     steps.forEach(s => s.hidden = true);
+
     results.hidden = false;
 
     progressFill.style.width = "100%";
@@ -454,7 +554,184 @@
     results.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function bindNav() {
+  function getSelectedValue(field) {
+    const el = qs(`input[name="${field}"]:checked`);
+    if (!el) return null;
+    const v = Number(el.value);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function setSelectedValue(field, value) {
+    const el = qs(`input[name="${field}"][value="${value}"]`);
+    if (el) el.checked = true;
+  }
+
+  function validateStepAnswered(stepNumber) {
+    const stepEl = steps.find(s => Number(s.dataset.step) === stepNumber);
+    if (!stepEl) return true;
+
+    const radio = qs('input[type="radio"]', stepEl);
+    if (!radio) return true;
+
+    const field = radio.name;
+    const v = getSelectedValue(field);
+    return v !== null;
+  }
+
+  function fieldForStep(stepNumber) {
+    const stepEl = steps.find(s => Number(s.dataset.step) === stepNumber);
+    if (!stepEl) return null;
+    const radio = qs('input[type="radio"]', stepEl);
+    return radio ? radio.name : null;
+  }
+
+  function resumeFromAnswers(saved) {
+    // Find first unanswered step
+    for (let i = 1; i <= 6; i++) {
+      const field = fieldForStep(i);
+      if (!field) continue;
+      if (saved[field] === undefined || saved[field] === null) return i;
+    }
+    return 6; // all answered -> last step
+  }
+
+  // ---- Scoring
+  function computeModel(scores) {
+    // Weighted sum
+    let weightedSum = 0;
+    let maxSum = 0;
+
+    for (const f of FIELDS) {
+      const w = WEIGHTS[f] ?? 1;
+      const v = scores[f];
+      weightedSum += v * w;
+      maxSum += 3 * w;
+    }
+
+    const ratio = maxSum > 0 ? (weightedSum / maxSum) : 0;
+
+    // Critical constraints
+    const crit0 = CRITICAL_FIELDS.filter(f => scores[f] === 0).length;
+
+    // Base band by ratio (not shown to user)
+    let band = "moderate";
+    if (ratio >= 0.75) band = "strong";
+    else if (ratio < 0.5) band = "weak";
+    else band = "moderate";
+
+    // Apply constraints
+    if (crit0 >= 2) band = "weak";
+    else if (crit0 >= 1 && band === "strong") band = "moderate";
+
+    return { band, ratio };
+  }
+
+  function levelFromScore(score) {
+    // map 0-3 to UI level token
+    if (score === 3) return "strong";
+    if (score === 2) return "moderate";
+    if (score === 1) return "weak";
+    return "critical";
+  }
+
+  function renderDashboard(scores) {
+    // Overall
+    const { band } = computeModel(scores);
+
+    const o = OVERALL_TEXT[band];
+    overallBadge.textContent = o.badge;
+    overallTitle.textContent = o.title;
+    overallDesc.textContent = o.desc;
+
+    overallCard.dataset.level = band;
+
+    // Components
+    for (const f of FIELDS) {
+      const score = scores[f];
+      const t = COMPONENT_TEXT[f][score];
+
+      const ids = gridIds[f];
+      const card = document.getElementById(ids.card);
+      const label = document.getElementById(ids.label);
+      const note = document.getElementById(ids.note);
+
+      label.textContent = t.label;
+      note.textContent = t.note;
+
+      // dataset level can be styled in CSS
+      card.dataset.level = levelFromScore(score);
+    }
+  }
+
+  // ---- Persistence
+  function readAllAnswersFromDOM() {
+    const out = {};
+    for (const f of FIELDS) {
+      const v = getSelectedValue(f);
+      if (v !== null) out[f] = v;
+    }
+    return out;
+  }
+
+  function applySavedToDOM(saved) {
+    for (const f of FIELDS) {
+      const v = saved[f];
+      if (v === 0 || v === 1 || v === 2 || v === 3) {
+        setSelectedValue(f, v);
+      }
+    }
+  }
+
+  function allAnswered(saved) {
+    return FIELDS.every(f => (saved[f] === 0 || saved[f] === 1 || saved[f] === 2 || saved[f] === 3));
+  }
+
+  // Save on answer change
+  function bindAnswerPersistence() {
+    document.addEventListener("change", (e) => {
+      const inp = e.target;
+      if (!(inp instanceof HTMLInputElement)) return;
+      if (inp.type !== "radio") return;
+
+      const field = inp.name;
+      if (!FIELDS.includes(field)) return;
+
+      const saved = getSaved();
+      saved[field] = Number(inp.value);
+      save(saved);
+    });
+  }
+
+  // ---- UI events
+  function resetAll() {
+    qsa('input[type="radio"]').forEach(i => (i.checked = false));
+    clearSaved();
+
+    progressFill.style.width = "0%";
+    progressLabel.textContent = "Samm 0 / 6";
+    progressBar.setAttribute("aria-valuenow", "0");
+
+    results.hidden = true;
+    stepsWrap.hidden = true;
+
+    // reset cards
+    overallCard.dataset.level = "unknown";
+    overallBadge.textContent = "—";
+    overallTitle.textContent = "Üldine riskiprofiil";
+    overallDesc.textContent = "Täida küsimustik, et kuvada hinnang.";
+
+    for (const f of FIELDS) {
+      const ids = gridIds[f];
+      const card = document.getElementById(ids.card);
+      document.getElementById(ids.label).textContent = "—";
+      document.getElementById(ids.note).textContent = "—";
+      card.dataset.level = "unknown";
+    }
+
+    document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function bindNavAndInfo() {
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("button");
       if (!btn) return;
@@ -478,47 +755,85 @@
       }
 
       if (action === "next") {
-        // TODO: validate current step answered before proceeding
+        if (!validateStepAnswered(currentStep)) {
+          alert("Palun vali üks vastusevariant, et jätkata.");
+          return;
+        }
         if (currentStep < 6) showStep(currentStep + 1);
         return;
       }
 
       if (action === "finish") {
-        // TODO: validate all answered + compute + render dashboard
+        if (!validateStepAnswered(currentStep)) {
+          alert("Palun vali üks vastusevariant, et kuvada tulemus.");
+          return;
+        }
+
+        const saved = { ...getSaved(), ...readAllAnswersFromDOM() };
+        save(saved);
+
+        if (!allAnswered(saved)) {
+          alert("Palun vasta kõigile plokkidele, et kuvada tulemus.");
+          // jump to first unanswered
+          const step = resumeFromAnswers(saved);
+          showStep(step);
+          return;
+        }
+
+        renderDashboard(saved);
         showResults();
         return;
       }
     });
   }
 
-  function resetAll() {
-    // Clear form inputs
-    document.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
+  // ---- Start / Resume
+  function initFromStorage() {
+    const saved = getSaved();
+    if (!saved || Object.keys(saved).length === 0) return;
 
-    // Clear storage
-    sessionStorage.removeItem(STORAGE_KEY);
+    applySavedToDOM(saved);
 
-    // Reset UI
-    progressFill.style.width = "0%";
-    progressLabel.textContent = "Samm 0 / 6";
-    progressBar.setAttribute("aria-valuenow", "0");
-    results.hidden = true;
-    stepsWrap.hidden = true;
+    // If all answered, we can show results immediately or resume at last step.
+    // Keep it controlled: resume to first unanswered (or step 6).
+    const step = resumeFromAnswers(saved);
+    stepsWrap.hidden = false;
+    showStep(step);
 
-    // Scroll top
-    document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "start" });
+    // If all answered, you may prefer to keep user in steps until they press finish.
+    // But we can also auto-render results if they already finished previously.
+    if (allAnswered(saved) && saved.__finished === true) {
+      renderDashboard(saved);
+      showResults();
+    }
   }
 
+  // Mark finished when results shown
+  function markFinished() {
+    const saved = getSaved();
+    saved.__finished = true;
+    save(saved);
+  }
+
+  // Hook “finish” moment to mark finished
+  const _showResults = showResults;
+  showResults = function() {
+    markFinished();
+    _showResults();
+  };
+
+  // ---- Bind buttons
   btnStart.addEventListener("click", () => showStep(1));
   btnEdit?.addEventListener("click", () => showStep(1));
   btnResetTop.addEventListener("click", resetAll);
   btnResetBottom?.addEventListener("click", resetAll);
 
-  bindNav();
-
-  // TODO (next step): load saved answers from sessionStorage + resume step
+  bindNavAndInfo();
+  bindAnswerPersistence();
+  initFromStorage();
 })();
 </script>
+
 
 </body>
 </html>
