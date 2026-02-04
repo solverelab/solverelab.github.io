@@ -489,3 +489,18 @@ body > * { position:relative; z-index:1; }
   }
 }
 
+/* Desktop banding fix: make noise layer effective (avoid overlay blend) */
+@media (min-width: 721px){
+  body::before{
+    opacity: .11;
+    mix-blend-mode: normal;
+  }
+}
+
+/* Ensure results cards are flat (no gradient banding) */
+.results .card,
+.results .step,
+.results .overall,
+.results .metric{
+  background: rgba(255,255,255,.055) !important;
+}
