@@ -426,3 +426,12 @@ textarea{
 /* Results note spacing */
 .results__note{ margin-top: 14px; }
 
+/* =========================
+   Metoodika page override
+   ========================= */
+
+body.page-methodology{
+  background:
+    linear-gradient(180deg, #0b1220 0%, #0a1020 100%);
+}
+
