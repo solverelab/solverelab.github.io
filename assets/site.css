@@ -504,3 +504,14 @@ body > * { position:relative; z-index:1; }
 .results .metric{
   background: rgba(255,255,255,.055) !important;
 }
+
+/* Desktop: avoid banding on tool page by simplifying background */
+@media (min-width: 721px){
+  body.page-tool{
+    background: linear-gradient(180deg, #0b1220 0%, #0a1020 100%) !important;
+  }
+  body.page-tool::before{
+    opacity: .10;
+    mix-blend-mode: normal;
+  }
+}
