@@ -515,3 +515,5 @@ body > * { position:relative; z-index:1; }
     mix-blend-mode: normal;
   }
 }
+.list{ margin: 10px 0 0 18px; color: var(--muted); line-height: 1.6; }
+.list li{ margin: 6px 0; }
