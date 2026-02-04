@@ -468,3 +468,24 @@ body > * { position:relative; z-index:1; }
 }
 
 .results .card{ background: rgba(255,255,255,.055); }
+
+/* iOS/Safari banding fix on mobile: simplify background + stronger noise */
+@media (max-width: 720px){
+
+  /* Simplify background on mobile (metoodika lehe moodi) */
+  body{
+    background: linear-gradient(180deg, #0b1220 0%, #0a1020 100%);
+  }
+
+  /* Make the noise layer effective on iOS */
+  body::before{
+    opacity: .14;
+    mix-blend-mode: normal;
+  }
+
+  /* Remove card gradient on mobile (reduces banding on large surfaces) */
+  .card{
+    background: rgba(255,255,255,.055);
+  }
+}
+
