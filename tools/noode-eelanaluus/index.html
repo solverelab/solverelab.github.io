@@ -839,7 +839,12 @@ document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "star
     });
   }
 
-  // ---- Start / Resume
+// ---- Start / Resume
+function hasAnyAnswers(saved){
+  if (!saved) return false;
+  return FIELDS.some(f => saved[f] === 0 || saved[f] === 1 || saved[f] === 2 || saved[f] === 3);
+}
+
 function initFromStorage() {
   const saved = getSaved();
 
@@ -854,22 +859,17 @@ function initFromStorage() {
 
   applySavedToDOM(saved);
 
-  // ... ülejäänud sinu olemasolev initFromStorage loogika
-}
+  // Resume to first unanswered step (or step 6 if all answered)
+  const step = resumeFromAnswers(saved);
+  stepsWrap.hidden = false;
+  showStep(step);
 
-    // If all answered, we can show results immediately or resume at last step.
-    // Keep it controlled: resume to first unanswered (or step 6).
-    const step = resumeFromAnswers(saved);
-    stepsWrap.hidden = false;
-    showStep(step);
-
-    // If all answered, you may prefer to keep user in steps until they press finish.
-    // But we can also auto-render results if they already finished previously.
-    if (allAnswered(saved) && saved.__finished === true) {
-      renderDashboard(saved);
-      showResults();
-    }
+  // If previously finished, show results immediately
+  if (allAnswered(saved) && saved.__finished === true) {
+    renderDashboard(saved);
+    showResults();
   }
+}
 
   // Mark finished when results shown
   function markFinished() {
