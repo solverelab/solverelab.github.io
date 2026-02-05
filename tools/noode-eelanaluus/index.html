@@ -1008,6 +1008,22 @@ const COMPONENT_TEXT = {
 
       block.appendChild(h);
       block.appendChild(ul);
+      
+        // Lisa viivisekalkulaatori link ainult "Kahju" plokki
+  if (key === "damage") {
+    const p = document.createElement("p");
+    p.className = "muted small";
+    p.style.marginTop = "8px";
+    p.innerHTML = `
+      Vajadusel saad viivise ja intressi arvutada
+      <a href="https://viivisekalkulaator.ee/calculator/debt"
+         target="_blank" rel="noopener">
+        viivisekalkulaator.ee lehel
+      </a>.
+    `;
+    block.appendChild(p);
+  }
+      
       planBlocks.appendChild(block);
     }
   }
