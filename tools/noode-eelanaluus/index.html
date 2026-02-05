@@ -279,6 +279,7 @@
       <div class="step__info" id="s6-info" hidden>
   Aegumine tähendab, et tähtaja möödumisel võib nõude maksmapanek olla piiratud.
   Üldreeglina on nõuete aegumistähtaeg sageli 3 aastat, kuid tähtaeg sõltub nõude liigist ja asjaoludest.
+  Kui Sa ei ole kuupäevades kindel, vali pigem “Võimalik”.
 </div>
 
       <fieldset class="q" aria-label="Aegumise küsimus">
@@ -899,7 +900,7 @@ const COMPONENT_TEXT = {
       if (scores.basis <= 1) parts.push("alus");
       if (scores.breach <= 1) parts.push("rikkumine");
       if (scores.damage <= 1) parts.push("kahju");
-      out.push(`Nõude tuum vajab täpsustamist (${parts.join(", ")}).`);
+      out.push(`Nõude sisu vajab täpsustamist: ${parts.join(", ")}.`);
     }
     if (scores.defenses === 0) out.push("Vastuväidete käsitlus on vajalik.");
 
@@ -913,7 +914,7 @@ const COMPONENT_TEXT = {
       items: [
         "Sõnasta kohustus ühe lausega (kes, mida, millal).",
         "Tuvasta kohustuse allikas (leping / kirjavahetus / seadus / muu).",
-        "Kirjelda 3–5 bulletiga, mis oli kohustuse sisu.",
+        "Kirjelda 3–5 lühilausena, mis oli kohustuse sisu.",
         "Määra, mis on nõude ese (raha / täitmine / muu).",
       ],
     },
@@ -938,7 +939,7 @@ const COMPONENT_TEXT = {
     evidence: {
       title: "Tõendid",
       items: [
-        "Koosta tõendite nimekiri (min 3: leping/kirjavahetus/arve/akt/foto jne).",
+        "Koosta tõendite nimekiri (vähemalt 3). Näited: leping, kirjavahetus, arve, akt, foto.",
         "Seo iga tõend konkreetse väitega (mida see tõendab).",
         "Tuvasta lüngad: millise väite kohta on tõend puudu.",
         "Koonda failid ühtseks struktuuriks (nt 01_leping, 02_kirjavahetus…).",
