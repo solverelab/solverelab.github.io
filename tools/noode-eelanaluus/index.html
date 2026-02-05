@@ -769,19 +769,19 @@ const COMPONENT_TEXT = {
     overallTitle.textContent = "Üldine riskiprofiil";
     overallDesc.textContent = "Täida küsimustik, et kuvada hinnang.";
 
-    for (const f of FIELDS) {
-      const ids = gridIds[f];
-      const card = document.getElementById(ids.card);
-      document.getElementById(ids.label).textContent = "—";
-      document.getElementById(ids.note).textContent = "—";
-      card.dataset.level = "unknown";
-    }
-    
+for (const f of FIELDS) {
+  const ids = gridIds[f];
+  const card = document.getElementById(ids.card);
+  document.getElementById(ids.label).textContent = "—";
+  document.getElementById(ids.note).textContent = "—";
+  card.dataset.level = "unknown";
+}
+
 // ✅ Reset Start button label
 btnStart.textContent = "Alusta analüüsi";
-    
-    document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+
+document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
   function bindNavAndInfo() {
     document.addEventListener("click", (e) => {
