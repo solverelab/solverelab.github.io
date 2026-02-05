@@ -517,3 +517,9 @@ body > * { position:relative; z-index:1; }
 }
 .list{ margin: 10px 0 0 18px; color: var(--muted); line-height: 1.6; }
 .list li{ margin: 6px 0; }
+
+/* Mobile wrapping: avoid hidden/overflow text in long list items */
+.list, .list li, .qblock, .metric__note, .muted {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
