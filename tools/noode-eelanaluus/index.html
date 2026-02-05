@@ -22,10 +22,9 @@
       Vastused salvestuvad üksnes Teie brauseris ega edastata serverisse.
     </div>
 
-    <div class="actions">
-      <button type="button" class="btn btn-primary" id="btnStart">Alusta analüüsi</button>
-      <button type="button" class="btn" id="btnResetTop">Lähtesta</button>
-    </div>
+   <div class="actions">
+  <button type="button" class="btn btn-primary" id="btnStart">Alusta analüüsi</button>
+</div>
   </header>
 
   <!-- PROGRESS -->
@@ -458,7 +457,6 @@
 
   const btnStart = document.getElementById("btnStart");
   const btnEdit = document.getElementById("btnEdit");
-  const btnResetTop = document.getElementById("btnResetTop");
   const btnResetBottom = document.getElementById("btnResetBottom");
 
   const progressFill = document.getElementById("progressFill");
@@ -778,7 +776,10 @@ const COMPONENT_TEXT = {
       document.getElementById(ids.note).textContent = "—";
       card.dataset.level = "unknown";
     }
-
+    
+// ✅ Reset Start button label
+btnStart.textContent = "Alusta analüüsi";
+    
     document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -839,11 +840,22 @@ const COMPONENT_TEXT = {
   }
 
   // ---- Start / Resume
-  function initFromStorage() {
-    const saved = getSaved();
-    if (!saved || Object.keys(saved).length === 0) return;
+function initFromStorage() {
+  const saved = getSaved();
 
-    applySavedToDOM(saved);
+  // Update Start button label based on saved state
+  if (hasAnyAnswers(saved)) {
+    btnStart.textContent = "Jätka analüüsi";
+  } else {
+    btnStart.textContent = "Alusta analüüsi";
+  }
+
+  if (!saved || Object.keys(saved).length === 0) return;
+
+  applySavedToDOM(saved);
+
+  // ... ülejäänud sinu olemasolev initFromStorage loogika
+}
 
     // If all answered, we can show results immediately or resume at last step.
     // Keep it controlled: resume to first unanswered (or step 6).
@@ -876,7 +888,6 @@ const COMPONENT_TEXT = {
   // ---- Bind buttons
   btnStart.addEventListener("click", () => showStep(1));
   btnEdit?.addEventListener("click", () => showStep(1));
-  btnResetTop.addEventListener("click", resetAll);
   btnResetBottom?.addEventListener("click", resetAll);
 
   bindNavAndInfo();
