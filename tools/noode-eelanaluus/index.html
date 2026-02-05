@@ -919,61 +919,67 @@ function initFromStorage() {
     return out.slice(0, 3);
   }
 
-  const TASKS = {
-    basis: {
-      title: "Nõude alus",
-      items: [
-        "Sõnasta kohustus ühe lausega (kes, mida, millal).",
-        "Tuvasta kohustuse allikas (leping / kirjavahetus / seadus / muu).",
-        "Kirjelda 3–5 lühilausena, mis oli kohustuse sisu.",
-        "Määra, mis on nõude ese (raha / täitmine / muu).",
-      ],
-    },
-    breach: {
-      title: "Rikkumine",
-      items: [
-        "Kirjelda rikkumine faktina (mida ei tehtud / tehti valesti / hilines).",
-        "Seo rikkumine konkreetse kohustuse punktiga (või kokkuleppega).",
-        "Koosta kronoloogia: kuupäevad + teod + allikad.",
-        "Tuvasta rikkumise moment (millal rikkumine tekkis).",
-      ],
-    },
-    damage: {
-      title: "Kahju",
-      items: [
-        "Koosta arvutuskäik (valem + sisendid).",
-        "Kogu alusdokumendid (arved, pakkumised, kalkulatsioonid).",
-        "Erista kulud: tegelik kahju vs hinnangulised kulud.",
-        "Kirjelda lühidalt põhjuslik seos (miks rikkumine tekitas kahju).",
-      ],
-    },
-    evidence: {
-      title: "Tõendid",
-      items: [
-        "Koosta tõendite nimekiri (vähemalt 3). Näited: leping, kirjavahetus, arve, akt, foto.",
-        "Seo iga tõend konkreetse väitega (mida see tõendab).",
-        "Tuvasta lüngad: millise väite kohta on tõend puudu.",
-        "Koonda failid ühtseks struktuuriks (nt 01_leping, 02_kirjavahetus…).",
-      ],
-    },
-    defenses: {
-      title: "Vastuväited",
-      items: [
-        "Pane kirja 2–3 kõige tõenäolisemat vastuväidet.",
-        "Kirjuta igale vastuväitele 2–3 lausega vastus (fakt + tõend).",
-        "Märgi, milline vastuväide on nõrgim lüli ja mida selle leevendamiseks vaja.",
-      ],
-    },
-    limitation: {
-      title: "Aegumine",
-      items: [
-        "Pane kirja olulised kuupäevad (kokkulepe, rikkumine, kahju ilmnemine, teavitused).",
-        "Tuvasta, millal nõue muutus sissenõutavaks (praktiline kontrollpunkt).",
-        "Kogu info tähtaja katkemise/peatumise kohta (kui oli).",
-        "Tee kiire kontroll, kas nõude liigile võib kohalduda eritähtaeg.",
-      ],
-    },
-  };
+ const TASKS = {
+  basis: {
+    title: "Nõude alus",
+    items: [
+      "Kirjuta ühe lausega üles: kes pidi midagi tegema, mida täpselt pidi tegema ja millal pidi tegema.",
+      "Pane kirja, millele see kohustus tugines (nt leping, kokkulepe, kirjavahetus, seadus).",
+      "Kirjelda 3–5 lühilausena, mis oli kohustuse sisu (ilma hinnangute ja oletusteta).",
+      "Mõtle, mida Sa tegelikult nõuad (nt raha, kohustuse täitmist, kahju hüvitamist).",
+    ],
+  },
+
+  breach: {
+    title: "Rikkumine",
+    items: [
+      "Kirjelda faktina, mida tehti valesti, hilinemisega või jäeti tegemata.",
+      "Seo rikkumine konkreetse kohustusega (st millist lubadust või kokkulepet ei täidetud).",
+      "Koosta lihtne kronoloogia: kuupäev, mis toimus, millest see selgub (nt e-kiri, arve, sõnum).",
+    ],
+  },
+
+  damage: {
+    title: "Kahju",
+    items: [
+      "Pane kirja, millest nõude summa koosneb.",
+      "Kirjuta lahti arvutuskäik (nt summa × periood, konkreetne arve, kuludokumendid).",
+      "Erista: tegelik kahju ning hinnangulised või tulevased kulud.",
+      "Mõtle läbi, miks just see rikkumine kahju tekitas (st kuidas rikkumine viis rahalise kaotuseni).",
+    ],
+  },
+
+  evidence: {
+    title: "Tõendid",
+    items: [
+      "Koosta nimekiri olemasolevatest tõenditest (nt leping, kirjavahetus, arve, akt, foto).",
+      "Märgi iga tõendi juurde, millist väidet see kinnitab (nt kohustuse olemasolu, rikkumise toimumine, kahju suurus).",
+      "Mõtle, kas mõne olulise väite kohta on tõend puudu.",
+      "Koonda failid ühtsesse loogilisse struktuuri (nt kaustad või failinimed).",
+    ],
+  },
+
+  defenses: {
+    title: "Vastuväited",
+    items: [
+      "Mõtle, millistele väidetele teine pool võiks vastu vaielda.",
+      "Pane kirja 2–3 kõige tõenäolisemat vastuväidet.",
+      "Kirjuta iga vastuväite juurde lühike vastus (fakt + olemasolev tõend).",
+      "Märgi, milline vastuväide tundub Sulle kõige nõrgem koht.",
+    ],
+  },
+
+  limitation: {
+    title: "Aegumine",
+    items: [
+      "Pane kirja olulised kuupäevad: millal kokkulepe sõlmiti, millal rikkumine toimus, millal kahju ilmnes, millal teist poolt teavitati (kui teavitati).",
+      "Mõtle, millal nõue muutus tegelikult sissenõutavaks (st hetk, mil teisel poolel oleks tulnud kohustus täita).",
+      "Kontrolli, kas vahepeal toimus midagi, mis võis aega mõjutada (nt kirjavahetus, osaline tasumine, läbirääkimised).",
+      "Mõtle, kas Sinu juhtum võib kuuluda valdkonda, kus tähtajad on tavapärasest erinevad (nt töö-, üüri- või tarbijavaidlus).",
+      "Kui Sa ei ole kindel, on mõistlik seda käsitleda riskina ja arvestada sellega edasiste sammude planeerimisel.",
+    ],
+  },
+};
 
   function renderActionPlan(scores){
     // Clear
