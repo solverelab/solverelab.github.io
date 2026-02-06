@@ -34,9 +34,9 @@
   <header class="header">
     <!-- Language switch -->
     <nav class="langswitch" aria-label="Язык">
-      <a href="/tools/noode-eelanaluus/" data-lang="et">ET</a>
+      <a href="/tools/noude-eelanaluus/" data-lang="et">ET</a>
       <span class="langswitch__sep" aria-hidden="true">·</span>
-      <a href="/ru/tools/noode-eelanaluus/" data-lang="ru">RU</a>
+      <a href="/ru/tools/noude-eelanaluus/" data-lang="ru">RU</a>
     </nav>
 
     <h1>Предварительный анализ</h1>
@@ -44,7 +44,7 @@
 
     <nav class="topnav" aria-label="Навигация">
       <a href="/ru/">Главная</a>
-      <a class="active" href="/ru/tools/noode-eelanaluus/">Предварительный анализ</a>
+      <a class="active" href="/ru/tools/noude-eelanaluus/">Предварительный анализ</a>
       <a href="/ru/metoodika/">Методика</a>
     </nav>
 
@@ -53,7 +53,7 @@
     </div>
 
     <div class="actions">
-      <a class="btn btn-primary" href="/tools/noode-eelanaluus/">Открыть эстонскую версию</a>
+      <a class="btn btn-primary" href="/tools/noude-eelanaluus/">Открыть эстонскую версию</a>
       <a class="btn" href="/ru/">Назад</a>
     </div>
   </header>
