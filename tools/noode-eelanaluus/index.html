@@ -17,16 +17,14 @@
 
 <!-- Language switcher logic (ET / RU) -->
 <script>
-(() => {
+document.addEventListener("DOMContentLoaded", () => {
   const isRU = location.pathname.startsWith("/ru/");
   const current = isRU ? "ru" : "et";
 
-  document.querySelectorAll('.langswitch a[data-lang]').forEach(a => {
-    if (a.dataset.lang === current) {
-      a.classList.add("active");
-    }
+  document.querySelectorAll(".langswitch a[data-lang]").forEach(a => {
+    a.classList.toggle("active", a.dataset.lang === current);
   });
-})();
+});
 </script>
 </head>
 
