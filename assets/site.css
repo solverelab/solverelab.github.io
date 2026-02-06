@@ -738,3 +738,49 @@ body > * { position:relative; z-index:1; }
 @media (max-width: 520px){
   .langswitch{ top: 12px; right: 12px; }
 }
+
+/* =========================
+   Mobile header tightening
+   ========================= */
+@media (max-width: 640px) {
+
+  .header {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+
+  .header .lead {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+
+  /* Primary navigation buttons */
+  .topnav {
+    margin-top: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .topnav a {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  /* Language switch */
+  .langswitch {
+    top: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+
+  .langswitch a {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+}
