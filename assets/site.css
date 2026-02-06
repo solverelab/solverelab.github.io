@@ -643,3 +643,43 @@ body > * { position:relative; z-index:1; }
   margin: 0 6px;
   color: var(--muted, #999);
 }
+
+/* --- Language switch: top-right on every page --- */
+.header,
+.pagehead {
+  position: relative;
+}
+
+.langswitch {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.04);
+}
+
+.langswitch a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.langswitch a.active {
+  color: var(--text);
+}
+
+.langswitch span {
+  color: var(--muted);
+}
+
+/* Mobile: keep it visible and not too tight */
+@media (max-width: 720px){
+  .langswitch { top: 12px; right: 14px; padding: 7px 9px; }
+}
