@@ -546,3 +546,31 @@ body > * { position:relative; z-index:1; }
   margin: 0 6px;
   color: var(--muted);
 }
+
+/* Language switch */
+.langswitch{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:10px 0 0;
+  font-size:13px;
+  color:rgba(234,242,255,.70);
+}
+
+.langswitch a{
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+  text-decoration:none;
+}
+
+.langswitch a.active{
+  background:rgba(125,211,252,.12);
+  border-color:rgba(125,211,252,.35);
+}
+
+.langswitch span{
+  opacity:.7;
+}
