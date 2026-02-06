@@ -7,14 +7,28 @@
   <meta name="description" content="Solvere Lab — структурированный предварительный анализ требований перед обращением в суд. Русская версия находится в разработке." />
   <link rel="stylesheet" href="/assets/site.css" />
 
-  <!-- Privacy-friendly analytics by Plausible -->
-  <script async src="https://plausible.io/js/pa-pjc0qZXxUiq_r44m96Ana.js"></script>
-  <script>
-    window.plausible = window.plausible || function () {
-      (plausible.q = plausible.q || []).push(arguments);
-    };
-    plausible.init();
-  </script>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-pjc0qZXxUiq_r44m96Ana.js"></script>
+<script>
+  window.plausible = window.plausible || function () {
+    (plausible.q = plausible.q || []).push(arguments);
+  };
+  plausible.init();
+</script>
+
+<!-- Language switcher logic (ET / RU) -->
+<script>
+(() => {
+  const isRU = location.pathname.startsWith("/ru/");
+  const current = isRU ? "ru" : "et";
+
+  document.querySelectorAll('.langswitch a[data-lang]').forEach(a => {
+    if (a.dataset.lang === current) {
+      a.classList.add("active");
+    }
+  });
+})();
+</script>
 </head>
 
 <body class="page-ru">
