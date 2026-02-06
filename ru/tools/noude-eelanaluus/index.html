@@ -2,33 +2,837 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Предварительный анализ — Solvere Lab</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Предварительный анализ требования — Solvere Lab</title>
   <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Privacy-friendly analytics by Plausible -->
+  <script async src="https://plausible.io/js/pa-pjc0qZXxUiq_r44m96Ana.js"></script>
+  <script>
+    window.plausible = window.plausible || function () {
+      (plausible.q = plausible.q || []).push(arguments);
+    };
+    plausible.init();
+  </script>
+
+  <!-- Language switcher logic (ET / RU) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isRU = location.pathname.startsWith("/ru/");
+      const current = isRU ? "ru" : "et";
+      document.querySelectorAll(".langswitch a[data-lang]").forEach(a => {
+        a.classList.toggle("active", a.dataset.lang === current);
+      });
+    });
+  </script>
 </head>
 
-<body class="page-tool">
-<main class="container">
+<body class="page-tool page-ru">
+<main class="container" id="app">
 
-  <header class="header">
-    <h1>Предварительный анализ</h1>
+  <!-- Secondary nav + language -->
+  <nav class="tool-nav langswitch" aria-label="Навигация">
+    <a href="/ru/" class="tool-nav__link">← Главная</a>
+    <span class="tool-nav__sep">·</span>
+    <a href="/metoodika/" class="tool-nav__link">Методика (на эст.)</a>
+
+    <span class="tool-nav__sep">·</span>
+
+    <a href="/tools/noude-eelanaluus/" class="tool-nav__link" data-lang="et">ET</a>
+    <span class="tool-nav__sep">·</span>
+    <a href="/ru/tools/noude-eelanaluus/" class="tool-nav__link" data-lang="ru">RU</a>
+  </nav>
+
+  <!-- HEADER / INTRO -->
+  <header class="pagehead">
+    <h1>Предварительный анализ требования</h1>
     <p class="lead">
-      Русская версия инструмента находится в разработке.
+      Структурированный предварительный анализ перед обращением в суд: основание, риски и достаточность доказательств.
     </p>
 
-    <nav class="tool-nav">
-      <a href="/ru/">← Главная</a>
-      <span>·</span>
-      <a href="/tools/noude-eelanaluus/">Открыть версию на эстонском</a>
-    </nav>
+    <div class="notice notice--neutral" role="note" aria-label="Важно">
+      Это информационный инструмент предварительного анализа. Он не заменяет индивидуальную юридическую консультацию и не прогнозирует исход дела.
+      Ответы сохраняются только в Вашем браузере и не отправляются на сервер.
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btnStart">Начать анализ</button>
+    </div>
   </header>
 
-  <section class="card">
-    <p class="muted">
-      В настоящий момент доступна только версия инструмента на эстонском языке.
-    </p>
+  <!-- PROGRESS -->
+  <section class="progresswrap" aria-label="Прогресс">
+    <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+      <div class="progressbar__fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progressmeta">
+      <span id="progressLabel">Шаг 0 / 6</span>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section class="steps" id="steps" aria-label="Опросник" hidden>
+
+    <!-- STEP 1 -->
+    <article class="step" data-step="1" aria-labelledby="s1-title" hidden>
+      <header class="step__head">
+        <h2 id="s1-title">1. Основание требования</h2>
+        <button type="button" class="infoToggle" data-info="s1-info" aria-expanded="false" aria-controls="s1-info">(i)</button>
+      </header>
+
+      <div class="step__info" id="s1-info" hidden>
+        Обязательство — это обещание/договорная или установленная законом обязанность что-то сделать, не сделать или возместить ущерб.
+        Если содержание обязательства неясно, требование может быть слабее.
+      </div>
+
+      <fieldset class="q" aria-label="Вопрос об основании">
+        <legend class="q__legend">Было ли у другой стороны конкретное обязательство, исполнения которого Вы требуете?</legend>
+
+        <label class="opt"><input type="radio" name="basis" value="3" /><span>Да, обязательство зафиксировано письменно</span></label>
+        <label class="opt"><input type="radio" name="basis" value="2" /><span>Да, было устное соглашение</span></label>
+        <label class="opt"><input type="radio" name="basis" value="1" /><span>Содержание обязательства неясно</span></label>
+        <label class="opt"><input type="radio" name="basis" value="0" /><span>Чётко определённого обязательства нет</span></label>
+      </fieldset>
+
+      <footer class="step__nav">
+        <button type="button" class="btn" data-action="back" disabled>Назад</button>
+        <button type="button" class="btn btn-primary" data-action="next">Далее</button>
+      </footer>
+    </article>
+
+    <!-- STEP 2 -->
+    <article class="step" data-step="2" aria-labelledby="s2-title" hidden>
+      <header class="step__head">
+        <h2 id="s2-title">2. Нарушение</h2>
+        <button type="button" class="infoToggle" data-info="s2-info" aria-expanded="false" aria-controls="s2-info">(i)</button>
+      </header>
+
+      <div class="step__info" id="s2-info" hidden>
+        Нарушение означает, что обязательство не исполнено, исполнено ненадлежащим образом или с просрочкой.
+        Нарушение должно быть описуемым и связанным с конкретным обязательством.
+      </div>
+
+      <fieldset class="q" aria-label="Вопрос о нарушении">
+        <legend class="q__legend">Было ли нарушение и можно ли его описать?</legend>
+
+        <label class="opt"><input type="radio" name="breach" value="3" /><span>Нарушение чётко установлено и подтверждено документами</span></label>
+        <label class="opt"><input type="radio" name="breach" value="2" /><span>Нарушение вероятно, но подтверждено не полностью</span></label>
+        <label class="opt"><input type="radio" name="breach" value="1" /><span>Нарушение спорно</span></label>
+        <label class="opt"><input type="radio" name="breach" value="0" /><span>Наличие нарушения неясно</span></label>
+      </fieldset>
+
+      <footer class="step__nav">
+        <button type="button" class="btn" data-action="back">Назад</button>
+        <button type="button" class="btn btn-primary" data-action="next">Далее</button>
+      </footer>
+    </article>
+
+    <!-- STEP 3 -->
+    <article class="step" data-step="3" aria-labelledby="s3-title" hidden>
+      <header class="step__head">
+        <h2 id="s3-title">3. Ущерб / сумма требования</h2>
+        <button type="button" class="infoToggle" data-info="s3-info" aria-expanded="false" aria-controls="s3-info">(i)</button>
+      </header>
+
+      <div class="step__info" id="s3-info" hidden>
+        Ущерб должен быть выражаемым в деньгах. Сумма требования должна быть рассчитываемой и обоснованной, а не основанной на предположениях.
+      </div>
+
+      <fieldset class="q" aria-label="Вопрос о сумме">
+        <legend class="q__legend">Определена ли сумма требования и можно ли её обосновать?</legend>
+
+        <label class="opt"><input type="radio" name="damage" value="3" /><span>Сумма точно рассчитывается и обоснована</span></label>
+        <label class="opt"><input type="radio" name="damage" value="2" /><span>Сумма приблизительно рассчитывается</span></label>
+        <label class="opt"><input type="radio" name="damage" value="1" /><span>Сумма неопределённая</span></label>
+        <label class="opt"><input type="radio" name="damage" value="0" /><span>Сумма не определена в деньгах</span></label>
+      </fieldset>
+
+      <footer class="step__nav">
+        <button type="button" class="btn" data-action="back">Назад</button>
+        <button type="button" class="btn btn-primary" data-action="next">Далее</button>
+      </footer>
+    </article>
+
+    <!-- STEP 4 (weighted x2) -->
+    <article class="step step--weighted" data-step="4" aria-labelledby="s4-title" hidden>
+      <header class="step__head">
+        <h2 id="s4-title">4. Доказательства</h2>
+        <button type="button" class="infoToggle" data-info="s4-info" aria-expanded="false" aria-controls="s4-info">(i)</button>
+      </header>
+
+      <div class="step__info" id="s4-info" hidden>
+        Доказательства — это документы, переписка, счета, договоры и другие объективные данные.
+        В споре оцениваются наличие и надёжность доказательств.
+      </div>
+
+      <fieldset class="q" aria-label="Вопрос о доказательствах">
+        <legend class="q__legend">Какие доказательства подтверждают Вашу позицию?</legend>
+
+        <label class="opt"><input type="radio" name="evidence" value="3" /><span>Несколько письменных/объективных доказательств</span></label>
+        <label class="opt"><input type="radio" name="evidence" value="2" /><span>Есть некоторые доказательства, но их может быть недостаточно</span></label>
+        <label class="opt"><input type="radio" name="evidence" value="1" /><span>Доказательства ограниченные или косвенные</span></label>
+        <label class="opt"><input type="radio" name="evidence" value="0" /><span>Доказательств нет</span></label>
+      </fieldset>
+
+      <footer class="step__nav">
+        <button type="button" class="btn" data-action="back">Назад</button>
+        <button type="button" class="btn btn-primary" data-action="next">Далее</button>
+      </footer>
+    </article>
+
+    <!-- STEP 5 -->
+    <article class="step" data-step="5" aria-labelledby="s5-title" hidden>
+      <header class="step__head">
+        <h2 id="s5-title">5. Возможные возражения</h2>
+        <button type="button" class="infoToggle" data-info="s5-info" aria-expanded="false" aria-controls="s5-info">(i)</button>
+      </header>
+
+      <div class="step__info" id="s5-info" hidden>
+        Возражения — это аргументы, которыми другая сторона может оспаривать требование.
+        Например: обязательства не было, ущерба нет, требование пропущено по сроку и т. п.
+      </div>
+
+      <fieldset class="q" aria-label="Вопрос о возражениях">
+        <legend class="q__legend">Насколько вероятно, что другая сторона сможет выдвинуть сильные возражения?</legend>
+
+        <label class="opt"><input type="radio" name="defenses" value="3" /><span>Маловероятно</span></label>
+        <label class="opt"><input type="radio" name="defenses" value="2" /><span>Возможно</span></label>
+        <label class="opt"><input type="radio" name="defenses" value="1" /><span>Вероятно</span></label>
+        <label class="opt"><input type="radio" name="defenses" value="0" /><span>Очень вероятно</span></label>
+      </fieldset>
+
+      <footer class="step__nav">
+        <button type="button" class="btn" data-action="back">Назад</button>
+        <button type="button" class="btn btn-primary" data-action="next">Далее</button>
+      </footer>
+    </article>
+
+    <!-- STEP 6 (weighted x2) -->
+    <article class="step step--weighted" data-step="6" aria-labelledby="s6-title" hidden>
+      <header class="step__head">
+        <h2 id="s6-title">6. Срок давности</h2>
+        <button type="button" class="infoToggle" data-info="s6-info" aria-expanded="false" aria-controls="s6-info">(i)</button>
+      </header>
+
+      <div class="step__info" id="s6-info" hidden>
+        Срок давности означает, что по истечении времени предъявление требования может быть ограничено или оспорено.
+        Если Вы не уверены в датах, лучше выбрать «Возможно».
+      </div>
+
+      <fieldset class="q" aria-label="Вопрос о сроке давности">
+        <legend class="q__legend">Возможно ли, что срок давности истёк или близок к истечению?</legend>
+
+        <label class="opt"><input type="radio" name="limitation" value="3" /><span>Нет — ситуация недавняя и даты ясны</span></label>
+        <label class="opt"><input type="radio" name="limitation" value="2" /><span>Маловероятно — дело не старое, но не все даты ясны</span></label>
+        <label class="opt"><input type="radio" name="limitation" value="1" /><span>Возможно — даты неясны или дело может быть более старым</span></label>
+        <label class="opt"><input type="radio" name="limitation" value="0" /><span>Вероятно — дело старое или риск очевиден</span></label>
+      </fieldset>
+
+      <footer class="step__nav">
+        <button type="button" class="btn" data-action="back">Назад</button>
+        <button type="button" class="btn btn-primary" data-action="finish">Показать результат</button>
+      </footer>
+    </article>
+
+  </section>
+
+  <!-- RESULTS -->
+  <section class="results" id="results" aria-label="Результат" hidden>
+
+    <header class="results__head">
+      <h2>Результат</h2>
+      <p class="muted">
+        Оценка основана на взвешенных компонентах риска, в том числе на доказательствах и сроке давности.
+      </p>
+    </header>
+
+    <!-- Overall -->
+    <div class="card overall" id="overallCard" data-level="unknown">
+      <div class="overall__badge" id="overallBadge" aria-label="Индикатор общей оценки">—</div>
+      <div class="overall__text">
+        <div class="overall__title" id="overallTitle">Общий профиль риска</div>
+        <div class="overall__desc" id="overallDesc">Заполните опросник, чтобы увидеть оценку.</div>
+      </div>
+    </div>
+
+    <!-- Grid (2x3) -->
+    <div class="grid grid-2x3" id="riskGrid">
+
+      <div class="card metric" id="m-basis" data-level="unknown">
+        <div class="metric__head"><div class="metric__name">Основание</div><div class="metric__dot"></div></div>
+        <div class="metric__label" id="m-basis-label">—</div>
+        <div class="metric__note" id="m-basis-note">—</div>
+      </div>
+
+      <div class="card metric" id="m-breach" data-level="unknown">
+        <div class="metric__head"><div class="metric__name">Нарушение</div><div class="metric__dot"></div></div>
+        <div class="metric__label" id="m-breach-label">—</div>
+        <div class="metric__note" id="m-breach-note">—</div>
+      </div>
+
+      <div class="card metric" id="m-damage" data-level="unknown">
+        <div class="metric__head"><div class="metric__name">Сумма</div><div class="metric__dot"></div></div>
+        <div class="metric__label" id="m-damage-label">—</div>
+        <div class="metric__note" id="m-damage-note">—</div>
+      </div>
+
+      <div class="card metric" id="m-defenses" data-level="unknown">
+        <div class="metric__head"><div class="metric__name">Возражения</div><div class="metric__dot"></div></div>
+        <div class="metric__label" id="m-defenses-label">—</div>
+        <div class="metric__note" id="m-defenses-note">—</div>
+      </div>
+
+      <div class="card metric metric--weighted" id="m-evidence" data-level="unknown">
+        <div class="metric__head"><div class="metric__name">Доказательства</div><div class="metric__dot"></div></div>
+        <div class="metric__label" id="m-evidence-label">—</div>
+        <div class="metric__note" id="m-evidence-note">—</div>
+      </div>
+
+      <div class="card metric metric--weighted" id="m-limitation" data-level="unknown">
+        <div class="metric__head"><div class="metric__name">Давность</div><div class="metric__dot"></div></div>
+        <div class="metric__label" id="m-limitation-label">—</div>
+        <div class="metric__note" id="m-limitation-note">—</div>
+      </div>
+
+    </div>
+
+    <div class="notice notice--neutral results__note">
+      Это информационный предварительный анализ и он не заменяет юридическую консультацию.
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn" id="btnPlanOpen">Открыть план действий</button>
+      <button type="button" class="btn" id="btnEdit">Изменить ответы</button>
+      <button type="button" class="btn secondary" id="btnResetBottom">Сбросить</button>
+    </div>
+
+    <!-- Action plan -->
+    <section class="card" id="actionPlanCard" hidden>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="margin:0;">Рекомендуемый план действий</h3>
+        <button type="button" class="btn secondary" id="btnPlanClose">Закрыть</button>
+      </div>
+
+      <p class="muted">Показываются только блоки, где выявлено слабое или критическое место.</p>
+
+      <div class="notice" id="planConditions">
+        <strong>Перед следующим шагом</strong>
+        <ul class="list" id="planConditionsList"></ul>
+      </div>
+
+      <div id="planBlocks" style="margin-top:16px;"></div>
+
+      <p class="muted small" style="margin-top:14px;">
+        Примечание: данный план носит информационный характер и не является юридической консультацией.
+      </p>
+
+    </section>
+
   </section>
 
 </main>
+
+<script>
+(() => {
+  const STORAGE_KEY = "solverelab_claim_precheck_ru_v1";
+
+  const stepsWrap = document.getElementById("steps");
+  const steps = Array.from(document.querySelectorAll(".step"));
+  const results = document.getElementById("results");
+
+  const btnStart = document.getElementById("btnStart");
+  const btnEdit = document.getElementById("btnEdit");
+  const btnResetBottom = document.getElementById("btnResetBottom");
+
+  const progressFill = document.getElementById("progressFill");
+  const progressLabel = document.getElementById("progressLabel");
+  const progressBar = document.querySelector(".progressbar");
+
+  const overallCard = document.getElementById("overallCard");
+  const overallBadge = document.getElementById("overallBadge");
+  const overallTitle = document.getElementById("overallTitle");
+  const overallDesc = document.getElementById("overallDesc");
+
+  const gridIds = {
+    basis:    { card: "m-basis",     label: "m-basis-label",     note: "m-basis-note" },
+    breach:   { card: "m-breach",    label: "m-breach-label",    note: "m-breach-note" },
+    damage:   { card: "m-damage",    label: "m-damage-label",    note: "m-damage-note" },
+    defenses: { card: "m-defenses",  label: "m-defenses-label",  note: "m-defenses-note" },
+    evidence: { card: "m-evidence",  label: "m-evidence-label",  note: "m-evidence-note" },
+    limitation:{card: "m-limitation",label: "m-limitation-label",note: "m-limitation-note" },
+  };
+
+  const FIELDS = ["basis", "breach", "damage", "evidence", "defenses", "limitation"];
+
+  const WEIGHTS = {
+    basis: 1,
+    breach: 1,
+    damage: 1,
+    defenses: 1,
+    evidence: 2,
+    limitation: 2,
+  };
+
+  const CRITICAL_FIELDS = ["evidence", "limitation"];
+
+  const COMPONENT_TEXT = {
+    basis: {
+      3: { label: "Сильный", note: "Обязательство чётко устанавливается и определимо." },
+      2: { label: "Достаточный", note: "Обязательство установимо, но его содержание требует уточнения." },
+      1: { label: "Слабый", note: "Содержание обязательства неясно или нуждается в существенном уточнении." },
+      0: { label: "Критический", note: "По предварительной оценке обязательство не устанавливается." },
+    },
+    breach: {
+      3: { label: "Сильный", note: "Нарушение описуемо и связано с конкретным обязательством." },
+      2: { label: "Достаточный", note: "Нарушение вероятно, но связь с обязательством следует уточнить." },
+      1: { label: "Слабый", note: "Наличие нарушения или связь с обязательством могут быть спорными." },
+      0: { label: "Критический", note: "Нарушение или его связь с обязательством недостаточно устанавливаются." },
+    },
+    damage: {
+      3: { label: "Сильный", note: "Сумма определена и обоснована." },
+      2: { label: "Достаточный", note: "Сумма определима, но расчёт/обоснование требуют дополнения." },
+      1: { label: "Слабый", note: "Сумма недостаточно определена или требует дополнительного обоснования." },
+      0: { label: "Критический", note: "Сумма не определена и не обоснована." },
+    },
+    evidence: {
+      3: { label: "Сильный", note: "Есть несколько релевантных и объективных доказательств." },
+      2: { label: "Достаточный", note: "Доказательства есть, но их достаточность может быть спорной." },
+      1: { label: "Слабый", note: "Доказательства ограниченные/косвенные; достаточность под вопросом." },
+      0: { label: "Критический", note: "Релевантных доказательств нет или они не поддерживают позицию." },
+    },
+    defenses: {
+      3: { label: "Сильный", note: "Сильные возражения по предварительной оценке маловероятны." },
+      2: { label: "Достаточный", note: "Возможные возражения могут повлиять на оценку." },
+      1: { label: "Слабый", note: "Возражения могут существенно повлиять на требование." },
+      0: { label: "Критический", note: "Возражения могут серьёзно ограничить жизнеспособность требования." },
+    },
+    limitation: {
+      3: { label: "Сильный", note: "Риск давности по предварительной оценке не выявлен." },
+      2: { label: "Достаточный", note: "Риск давности маловероятен, но требует проверки." },
+      1: { label: "Слабый", note: "Риск давности возможен и требует дополнительной проверки." },
+      0: { label: "Критический", note: "Риск давности может существенно ограничить предъявление требования." },
+    },
+  };
+
+  const OVERALL_TEXT = {
+    strong:   { badge: "🟢", title: "Общий профиль риска: сильный", desc: "Компоненты в целом достаточны, критических ограничений не выявлено." },
+    moderate: { badge: "🟡", title: "Общий профиль риска: умеренный", desc: "Есть слабые места или неопределённость. Перед следующим шагом стоит уточнить компоненты." },
+    weak:     { badge: "🔴", title: "Общий профиль риска: слабый", desc: "Есть критические недостатки или несколько важных рисков. Структуру требования нужно пересмотреть и дополнить." },
+  };
+
+  let currentStep = 1;
+
+  function qs(sel, root = document) { return root.querySelector(sel); }
+  function qsa(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+
+  function getSaved() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function save(data) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function clearSaved() {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
+
+  function setProgress(step) {
+    const pct = Math.round((step - 1) / 6 * 100);
+    progressFill.style.width = pct + "%";
+    progressLabel.textContent = `Шаг ${step} / 6`;
+    progressBar.setAttribute("aria-valuenow", String(step - 1));
+  }
+
+  function showStep(n) {
+    currentStep = n;
+    stepsWrap.hidden = false;
+    results.hidden = true;
+    steps.forEach(s => s.hidden = (Number(s.dataset.step) !== n));
+    setProgress(n);
+    stepsWrap.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function showResults() {
+    stepsWrap.hidden = false;
+    steps.forEach(s => s.hidden = true);
+    results.hidden = false;
+
+    progressFill.style.width = "100%";
+    progressLabel.textContent = "Шаг 6 / 6";
+    progressBar.setAttribute("aria-valuenow", "6");
+
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function getSelectedValue(field) {
+    const el = qs(`input[name="${field}"]:checked`);
+    if (!el) return null;
+    const v = Number(el.value);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function setSelectedValue(field, value) {
+    const el = qs(`input[name="${field}"][value="${value}"]`);
+    if (el) el.checked = true;
+  }
+
+  function validateStepAnswered(stepNumber) {
+    const stepEl = steps.find(s => Number(s.dataset.step) === stepNumber);
+    if (!stepEl) return true;
+    const radio = qs('input[type="radio"]', stepEl);
+    if (!radio) return true;
+    const field = radio.name;
+    const v = getSelectedValue(field);
+    return v !== null;
+  }
+
+  function fieldForStep(stepNumber) {
+    const stepEl = steps.find(s => Number(s.dataset.step) === stepNumber);
+    if (!stepEl) return null;
+    const radio = qs('input[type="radio"]', stepEl);
+    return radio ? radio.name : null;
+  }
+
+  function resumeFromAnswers(saved) {
+    for (let i = 1; i <= 6; i++) {
+      const field = fieldForStep(i);
+      if (!field) continue;
+      if (saved[field] === undefined || saved[field] === null) return i;
+    }
+    return 6;
+  }
+
+  function computeModel(scores) {
+    let weightedSum = 0;
+    let maxSum = 0;
+
+    for (const f of FIELDS) {
+      const w = WEIGHTS[f] ?? 1;
+      const v = scores[f];
+      weightedSum += v * w;
+      maxSum += 3 * w;
+    }
+
+    const ratio = maxSum > 0 ? (weightedSum / maxSum) : 0;
+    const crit0 = CRITICAL_FIELDS.filter(f => scores[f] === 0).length;
+
+    let band = "moderate";
+    if (ratio >= 0.75) band = "strong";
+    else if (ratio < 0.5) band = "weak";
+
+    if (crit0 >= 2) band = "weak";
+    else if (crit0 >= 1 && band === "strong") band = "moderate";
+
+    return { band, ratio };
+  }
+
+  function levelFromScore(score) {
+    if (score === 3) return "strong";
+    if (score === 2) return "moderate";
+    if (score === 1) return "weak";
+    return "critical";
+  }
+
+  function renderDashboard(scores) {
+    const { band } = computeModel(scores);
+
+    const o = OVERALL_TEXT[band];
+    overallBadge.textContent = o.badge;
+    overallTitle.textContent = o.title;
+    overallDesc.textContent = o.desc;
+    overallCard.dataset.level = band;
+
+    for (const f of FIELDS) {
+      const score = scores[f];
+      const t = COMPONENT_TEXT[f][score];
+      const ids = gridIds[f];
+      const card = document.getElementById(ids.card);
+      const label = document.getElementById(ids.label);
+      const note = document.getElementById(ids.note);
+
+      label.textContent = t.label;
+      note.textContent = t.note;
+      card.dataset.level = levelFromScore(score);
+    }
+  }
+
+  function readAllAnswersFromDOM() {
+    const out = {};
+    for (const f of FIELDS) {
+      const v = getSelectedValue(f);
+      if (v !== null) out[f] = v;
+    }
+    return out;
+  }
+
+  function applySavedToDOM(saved) {
+    for (const f of FIELDS) {
+      const v = saved[f];
+      if (v === 0 || v === 1 || v === 2 || v === 3) setSelectedValue(f, v);
+    }
+  }
+
+  function allAnswered(saved) {
+    return FIELDS.every(f => (saved[f] === 0 || saved[f] === 1 || saved[f] === 2 || saved[f] === 3));
+  }
+
+  function bindAnswerPersistence() {
+    document.addEventListener("change", (e) => {
+      const inp = e.target;
+      if (!(inp instanceof HTMLInputElement)) return;
+      if (inp.type !== "radio") return;
+
+      const field = inp.name;
+      if (!FIELDS.includes(field)) return;
+
+      const saved = getSaved();
+      saved[field] = Number(inp.value);
+      save(saved);
+    });
+  }
+
+  function resetAll() {
+    qsa('input[type="radio"]').forEach(i => (i.checked = false));
+    clearSaved();
+
+    progressFill.style.width = "0%";
+    progressLabel.textContent = "Шаг 0 / 6";
+    progressBar.setAttribute("aria-valuenow", "0");
+
+    results.hidden = true;
+    stepsWrap.hidden = true;
+
+    overallCard.dataset.level = "unknown";
+    overallBadge.textContent = "—";
+    overallTitle.textContent = "Общий профиль риска";
+    overallDesc.textContent = "Заполните опросник, чтобы увидеть оценку.";
+
+    for (const f of FIELDS) {
+      const ids = gridIds[f];
+      const card = document.getElementById(ids.card);
+      document.getElementById(ids.label).textContent = "—";
+      document.getElementById(ids.note).textContent = "—";
+      card.dataset.level = "unknown";
+    }
+
+    btnStart.textContent = "Начать анализ";
+    document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function bindNavAndInfo() {
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+
+      if (btn.classList.contains("infoToggle")) {
+        const infoId = btn.getAttribute("data-info");
+        const infoEl = document.getElementById(infoId);
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!expanded));
+        infoEl.hidden = expanded;
+        return;
+      }
+
+      const action = btn.getAttribute("data-action");
+      if (!action) return;
+
+      if (action === "back") {
+        if (currentStep > 1) showStep(currentStep - 1);
+        return;
+      }
+
+      if (action === "next") {
+        if (!validateStepAnswered(currentStep)) {
+          alert("Пожалуйста, выберите вариант ответа, чтобы продолжить.");
+          return;
+        }
+        if (currentStep < 6) showStep(currentStep + 1);
+        return;
+      }
+
+      if (action === "finish") {
+        if (!validateStepAnswered(currentStep)) {
+          alert("Пожалуйста, выберите вариант ответа, чтобы увидеть результат.");
+          return;
+        }
+
+        const saved = { ...getSaved(), ...readAllAnswersFromDOM() };
+        save(saved);
+
+        if (!allAnswered(saved)) {
+          alert("Пожалуйста, ответьте на все блоки, чтобы увидеть результат.");
+          const step = resumeFromAnswers(saved);
+          showStep(step);
+          return;
+        }
+
+        renderDashboard(saved);
+        showResults();
+        return;
+      }
+    });
+  }
+
+  function hasAnyAnswers(saved){
+    return FIELDS.some(f => saved[f] === 0 || saved[f] === 1 || saved[f] === 2 || saved[f] === 3);
+  }
+
+  function initFromStorage() {
+    const saved = getSaved();
+
+    btnStart.textContent = hasAnyAnswers(saved) ? "Продолжить" : "Начать анализ";
+
+    if (!saved || Object.keys(saved).length === 0) return;
+
+    applySavedToDOM(saved);
+
+    const step = resumeFromAnswers(saved);
+    stepsWrap.hidden = false;
+    showStep(step);
+
+    if (allAnswered(saved) && saved.__finished === true) {
+      renderDashboard(saved);
+      showResults();
+    }
+  }
+
+  function markFinished() {
+    const saved = getSaved();
+    saved.__finished = true;
+    save(saved);
+  }
+
+  const _showResults = showResults;
+  showResults = function() {
+    markFinished();
+    _showResults();
+  };
+
+  // --- II phase: Action plan (RU placeholder for now, can refine later)
+  const btnPlanOpen = document.getElementById("btnPlanOpen");
+  const btnPlanClose = document.getElementById("btnPlanClose");
+  const actionPlanCard = document.getElementById("actionPlanCard");
+  const planBlocks = document.getElementById("planBlocks");
+  const planConditionsList = document.getElementById("planConditionsList");
+
+  function decisionConditionsFromScores(scores){
+    const out = [];
+    if (scores.limitation <= 1) out.push("Вопрос срока давности требует проверки.");
+    if (scores.evidence <= 1) out.push("Доказательственную базу нужно усилить.");
+    if (scores.basis <= 1 || scores.breach <= 1 || scores.damage <= 1){
+      const parts = [];
+      if (scores.basis <= 1) parts.push("основание");
+      if (scores.breach <= 1) parts.push("нарушение");
+      if (scores.damage <= 1) parts.push("сумма/ущерб");
+      out.push(`Содержание требования нужно уточнить: ${parts.join(", ")}.`);
+    }
+    if (scores.defenses === 0) out.push("Нужно проработать возможные возражения.");
+    return out.slice(0, 3);
+  }
+
+  const TASKS = {
+    basis: { title: "Основание", items: ["Сформулируйте обязательство одной фразой (кто / что / когда).", "Укажите источник (договор / переписка / закон / другое).", "Опишите 3–5 короткими фразами содержание обязательства.", "Определите, чего Вы требуете (деньги / исполнение / возмещение)."] },
+    breach:{ title: "Нарушение", items: ["Опишите факт нарушения (что не сделано / сделано плохо / просрочено).", "Свяжите нарушение с конкретным обязательством.", "Составьте простую хронологию: даты + события + источники.", "Отметьте момент нарушения (когда оно возникло)."] },
+    damage:{ title: "Сумма / ущерб", items: ["Опишите, из чего состоит сумма требования.", "Запишите расчёт (формула + данные).", "Разделите: фактический ущерб и оценочные/будущие расходы.", "Кратко опишите причинно-следственную связь (почему нарушение вызвало ущерб)."] },
+    evidence:{ title: "Доказательства", items: ["Составьте список доказательств (договор, переписка, счёт, акт, фото).", "Отметьте, какое утверждение подтверждает каждое доказательство.", "Найдите пробелы: по какому утверждению доказательства отсутствуют.", "Организуйте файлы в понятную структуру (например 01_договор, 02_переписка…)."] },
+    defenses:{ title: "Возражения", items: ["Запишите 2–3 наиболее вероятных возражения.", "На каждое — короткий ответ (факт + доказательство).", "Отметьте самое слабое место и что нужно, чтобы его усилить."] },
+    limitation:{ title: "Давность", items: ["Запишите ключевые даты (соглашение, нарушение, выявление ущерба, уведомления).", "Определите, когда требование стало подлежащим предъявлению.", "Отметьте события, которые могли повлиять на срок (переписка, частичная оплата, переговоры).", "Если не уверены — считайте это риском при планировании следующих шагов."] },
+  };
+
+  function renderActionPlan(scores){
+    planBlocks.innerHTML = "";
+    planConditionsList.innerHTML = "";
+
+    const conds = decisionConditionsFromScores(scores);
+    if (conds.length === 0){
+      const li = document.createElement("li");
+      li.textContent = "Критических условий не выявлено. При необходимости уточните детали перед следующим шагом.";
+      planConditionsList.appendChild(li);
+    } else {
+      for (const c of conds){
+        const li = document.createElement("li");
+        li.textContent = c;
+        planConditionsList.appendChild(li);
+      }
+    }
+
+    const order = ["basis","breach","damage","evidence","defenses","limitation"];
+    for (const key of order){
+      if (scores[key] > 1) continue;
+
+      const block = document.createElement("div");
+      block.className = "qblock";
+      block.style.marginTop = "12px";
+
+      const h = document.createElement("h3");
+      h.className = "qtitle";
+      h.textContent = TASKS[key].title;
+
+      const ul = document.createElement("ul");
+      ul.className = "list";
+      ul.style.margin = "8px 0 0 18px";
+
+      for (const item of TASKS[key].items){
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      }
+
+      block.appendChild(h);
+      block.appendChild(ul);
+
+      if (key === "damage") {
+        const p = document.createElement("p");
+        p.className = "muted small";
+        p.style.marginTop = "8px";
+        p.innerHTML = `
+          При необходимости можно рассчитать пеню/проценты на
+          <a href="https://viivisekalkulaator.ee/calculator/debt" target="_blank" rel="noopener">
+            viivisekalkulaator.ee
+          </a>.
+        `;
+        block.appendChild(p);
+      }
+
+      planBlocks.appendChild(block);
+    }
+  }
+
+  function openPlan(){
+    const saved = getSaved();
+    if (!saved) return;
+
+    const scores = {};
+    for (const f of FIELDS) scores[f] = Number(saved[f]);
+
+    renderActionPlan(scores);
+    actionPlanCard.hidden = false;
+    actionPlanCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function closePlan(){
+    actionPlanCard.hidden = true;
+  }
+
+  btnStart.addEventListener("click", () => showStep(1));
+  btnEdit?.addEventListener("click", () => showStep(1));
+  btnResetBottom?.addEventListener("click", resetAll);
+
+  btnPlanOpen?.addEventListener("click", openPlan);
+  btnPlanClose?.addEventListener("click", closePlan);
+
+  bindNavAndInfo();
+  bindAnswerPersistence();
+  initFromStorage();
+})();
+</script>
+
 </body>
 </html>
