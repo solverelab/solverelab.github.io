@@ -32,18 +32,20 @@
 
 <body class="page-tool">
 <main class="container" id="app">
-  
-<nav class="tool-nav langswitch" aria-label="Sekundaarne navigatsioon">
-  <a href="/" class="tool-nav__link">← Avaleht</a>
-  <span class="tool-nav__sep">·</span>
-  <a href="/metoodika/" class="tool-nav__link">Metoodika</a>
 
-  <span class="tool-nav__sep">·</span>
+  <!-- Language switch (global) -->
+  <nav class="langswitch" aria-label="Keel">
+    <a href="/" data-lang="et">ET</a>
+    <span aria-hidden="true">·</span>
+    <a href="/ru/" data-lang="ru">RU</a>
+  </nav>
 
-  <a href="/" class="tool-nav__link" data-lang="et">ET</a>
-  <span class="tool-nav__sep">·</span>
-  <a href="/ru/" class="tool-nav__link" data-lang="ru">RU</a>
-</nav>
+  <!-- Tool navigation -->
+  <nav class="tool-nav" aria-label="Sekundaarne navigatsioon">
+    <a href="/" class="tool-nav__link">← Avaleht</a>
+    <span class="tool-nav__sep">·</span>
+    <a href="/metoodika/" class="tool-nav__link">Metoodika</a>
+  </nav>
   
   <!-- HEADER / INTRO -->
   <header class="pagehead">
