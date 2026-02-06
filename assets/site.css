@@ -618,3 +618,28 @@ body > * { position:relative; z-index:1; }
   background:rgba(125,211,252,.12);
   box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
+
+/* Keelelüliti – globaalne */
+.langswitch {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.langswitch a {
+  text-decoration: none;
+  color: var(--muted, #666);
+}
+
+.langswitch a.active {
+  color: var(--text, #000);
+  font-weight: 600;
+}
+
+.langswitch span {
+  margin: 0 6px;
+  color: var(--muted, #999);
+}
