@@ -683,3 +683,58 @@ body > * { position:relative; z-index:1; }
 @media (max-width: 720px){
   .langswitch { top: 12px; right: 14px; padding: 7px 9px; }
 }
+
+/* =========================
+   Language switch (ET / RU)
+   Top-right, consistent on all pages
+   ========================= */
+
+.header, .pagehead{
+  position: relative; /* anchor for absolute langswitch */
+}
+
+.langswitch{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.langswitch a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-decoration: none;
+  color: rgba(255,255,255,.80);
+  border: 1px solid transparent;
+}
+
+.langswitch a.active{
+  color: rgba(255,255,255,.95);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.14);
+}
+
+.langswitch .langswitch__sep{
+  opacity: .45;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* On small screens keep it neat */
+@media (max-width: 520px){
+  .langswitch{ top: 12px; right: 12px; }
+}
