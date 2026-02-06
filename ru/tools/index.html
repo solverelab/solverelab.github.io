@@ -1,1 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <title>Предварительный анализ — Solvere Lab</title>
+  <meta name="description" content="Структурированный предварительный анализ требований перед обращением в суд. Русская версия в разработке." />
+
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Privacy-friendly analytics by Plausible -->
+  <script async src="https://plausible.io/js/pa-pjc0qZXxUiq_r44m96Ana.js"></script>
+  <script>
+    window.plausible = window.plausible || function () {
+      (plausible.q = plausible.q || []).push(arguments);
+    };
+    plausible.init();
+  </script>
+
+  <!-- Language switcher logic (ET / RU) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isRU = location.pathname.startsWith("/ru/");
+      const current = isRU ? "ru" : "et";
+
+      document.querySelectorAll(".langswitch a[data-lang]").forEach(a => {
+        a.classList.toggle("active", a.dataset.lang === current);
+      });
+    });
+  </script>
+</head>
+
+<body class="page-tool page-ru">
+<main class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <!-- Language switch -->
+    <nav class="langswitch" aria-label="Язык">
+      <a href="/tools/noude-eelanaluus/" data-lang="et">ET</a>
+      <span aria-hidden="true">·</span>
+      <a href="/ru/tools/noude-eelanaluus/" data-lang="ru">RU</a>
+    </nav>
+
+    <h1>Предварительный анализ</h1>
+    <p class="lead">
+      Структурированный предварительный анализ требований перед обращением в суд.
+    </p>
+
+    <!-- Secondary navigation -->
+    <nav class="tool-nav" aria-label="Навигация">
+      <a href="/ru/" class="tool-nav__link">← Главная</a>
+      <span class="tool-nav__sep">·</span>
+      <a href="/metoodika/" class="tool-nav__link">Методика (на эстонском)</a>
+    </nav>
+
+    <div class="notice notice--neutral" role="note" aria-label="Важно">
+      Русская версия инструмента находится в разработке.
+      В настоящий момент доступна только версия на эстонском языке.
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <section class="card">
+    <h2 class="h3">Что это за инструмент?</h2>
+
+    <p class="muted">
+      Инструмент помогает структурировать требование и оценить его ключевые элементы
+      перед обращением в суд: основание требования, риски и достаточность доказательств.
+    </p>
+
+    <ul class="list">
+      <li>Наличие и содержание обязательства</li>
+      <li>Нарушение обязательства</li>
+      <li>Определимость ущерба</li>
+      <li>Достаточность доказательств</li>
+      <li>Возможные возражения</li>
+      <li>Вопрос срока давности</li>
+    </ul>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/tools/noude-eelanaluus/">
+        Открыть инструмент на эстонском языке
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="margin-top:40px;">
+    <div class="small muted">
+      © 2026 Solvere Lab. Все права защищены.
+    </div>
+  </footer>
+
+</main>
+</body>
+</html>
