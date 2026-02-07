@@ -595,6 +595,9 @@
     if (overallText) overallText.textContent = statusText;
     if (overallStatusDot) overallStatusDot.setAttribute("data-level", overall);
 
+const statusBox = document.getElementById("overallStatus");
+if (statusBox) statusBox.setAttribute("data-level", overall);
+
     if (!componentGrid) return;
     componentGrid.innerHTML = "";
 
