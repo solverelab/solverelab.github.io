@@ -491,6 +491,16 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 (() => {
   const STORAGE_KEY = "solverelab_claim_precheck_v1";
+    // --- Plausible events (ET)
+  function track(name, props = {}) {
+    try {
+      if (typeof window.plausible === "function") {
+        window.plausible(name, { props });
+      }
+    } catch (e) {}
+  }
+
+  const TRACK_CTX = { lang: "et", tool: "claim_precheck" };
 
   // ---- Elements
   const stepsWrap = document.getElementById("steps");
@@ -790,6 +800,8 @@ const COMPONENT_TEXT = {
       const saved = getSaved();
       saved[field] = Number(inp.value);
       save(saved);
+     
+      track("tool_answer", { ...TRACK_CTX, field, value: Number(inp.value) }); 
     });
   }
 
@@ -843,16 +855,18 @@ document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "star
       const action = btn.getAttribute("data-action");
       if (!action) return;
 
-      if (action === "back") {
-        if (currentStep > 1) showStep(currentStep - 1);
-        return;
-      }
+     if (action === "back") {
+  track("tool_step_back", { ...TRACK_CTX, step: currentStep });
+  if (currentStep > 1) showStep(currentStep - 1);
+  return;
+}
 
       if (action === "next") {
         if (!validateStepAnswered(currentStep)) {
           alert("Palun vali üks vastusevariant, et jätkata.");
           return;
         }
+        track("tool_step_next", { ...TRACK_CTX, step: currentStep });
         if (currentStep < 6) showStep(currentStep + 1);
         return;
       }
@@ -875,6 +889,7 @@ document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "star
         }
 
         renderDashboard(saved);
+        track("tool_finish", TRACK_CTX);
         showResults();
         return;
       }
@@ -928,7 +943,10 @@ function initFromStorage() {
   };
 
   // ---- Bind buttons
-  btnStart.addEventListener("click", () => showStep(1));
+  btnStart.addEventListener("click", () => {
+  track("tool_start", TRACK_CTX);
+  showStep(1);
+});
   btnEdit?.addEventListener("click", () => showStep(1));
   btnResetBottom?.addEventListener("click", resetAll);
 
