@@ -7,75 +7,82 @@
 
   <link rel="stylesheet" href="/assets/site.css" />
 
-<!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-pjc0qZXxUiq_r44m96Ana.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
-</script>
+  <!-- Privacy-friendly analytics by Plausible -->
+  <script async src="https://plausible.io/js/pa-pjc0qZXxUiq_r44m96Ana.js"></script>
+  <script>
+    window.plausible = window.plausible || function () {
+      (plausible.q = plausible.q || []).push(arguments)
+    };
+    plausible.init = plausible.init || function (i) {
+      plausible.o = i || {}
+    };
+    plausible.init();
+  </script>
 
-<!-- Language switcher logic (ET / RU) -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const isRU = location.pathname.startsWith("/ru/");
-  const current = isRU ? "ru" : "et";
+  <!-- Language switcher logic (ET / RU) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isRU = location.pathname.startsWith("/ru/");
+      const current = isRU ? "ru" : "et";
 
-  document.querySelectorAll(".langswitch a[data-lang]").forEach(a => {
-    a.classList.toggle("active", a.dataset.lang === current);
-  });
-});
-</script>
+      document.querySelectorAll(".langswitch a[data-lang]").forEach(a => {
+        a.classList.toggle("active", a.dataset.lang === current);
+      });
+    });
+  </script>
 </head>
 
 <body>
   <main class="container">
 
-<!-- HEADER -->
-<header class="header">
+    <!-- HEADER -->
+    <header class="header">
 
-  <!-- Language switch (üleval paremal, jääb samaks) -->
-  <nav class="langswitch" aria-label="Keel">
-    <a href="/" data-lang="et">ET</a>
-    <span class="langswitch__sep" aria-hidden="true">·</span>
-    <a href="/ru/" data-lang="ru">RU</a>
-  </nav>
+      <!-- Language switch -->
+      <nav class="langswitch" aria-label="Keel">
+        <a href="/" data-lang="et">ET</a>
+        <span class="langswitch__sep" aria-hidden="true">·</span>
+        <a href="/ru/" data-lang="ru">RU</a>
+      </nav>
 
-  <!-- Brand -->
-  <h1>Solvere Lab</h1>
-  <p class="lead">
-    Struktureeritud eelanalüüs enne kohtusse pöördumist.
-  </p>
+      <!-- Brand -->
+      <h1>Solvere Lab</h1>
+      <p class="lead">
+        Struktureeritud eelanalüüs enne kohtusse pöördumist
+      </p>
 
-  <!-- Primary navigation (PEAB olema siin) -->
-  <nav class="topnav" aria-label="Põhinavigatsioon">
-    <a class="active" href="/">Avaleht</a>
-    <a href="/tools/noude-eelanaluus/">Nõude eelanalüüs</a>
-    <a href="/metoodika/">Metoodika</a>
-  </nav>
+      <p class="muted">
+        Tasuta tööriist, mis aitab Sul enne kohtusse minekut oma olukorra
+        rahulikult läbi mõelda.
+      </p>
 
-</header>
+      <!-- Primary navigation -->
+      <nav class="topnav" aria-label="Põhinavigatsioon">
+        <a class="active" href="/">Avaleht</a>
+        <a href="/tools/noude-eelanaluus/">Nõude eelanalüüs</a>
+        <a href="/metoodika/">Metoodika</a>
+      </nav>
+
+    </header>
 
     <!-- VALUE SECTION -->
     <section class="card">
       <h2 class="h3">Nõude eelanalüüs</h2>
 
       <p class="muted">
-        Tööriist aitab hinnata nõude alust, riskikomponente ja tõendite piisavust
-        enne kohtusse pöördumist. Hinnang põhineb struktureeritud riskimudelil.
+        Vastad lihtsatele küsimustele ja saad ülevaate,
+        kas kohtusse pöördumine võib olla mõistlik, millised riskid sellega
+        kaasnevad ja mida tasub enne otsustamist veel kontrollida.
+        Iga küsimuse juures on selgitused ja näited.
       </p>
 
-      <ul class="list">
-        <li>Nõude aluse selgus</li>
-        <li>Kohustuse rikkumine</li>
-        <li>Kahju määratletavus</li>
-        <li>Tõendite olemasolu</li>
-        <li>Võimalikud vastuväited</li>
-        <li>Aegumisküsimus</li>
-      </ul>
+      <p class="muted">
+        <strong>Tööriist on tasuta.</strong>
+      </p>
 
       <div class="actions">
         <a class="btn btn-primary" href="/tools/noude-eelanaluus/">
-          Alusta eelanalüüsi
+          → Alusta eelanalüüsi
         </a>
       </div>
 
@@ -85,11 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
       </p>
     </section>
 
-<footer class="footer" style="margin-top:40px;">
-  <div class="small muted" style="margin-top:6px;">
-    © 2026 OÜ Solvere (Solvere Lab). Kõik õigused kaitstud.
-  </div>
-</footer>
+    <!-- FOOTER -->
+    <footer class="footer" style="margin-top:40px;">
+      <div class="small muted" style="margin-top:6px;">
+        © 2026 OÜ Solvere (Solvere Lab). Kõik õigused kaitstud.
+      </div>
+    </footer>
 
   </main>
 </body>
