@@ -735,3 +735,41 @@ body{
 .card{
   padding-left: 16px;
 }
+
+/* ======================================
+   HARD OVERRIDE – Action plan dark fix
+   ====================================== */
+
+/* kogu tööplaani konteiner */
+#actionCard{
+  background: var(--card);
+}
+
+/* iga sektsioon */
+.plansec{
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+/* avatud sisu */
+.plansec__items{
+  background: transparent !important;
+  color: var(--muted);
+}
+
+/* üksik list item */
+.plansec__items li{
+  background: transparent !important;
+}
+
+/* eemaldame võimaliku globaalreegli mõju */
+.checklist li{
+  background: transparent !important;
+}
+
+/* kui sul on kuskil .card { background:#fff } */
+.card{
+  background: var(--card);
+}
