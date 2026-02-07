@@ -405,63 +405,72 @@
     return cond;
   }
 
-  function generateActionTasks(a) {
-    const tasks = [];
-    const pushAll = (arr) => arr.forEach(t => tasks.push(t));
+function generateActionPlan(a) {
+  // Tagastab sektsioonid kujul: [{ key, title, items: [string|{html}] }]
+  const plan = [];
 
-    if (Number(a.basis) <= 1) {
-      pushAll([
-        "Kirjuta ühe lausega üles: kes pidi midagi tegema, mida täpselt pidi tegema, millal pidi tegema.",
-        "Pane kirja, millele kohustus tugines (nt leping, kokkulepe, kirjavahetus, seadus).",
-        "Kirjelda 3–5 lühilausena kohustuse sisu (ilma hinnangute ja oletusteta).",
-        "Täpsusta, mida Sa nõuad (nt raha, kohustuse täitmist, kahju hüvitamist)."
-      ]);
-    }
+  const addSection = (key, title, items) => {
+    if (!items || items.length === 0) return;
+    plan.push({ key, title, items });
+  };
 
-    if (Number(a.breach) <= 1) {
-      pushAll([
-        "Kirjelda faktina, mida tehti valesti, hilinemisega või jäeti tegemata.",
-        "Seo rikkumine konkreetse kohustusega (millist lubadust või kokkulepet ei täidetud).",
-        "Koosta lihtne kronoloogia: kuupäev → mis toimus → millest see selgub (nt e-kiri, arve, sõnum)."
-      ]);
-    }
-
-    if (Number(a.damage) <= 1) {
-      pushAll([
-        "Koosta arvutuskäik (nt summa × periood, konkreetne arve, kuludokumendid).",
-        "Erista: tegelik kahju vs hinnangulised või tulevased kulud.",
-        "Kirjelda lühidalt põhjuslik seos: kuidas rikkumine viis rahalise kaotuseni."
-      ]);
-    }
-
-    if (Number(a.evidence) <= 1) {
-      pushAll([
-        "Koosta nimekiri olemasolevatest tõenditest (nt leping, kirjavahetus, arve, akt, foto).",
-        "Märgi iga tõendi juurde, millist väidet see kinnitab (alus / rikkumine / kahju).",
-        "Tuvasta, millise olulise väite kohta on tõend puudu.",
-        "Koonda failid ühtsesse loogilisse struktuuri (nt kaustad või failinimed)."
-      ]);
-    }
-
-    if (Number(a.defenses) <= 1) {
-      pushAll([
-        "Pane kirja 2–3 kõige tõenäolisemat vastuväidet, mida teine pool võiks esitada.",
-        "Kirjuta iga vastuväite juurde lühike vastus (fakt + olemasolev tõend).",
-        "Märgi, milline vastuväide tundub Sulle nõrgim koht."
-      ]);
-    }
-
-    if (Number(a.limitation) <= 1) {
-      pushAll([
-        "Pane kirja olulised kuupäevad: kokkulepe, rikkumine, kahju ilmnemine, teavitamine (kui oli).",
-        "Täpsusta hetk, mil nõue muutus sissenõutavaks (millal oleks pidanud täitma).",
-        "Märgi sündmused, mis võisid aega mõjutada (nt kirjavahetus, osaline tasumine, läbirääkimised).",
-        "Kui Sa ei ole kindel, käsitle seda riskina edasiste sammude planeerimisel."
-      ]);
-    }
-
-    return tasks;
+  if (Number(a.basis) <= 1) {
+    addSection("basis", "Nõude alus", [
+      "Kirjuta ühe lausega üles: – kes pidi midagi tegema – mida täpselt pidi tegema – millal pidi tegema.",
+      "Pane kirja, millele see kohustus tugines (nt leping, kokkulepe, kirjavahetus, seadus).",
+      "Kirjelda 3–5 lühilausena, mis oli kohustuse sisu (ilma hinnangute ja oletusteta).",
+      "Mõtle, mida Sa tegelikult nõuad (nt raha, kohustuse täitmist, kahju hüvitamist)."
+    ]);
   }
+
+  if (Number(a.breach) <= 1) {
+    addSection("breach", "Rikkumine", [
+      "Kirjelda faktina, mida tehti valesti, hilinemisega või jäeti tegemata.",
+      "Seo rikkumine konkreetse kohustusega (st millist lubadust või kokkulepet ei täidetud).",
+      "Koosta lihtne kronoloogia: – kuupäev – mis toimus – millest see selgub (nt e-kiri, arve, sõnum)."
+    ]);
+  }
+
+  if (Number(a.damage) <= 1) {
+    addSection("damage", "Kahju", [
+      "Pane kirja, millest nõude summa koosneb.",
+      "Kirjuta lahti arvutuskäik (nt summa × periood, konkreetne arve, kuludokumendid).",
+      "Erista: – tegelik kahju – hinnangulised või tulevased kulud.",
+      "Mõtle läbi, miks just see rikkumine kahju tekitas (st kuidas rikkumine viis rahalise kaotuseni).",
+      { html: 'Viivise ja intressi kalkulaator: <a href="https://viivisekalkulaator.ee/calculator/debt" target="_blank" rel="noopener">viivisekalkulaator.ee</a>' }
+    ]);
+  }
+
+  if (Number(a.evidence) <= 1) {
+    addSection("evidence", "Tõendid", [
+      "Koosta nimekiri olemasolevatest tõenditest (nt leping, kirjavahetus, arve, akt, foto).",
+      "Märgi iga tõendi juurde, millist väidet see kinnitab (nt kohustuse olemasolu, rikkumise toimumine, kahju suurus).",
+      "Mõtle, kas mõne olulise väite kohta on tõend puudu.",
+      "Koonda failid ühtsesse loogilisse struktuuri (nt kaustad või failinimed)."
+    ]);
+  }
+
+  if (Number(a.defenses) <= 1) {
+    addSection("defenses", "Vastuväited", [
+      "Mõtle, millistele väidetele teine pool võiks vastu vaielda.",
+      "Pane kirja 2–3 kõige tõenäolisemat vastuväidet.",
+      "Kirjuta iga vastuväite juurde lühike vastus (fakt + olemasolev tõend).",
+      "Märgi, milline vastuväide tundub Sulle kõige nõrgem koht."
+    ]);
+  }
+
+  if (Number(a.limitation) <= 1) {
+    addSection("limitation", "Aegumine", [
+      "Pane kirja olulised kuupäevad: – millal kokkulepe sõlmiti – millal rikkumine toimus – millal kahju ilmnes – millal teist poolt teavitati (kui teavitati).",
+      "Mõtle, millal nõue muutus tegelikult sissenõutavaks (st hetk, mil teisel poolel oleks tulnud kohustus täita).",
+      "Kontrolli, kas vahepeal toimus midagi, mis võis aega mõjutada (nt kirjavahetus, osaline tasumine, läbirääkimised).",
+      "Mõtle, kas Sinu juhtum võib kuuluda valdkonda, kus tähtajad on tavapärasest erinevad (nt töö-, üüri- või tarbijavaidlus).",
+      "Kui Sa ei ole kindel, on mõistlik seda käsitleda riskina ja arvestada sellega edasiste sammude planeerimisel."
+    ]);
+  }
+
+  return plan;
+}
 
   function renderPhase2(a) {
     if (!reasonsCard || !reasonsList || !conditionsCard || !conditionsList || !actionCard || !actionList) {
@@ -492,13 +501,38 @@
     conditionsCard.hidden = (decision === "JAH" || conditions.length === 0);
 
     // Tööplaan
-    actionList.innerHTML = "";
-    tasks.forEach(t => {
-      const li = document.createElement("li");
-      li.textContent = t;
-      actionList.appendChild(li);
-    });
-    actionCard.hidden = tasks.length === 0;
+const plan = generateActionPlan(a);
+
+// Tööplaan: sektsioonid
+actionList.innerHTML = "";
+
+plan.forEach(sec => {
+  const li = document.createElement("li");
+  li.className = "plansec";
+
+  const title = document.createElement("div");
+  title.className = "plansec__title";
+  title.textContent = sec.title;
+
+  const ul = document.createElement("ul");
+  ul.className = "plansec__items";
+
+  sec.items.forEach(item => {
+    const i = document.createElement("li");
+    if (typeof item === "string") {
+      i.textContent = item;
+    } else if (item && typeof item === "object" && item.html) {
+      i.innerHTML = item.html;
+    }
+    ul.appendChild(i);
+  });
+
+  li.appendChild(title);
+  li.appendChild(ul);
+  actionList.appendChild(li);
+});
+
+actionCard.hidden = plan.length === 0;
   }
 
   // -----------------------
