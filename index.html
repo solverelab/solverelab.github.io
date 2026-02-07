@@ -1,1 +1,257 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solvere Lab</title>
 
+  <link rel="stylesheet" href="/assets/site.css" />
+
+  <!-- Privacy-friendly analytics by Plausible (kui kasutad) -->
+  <!-- <script async src="https://plausible.io/js/script.js" data-domain="SINU-DOMEEN.ee"></script> -->
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <div class="brand">
+        <div class="brand__name">Solvere Lab</div>
+        <div class="brand__tag">Struktureeritud eelanalüüs</div>
+      </div>
+
+      <nav class="langswitch" aria-label="Keelevalik">
+        <a class="langswitch__link is-active" href="/" aria-current="page">ET</a>
+        <a class="langswitch__link" href="/ru/">RU</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Hinda enne kohtusse pöördumist oma nõude struktuurset tugevust.</h1>
+      <p class="lead">
+        Küsimustik kaardistab riskikomponendid: nõude alus, rikkumine, kahju, tõendid, vastuväited ja aegumine.
+        Tulemuseks on visuaalne riskiprofiil ilma juriidiliste detailideta.
+      </p>
+
+      <div class="notice">
+        Tegemist on informatiivse eelanalüüsi tööriistaga. See ei asenda individuaalset õigusnõustamist ega prognoosi menetluse tulemust.
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="startBtn" type="button">Alusta analüüsi</button>
+        <button class="btn btn--ghost" id="resetBtn" type="button">Lähtesta</button>
+      </div>
+
+      <div class="meta">
+        <div class="meta__item">Andmed salvestuvad üksnes Teie brauseris ega edastata serverisse.</div>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section class="progress" aria-label="Progress">
+      <div class="progress__row">
+        <div class="progress__label" id="progressLabel">Samm 0 / 6</div>
+        <div class="progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+          <div class="progress__fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="steps" aria-label="Küsimustik">
+      <div class="step is-locked" data-step="1">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Samm 1 — Nõude alus</span>
+          <span class="step__meta">
+            <button class="info" type="button" data-info="basis" aria-label="Lisainfo">?</button>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Tuvastage, kas teisel poolel oli selgelt määratletud kohustus.</p>
+          <div class="info__panel" data-panel="basis" hidden>
+            Kohustus tähendab teise poole lubadust või kokkulepitud kohustust midagi teha, mitte teha või hüvitada kahju. Kui kohustuse sisu ei ole selge, võib nõue olla nõrgem.
+          </div>
+
+          <fieldset class="choices" aria-label="Nõude alus">
+            <label><input type="radio" name="basis" value="3"> Jah, kohustus on kirjalikult fikseeritud</label>
+            <label><input type="radio" name="basis" value="2"> Jah, kohustus lepiti kokku suuliselt</label>
+            <label><input type="radio" name="basis" value="1"> Kohustuse sisu on ebaselge</label>
+            <label><input type="radio" name="basis" value="0"> Selgelt tuvastatavat kohustust ei ole</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Tagasi</button>
+            <button class="btn" type="button" data-next>Järgmine</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="2">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Samm 2 — Kohustuse rikkumine</span>
+          <span class="step__meta">
+            <button class="info" type="button" data-info="breach" aria-label="Lisainfo">?</button>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Hinnake, kas kohustuse rikkumine on tuvastatav.</p>
+          <div class="info__panel" data-panel="breach" hidden>
+            Rikkumine tähendab, et kohustust ei täidetud, täideti puudulikult või hilinemisega. Rikkumine peab olema kirjeldatav ja seostatav konkreetse kohustusega.
+          </div>
+
+          <fieldset class="choices" aria-label="Rikkumine">
+            <label><input type="radio" name="breach" value="3"> Rikkumine on selgelt tuvastatav ja dokumenteeritud</label>
+            <label><input type="radio" name="breach" value="2"> Rikkumine on tõenäoline, kuid mitte täielikult dokumenteeritud</label>
+            <label><input type="radio" name="breach" value="1"> Rikkumine on vaieldav</label>
+            <label><input type="radio" name="breach" value="0"> Rikkumise olemasolu ei ole kindel</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Tagasi</button>
+            <button class="btn" type="button" data-next>Järgmine</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="3">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Samm 3 — Kahju või nõude suurus</span>
+          <span class="step__meta">
+            <button class="info" type="button" data-info="damage" aria-label="Lisainfo">?</button>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Hinnake, kas nõude summa on määratletav ja põhjendatud.</p>
+          <div class="info__panel" data-panel="damage" hidden>
+            Kahju peab olema rahaliselt määratletav. Nõude suurus peaks olema arvutatav ja põhjendatav, mitte hinnanguline oletus.
+          </div>
+
+          <fieldset class="choices" aria-label="Kahju">
+            <label><input type="radio" name="damage" value="3"> Summa on täpselt arvutatav ja põhjendatud</label>
+            <label><input type="radio" name="damage" value="2"> Summa on ligikaudu arvutatav</label>
+            <label><input type="radio" name="damage" value="1"> Summa on ebamäärane</label>
+            <label><input type="radio" name="damage" value="0"> Summa ei ole rahaliselt määratletud</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Tagasi</button>
+            <button class="btn" type="button" data-next>Järgmine</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked is-emphasis" data-step="4">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Samm 4 — Tõendite olemasolu</span>
+          <span class="step__meta">
+            <button class="info" type="button" data-info="evidence" aria-label="Lisainfo">?</button>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Hinnake, millised tõendid toetavad nõuet.</p>
+          <div class="info__panel" data-panel="evidence" hidden>
+            Tõendid võivad olla kirjalikud dokumendid, kirjavahetus, arved, lepingud või muud objektiivsed andmed. Kohtuvaidluses hinnatakse eelkõige tõendite olemasolu ja usaldusväärsust.
+          </div>
+
+          <fieldset class="choices" aria-label="Tõendid">
+            <label><input type="radio" name="evidence" value="3"> Mitmed kirjalikud või objektiivsed tõendid</label>
+            <label><input type="radio" name="evidence" value="2"> Mõned kirjalikud või muud tõendid</label>
+            <label><input type="radio" name="evidence" value="1"> Piiratud või kaudsed tõendid</label>
+            <label><input type="radio" name="evidence" value="0"> Tõendid puuduvad</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Tagasi</button>
+            <button class="btn" type="button" data-next>Järgmine</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="5">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Samm 5 — Võimalikud vastuväited</span>
+          <span class="step__meta">
+            <button class="info" type="button" data-info="defenses" aria-label="Lisainfo">?</button>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Hinnake, kui tugevad võivad olla teise poole vastuväited.</p>
+          <div class="info__panel" data-panel="defenses" hidden>
+            Vastuväited on põhjendused, millega teine pool võib nõudele vastu vaielda. Näiteks võib väita, et kohustust ei olnud, kahju ei tekkinud või nõue on aegunud.
+          </div>
+
+          <fieldset class="choices" aria-label="Vastuväited">
+            <label><input type="radio" name="defenses" value="3"> Vähetõenäoline</label>
+            <label><input type="radio" name="defenses" value="2"> Võimalik</label>
+            <label><input type="radio" name="defenses" value="1"> Tõenäoline</label>
+            <label><input type="radio" name="defenses" value="0"> Väga tõenäoline</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Tagasi</button>
+            <button class="btn" type="button" data-next>Järgmine</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked is-emphasis" data-step="6">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Samm 6 — Aegumisküsimus</span>
+          <span class="step__meta">
+            <button class="info" type="button" data-info="limitation" aria-label="Lisainfo">?</button>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Hinnake, kas nõude esitamine võib olla ajaliselt piiratud.</p>
+          <div class="info__panel" data-panel="limitation" hidden>
+            Aegumine tähendab, et seaduses ettenähtud tähtaja möödumisel võib nõude maksmapanek olla piiratud. Tähtajad sõltuvad nõude liigist ja asjaoludest.
+          </div>
+
+          <fieldset class="choices" aria-label="Aegumine">
+            <label><input type="radio" name="limitation" value="3"> Ei</label>
+            <label><input type="radio" name="limitation" value="2"> Ebatõenäoline</label>
+            <label><input type="radio" name="limitation" value="1"> Võimalik</label>
+            <label><input type="radio" name="limitation" value="0"> Tõenäoline</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Tagasi</button>
+            <button class="btn" type="button" id="showResultBtn">Vaata tulemust</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="results" id="results" hidden aria-label="Tulemused">
+      <div class="card card--main">
+        <div class="card__title">Üldine riskiprofiil</div>
+        <div class="status" id="overallStatus">
+          <div class="status__dot" data-level="neutral"></div>
+          <div class="status__text" id="overallText">—</div>
+        </div>
+        <p class="muted" id="overallNote">
+          Hinnang põhineb sisestatud vastustel ja kajastab nõude struktuurset tugevust, mitte menetluse tulemust.
+        </p>
+      </div>
+
+      <div class="grid" id="componentGrid"></div>
+
+      <div class="notice notice--subtle" id="methodNote">
+        Hinnang põhineb kaalutud riskikomponentidel, sealhulgas tõendite olemasolul ja aegumisküsimusel. Tegemist on struktureeritud eelanalüüsiga.
+      </div>
+
+      <div class="footerline">
+        Sügavam struktureeritud analüüs (hagi eelhindamise protokoll) on arendamisel.
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="muted small">© Solvere Lab</div>
+    </footer>
+  </main>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
