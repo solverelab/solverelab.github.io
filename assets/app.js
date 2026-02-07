@@ -108,9 +108,14 @@
       });
 
       // next/back
-      step.querySelectorAll("[data-next]").forEach(btn => {
-        btn.addEventListener("click", () => gotoStep(getStepNum(step) + 1));
-      });
+step.querySelectorAll("[data-next]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const n = getStepNum(step);
+    if (!isStepComplete(n)) return;
+    gotoStep(n + 1);
+  });
+});
+
       step.querySelectorAll("[data-back]").forEach(btn => {
         btn.addEventListener("click", () => gotoStep(getStepNum(step) - 1));
       });
@@ -160,20 +165,38 @@
     resetBtn?.addEventListener("click", resetAll);
 
     showResultBtn?.addEventListener("click", () => {
-      if (!isStepComplete(6)) return;
-      renderResults();
-      results.hidden = false;
-      results.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+  if (!isStepComplete(6)) return;
+
+  state.seenResults = true;
+  saveState(state);
+
+  renderResults();
+  results.hidden = false;
+  results.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
     updateProgress();
     updateShowResultButton();
+    updateNextButtons();
   }
 
   function updateShowResultButton() {
     if (!showResultBtn) return;
     showResultBtn.disabled = !isStepComplete(6);
   }
+
+  function updateNextButtons() {
+  // iga sammu "Järgmine" disabled kuni sammu vastus on valitud
+  for (let n = 1; n <= 5; n++) {
+    const stepEl = steps.find(s => getStepNum(s) === n);
+    if (!stepEl) continue;
+
+    const nextBtn = stepEl.querySelector('[data-next]');
+    if (!nextBtn) continue;
+
+    nextBtn.disabled = !isStepComplete(n);
+  }
+}
 
   function getStepNum(stepEl) {
     return Number(stepEl.getAttribute("data-step"));
@@ -200,6 +223,7 @@
 
     updateProgress();
     updateShowResultButton();
+    updateNextButtons();
 
     if (isStepComplete(6) && state.seenResults) {
       renderResults();
