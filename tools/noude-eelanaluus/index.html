@@ -191,230 +191,538 @@ document.addEventListener("DOMContentLoaded", () => {
 </article>
 
     <!-- STEP 2 -->
-    <article class="step" data-step="2" aria-labelledby="s2-title" hidden>
-      <header class="step__head">
-        <h2 id="s2-title">2. Kohustuse rikkumine</h2>
+<article class="step" data-step="2" aria-labelledby="s2-title" hidden>
+  <header class="step__head">
+    <h2 id="s2-title">2. Kas teine pool jättis kokkuleppe täitmata?</h2>
 
-        <button type="button" class="infoToggle" data-info="s2-info" aria-expanded="false" aria-controls="s2-info">
-          (i)
+    <button type="button"
+            class="helpBtn"
+            data-help="s2-help"
+            aria-expanded="false"
+            aria-controls="s2-help"
+            aria-label="Ava selgitus">
+      ?
+    </button>
+  </header>
+
+  <div class="helpPanel" id="s2-help" hidden>
+    <p><strong>Lihtsas keeles:</strong> kas lubatu jäi tegemata, tehti halvasti või tehti liiga hilja.</p>
+    <p class="muted"><strong>Miks küsime:</strong> nõue on tugevam, kui rikkumine on selgelt kirjeldatav ja seostatav konkreetse kokkuleppega.</p>
+    <p class="muted"><strong>Näide:</strong> “ei tarnitud”, “tehti puudulikult”, “hilines 2 kuud”.</p>
+  </div>
+
+  <fieldset class="q" aria-label="Rikkumise küsimus">
+    <legend class="q__legend">Vali kõige sobivam kirjeldus</legend>
+
+    <label class="opt">
+      <input type="radio" name="breach" value="3" />
+      <span class="opt__text">
+        <span>Jah — rikkumine on selge ja seda toetavad dokumendid või muud tõendid.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s2-o3"
+                aria-expanded="false"
+                aria-controls="s2-o3"
+                aria-label="Näited">
+          ?
         </button>
-      </header>
+      </span>
+    </label>
+    <div class="optHelp" id="s2-o3" hidden>
+      <p><strong>Näited:</strong> kirjavahetus “ei teinud/ei saanud”, aktid, fotod, kauba mittesaabumine, hilinemise kuupäevad.</p>
+      <p class="muted"><strong>Miks oluline:</strong> vähendab vaidlust “kas üldse rikuti”.</p>
+    </div>
 
-      <div class="step__info" id="s2-info" hidden>
-        Rikkumine tähendab, et kohustust ei täidetud, täideti puudulikult või hilinemisega.
-        Rikkumine peab olema kirjeldatav ja seostatav konkreetse kohustusega.
-      </div>
+    <label class="opt">
+      <input type="radio" name="breach" value="2" />
+      <span class="opt__text">
+        <span>Ilmselt jah — rikkumine on usutav, kuid kõik ei ole veel dokumenteeritud.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s2-o2"
+                aria-expanded="false"
+                aria-controls="s2-o2"
+                aria-label="Mida juurde koguda?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s2-o2" hidden>
+      <p><strong>Mida juurde koguda:</strong> kuupäevad, sõnumid, töö üleandmise puudumine, arved, tõendid tehtud maksete kohta.</p>
+      <p class="muted"><strong>Miks oluline:</strong> keskmine risk — sageli lahendatav parema kronoloogia ja tõenditega.</p>
+    </div>
 
-      <fieldset class="q" aria-label="Rikkumise küsimus">
-        <legend class="q__legend">Kas kohustust rikuti ning kas rikkumine on kirjeldatav?</legend>
+    <label class="opt">
+      <input type="radio" name="breach" value="1" />
+      <span class="opt__text">
+        <span>Vaidlus on võimalik — teine pool võib väita, et rikkumist ei olnud või see oli õigustatud.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s2-o1"
+                aria-expanded="false"
+                aria-controls="s2-o1"
+                aria-label="Millal on vaieldav?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s2-o1" hidden>
+      <p><strong>Millal on vaieldav:</strong> töö kvaliteet on hinnanguline, tähtajad polnud kokku lepitud, pooled mõistsid kokkulepet erinevalt.</p>
+      <p class="muted"><strong>Miks oluline:</strong> kõrgem risk — vaja täpsustada, mis täpselt oli lubatud.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="breach" value="3" />
-          <span>Rikkumine on selgelt tuvastatav ja dokumenteeritud</span>
-        </label>
+    <label class="opt">
+      <input type="radio" name="breach" value="0" />
+      <span class="opt__text">
+        <span>Ei ole kindel — ma ei saa selgelt öelda, mida ja kuidas rikuti.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s2-o0"
+                aria-expanded="false"
+                aria-controls="s2-o0"
+                aria-label="Mida teha, kui pole kindel?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s2-o0" hidden>
+      <p><strong>Kui pole kindel:</strong> kirjuta 5–8 lausega faktid (mis juhtus, millal, mida ootasid) ja kogu esmased tõendid.</p>
+      <p class="muted"><strong>Miks oluline:</strong> ilma rikkumise kirjelduseta on nõude “süda” nõrk.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="breach" value="2" />
-          <span>Rikkumine on tõenäoline, kuid mitte täielikult dokumenteeritud</span>
-        </label>
+  </fieldset>
 
-        <label class="opt">
-          <input type="radio" name="breach" value="1" />
-          <span>Rikkumine on vaieldav</span>
-        </label>
-
-        <label class="opt">
-          <input type="radio" name="breach" value="0" />
-          <span>Rikkumise olemasolu ei ole kindel</span>
-        </label>
-      </fieldset>
-
-      <footer class="step__nav">
-        <button type="button" class="btn" data-action="back">Tagasi</button>
-        <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
-      </footer>
-    </article>
+  <footer class="step__nav">
+    <button type="button" class="btn" data-action="back">Tagasi</button>
+    <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
+  </footer>
+</article>
 
     <!-- STEP 3 -->
-    <article class="step" data-step="3" aria-labelledby="s3-title" hidden>
-      <header class="step__head">
-        <h2 id="s3-title">3. Kahju või nõude suurus</h2>
+<article class="step" data-step="3" aria-labelledby="s3-title" hidden>
+  <header class="step__head">
+    <h2 id="s3-title">3. Kas nõude summa on selge ja põhjendatav?</h2>
 
-        <button type="button" class="infoToggle" data-info="s3-info" aria-expanded="false" aria-controls="s3-info">
-          (i)
+    <button type="button"
+            class="helpBtn"
+            data-help="s3-help"
+            aria-expanded="false"
+            aria-controls="s3-help"
+            aria-label="Ava selgitus">
+      ?
+    </button>
+  </header>
+
+  <div class="helpPanel" id="s3-help" hidden>
+    <p><strong>Lihtsas keeles:</strong> kas Sa oskad öelda, kui palju täpselt nõuad ja millest see summa koosneb.</p>
+    <p class="muted"><strong>Miks küsime:</strong> kui summa on ebamäärane, on nõue vaieldavam ja planeerimine keerulisem.</p>
+    <p class="muted"><strong>Näide:</strong> “arve 480 € + paranduskulu 120 €” on tugevam kui “umbes 1000 €”.</p>
+  </div>
+
+  <fieldset class="q" aria-label="Summa küsimus">
+    <legend class="q__legend">Vali kõige sobivam kirjeldus</legend>
+
+    <label class="opt">
+      <input type="radio" name="damage" value="3" />
+      <span class="opt__text">
+        <span>Jah — summa on täpselt arvutatav ja mul on selleks alus (arved, leping, arvestus).</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s3-o3"
+                aria-expanded="false"
+                aria-controls="s3-o3"
+                aria-label="Näited">
+          ?
         </button>
-      </header>
+      </span>
+    </label>
+    <div class="optHelp" id="s3-o3" hidden>
+      <p><strong>Näited:</strong> konkreetne arve, maksekorraldus, hinnapakkumine, remondiarve, selge arvutuskäik.</p>
+      <p class="muted"><strong>Miks oluline:</strong> vähendab vaidlust “kui palju tegelikult”.</p>
+    </div>
 
-      <div class="step__info" id="s3-info" hidden>
-        Kahju peab olema rahaliselt määratletav.
-        Nõude suurus peaks olema arvutatav ja põhjendatav, mitte hinnanguline oletus.
-      </div>
+    <label class="opt">
+      <input type="radio" name="damage" value="2" />
+      <span class="opt__text">
+        <span>Osaliselt — summa on ligikaudu arvutatav, aga kõik dokumendid/andmed pole koos.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s3-o2"
+                aria-expanded="false"
+                aria-controls="s3-o2"
+                aria-label="Mida puudu võib olla?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s3-o2" hidden>
+      <p><strong>Mis võib puudu olla:</strong> täpsed kuludokumendid, perioodid, töömaht, paranduskulude tõendid.</p>
+      <p class="muted"><strong>Miks oluline:</strong> keskmine risk — sageli parandatav dokumentide koondamisega.</p>
+    </div>
 
-      <fieldset class="q" aria-label="Kahju küsimus">
-        <legend class="q__legend">Kas nõude suurus on rahaliselt määratletud ja põhjendatav?</legend>
+    <label class="opt">
+      <input type="radio" name="damage" value="1" />
+      <span class="opt__text">
+        <span>Ei ole selge — ma ei oska summat piisavalt täpselt kokku panna.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s3-o1"
+                aria-expanded="false"
+                aria-controls="s3-o1"
+                aria-label="Kuidas alustada?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s3-o1" hidden>
+      <p><strong>Kuidas alustada:</strong> erista põhivõlg (raha) ja muud kulud (kahju, lisakulud). Tee lihtne tabel: kulu, summa, dokument.</p>
+      <p class="muted"><strong>Miks oluline:</strong> kõrgem risk — ilma selge summata on nõude maksmapanek raskem.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="damage" value="3" />
-          <span>Summa on täpselt arvutatav ja põhjendatud</span>
-        </label>
+    <label class="opt">
+      <input type="radio" name="damage" value="0" />
+      <span class="opt__text">
+        <span>Puudub — nõude summa ei ole praegu rahaliselt määratletud.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s3-o0"
+                aria-expanded="false"
+                aria-controls="s3-o0"
+                aria-label="Millal see variant sobib?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s3-o0" hidden>
+      <p><strong>Millal sobib:</strong> näiteks emotsionaalne kahju ilma arvestuseta või puuduvad kuludokumendid.</p>
+      <p class="muted"><strong>Miks oluline:</strong> kriitiline risk — vaja esmalt summa kokku panna.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="damage" value="2" />
-          <span>Summa on ligikaudu arvutatav</span>
-        </label>
+  </fieldset>
 
-        <label class="opt">
-          <input type="radio" name="damage" value="1" />
-          <span>Summa on ebamäärane</span>
-        </label>
-
-        <label class="opt">
-          <input type="radio" name="damage" value="0" />
-          <span>Summa ei ole rahaliselt määratletud</span>
-        </label>
-      </fieldset>
-
-      <footer class="step__nav">
-        <button type="button" class="btn" data-action="back">Tagasi</button>
-        <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
-      </footer>
-    </article>
+  <footer class="step__nav">
+    <button type="button" class="btn" data-action="back">Tagasi</button>
+    <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
+  </footer>
+</article>
 
     <!-- STEP 4 (weighted x2) -->
-    <article class="step step--weighted" data-step="4" aria-labelledby="s4-title" hidden>
-      <header class="step__head">
-        <h2 id="s4-title">4. Tõendite olemasolu</h2>
+<article class="step step--weighted" data-step="4" aria-labelledby="s4-title" hidden>
+  <header class="step__head">
+    <h2 id="s4-title">4. Millised tõendid Sul on?</h2>
 
-        <button type="button" class="infoToggle" data-info="s4-info" aria-expanded="false" aria-controls="s4-info">
-          (i)
+    <button type="button"
+            class="helpBtn"
+            data-help="s4-help"
+            aria-expanded="false"
+            aria-controls="s4-help"
+            aria-label="Ava selgitus">
+      ?
+    </button>
+  </header>
+
+  <div class="helpPanel" id="s4-help" hidden>
+    <p><strong>Lihtsas keeles:</strong> tõendid on asjad, mis kinnitavad Sinu juttu (dokumendid, sõnumid, fotod).</p>
+    <p class="muted"><strong>Miks küsime:</strong> kohtuvaidluses loevad faktid ja tõendid — see on üks tugevamaid riskitegureid.</p>
+    <p class="muted"><strong>Näited:</strong> leping, arve, e-kirjad, sõnumid, fotod, ülekanded, üleandmisakt.</p>
+  </div>
+
+  <fieldset class="q" aria-label="Tõendite küsimus">
+    <legend class="q__legend">Vali kõige sobivam kirjeldus</legend>
+
+    <label class="opt">
+      <input type="radio" name="evidence" value="3" />
+      <span class="opt__text">
+        <span>Mul on mitu tugevat tõendit (dokumendid, kirjavahetus, objektiivsed andmed).</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s4-o3"
+                aria-expanded="false"
+                aria-controls="s4-o3"
+                aria-label="Mis on tugev tõend?">
+          ?
         </button>
-      </header>
+      </span>
+    </label>
+    <div class="optHelp" id="s4-o3" hidden>
+      <p><strong>Tugev tõend:</strong> näitab kohustust + rikkumist + summat (või vähemalt kahte neist) ning on ajaliselt loogiline.</p>
+      <p class="muted"><strong>Tip:</strong> koonda tõendid kronoloogilisse kausta.</p>
+    </div>
 
-      <div class="step__info" id="s4-info" hidden>
-        Tõendid võivad olla kirjalikud dokumendid, kirjavahetus, arved, lepingud või muud objektiivsed andmed.
-        Kohtuvaidluses hinnatakse eelkõige tõendite olemasolu ja usaldusväärsust.
-      </div>
+    <label class="opt">
+      <input type="radio" name="evidence" value="2" />
+      <span class="opt__text">
+        <span>Mõned tõendid on olemas, aga mitte kõige kohta.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s4-o2"
+                aria-expanded="false"
+                aria-controls="s4-o2"
+                aria-label="Mis võiks puudu olla?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s4-o2" hidden>
+      <p><strong>Mis võib puudu olla:</strong> kokkuleppe detailid, kuupäevad, töö üleandmise jälg, kuludokumendid.</p>
+      <p class="muted"><strong>Miks oluline:</strong> keskmine risk — sageli parandatav lisatõenditega.</p>
+    </div>
 
-      <fieldset class="q" aria-label="Tõendite küsimus">
-        <legend class="q__legend">Millised tõendid kinnitavad Teie väidet?</legend>
+    <label class="opt">
+      <input type="radio" name="evidence" value="1" />
+      <span class="opt__text">
+        <span>Tõendeid on vähe või need on pigem kaudsed (nt ainult suusõnaline info).</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s4-o1"
+                aria-expanded="false"
+                aria-controls="s4-o1"
+                aria-label="Mis on kaudne tõend?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s4-o1" hidden>
+      <p><strong>Kaudne tõend:</strong> vihjab olukorrale, aga ei kinnita otse (nt üldised sõnumid ilma tingimusteta).</p>
+      <p class="muted"><strong>Miks oluline:</strong> kõrgem risk — vaja “otse” tõendeid juurde.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="evidence" value="3" />
-          <span>Mitmed kirjalikud või objektiivsed tõendid</span>
-        </label>
+    <label class="opt">
+      <input type="radio" name="evidence" value="0" />
+      <span class="opt__text">
+        <span>Tõendid puuduvad (praegu ei ole dokumente ega muud kinnitavat infot).</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s4-o0"
+                aria-expanded="false"
+                aria-controls="s4-o0"
+                aria-label="Kas tõesti mitte midagi?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s4-o0" hidden>
+      <p><strong>Kontrolli üle:</strong> maksekorraldused, sõnumid, fotod, kõnelogid, tunnistajad, varasemad arved.</p>
+      <p class="muted"><strong>Miks oluline:</strong> kriitiline risk — ilma tõenditeta on vaidlus väga ebakindel.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="evidence" value="2" />
-          <span>Mõned kirjalikud või muud tõendid</span>
-        </label>
+  </fieldset>
 
-        <label class="opt">
-          <input type="radio" name="evidence" value="1" />
-          <span>Piiratud või kaudsed tõendid</span>
-        </label>
-
-        <label class="opt">
-          <input type="radio" name="evidence" value="0" />
-          <span>Tõendid puuduvad</span>
-        </label>
-      </fieldset>
-
-      <footer class="step__nav">
-        <button type="button" class="btn" data-action="back">Tagasi</button>
-        <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
-      </footer>
-    </article>
+  <footer class="step__nav">
+    <button type="button" class="btn" data-action="back">Tagasi</button>
+    <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
+  </footer>
+</article>
 
     <!-- STEP 5 -->
-    <article class="step" data-step="5" aria-labelledby="s5-title" hidden>
-      <header class="step__head">
-        <h2 id="s5-title">5. Võimalikud vastuväited</h2>
+<article class="step" data-step="5" aria-labelledby="s5-title" hidden>
+  <header class="step__head">
+    <h2 id="s5-title">5. Mida teine pool võib vastu väita?</h2>
 
-        <button type="button" class="infoToggle" data-info="s5-info" aria-expanded="false" aria-controls="s5-info">
-          (i)
+    <button type="button"
+            class="helpBtn"
+            data-help="s5-help"
+            aria-expanded="false"
+            aria-controls="s5-help"
+            aria-label="Ava selgitus">
+      ?
+    </button>
+  </header>
+
+  <div class="helpPanel" id="s5-help" hidden>
+    <p><strong>Lihtsas keeles:</strong> “vastuväide” on põhjendus, miks teine pool ütleb, et ta ei pea maksma või täitma.</p>
+    <p class="muted"><strong>Miks küsime:</strong> isegi hea nõue võib nõrgeneda, kui vastuväited on tugevad ja toetuvad faktidele.</p>
+    <p class="muted"><strong>Näide:</strong> “töö oli tehtud”, “kvaliteet oli ok”, “te ise tühistasite”, “aegumine”.</p>
+  </div>
+
+  <fieldset class="q" aria-label="Vastuväidete küsimus">
+    <legend class="q__legend">Kui tõenäoline on, et teisel poolel on tugevad vastuväited?</legend>
+
+    <label class="opt">
+      <input type="radio" name="defenses" value="3" />
+      <span class="opt__text">
+        <span>Vähetõenäoline — ma ei näe tugevaid põhjendusi, millega ta saaks edukalt vastu vaielda.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s5-o3"
+                aria-expanded="false"
+                aria-controls="s5-o3"
+                aria-label="Millal on vähetõenäoline?">
+          ?
         </button>
-      </header>
+      </span>
+    </label>
+    <div class="optHelp" id="s5-o3" hidden>
+      <p><strong>Millal:</strong> faktid ja dokumendid on selged, teine pool on vastuoluline või ei suuda selgitada.</p>
+    </div>
 
-      <div class="step__info" id="s5-info" hidden>
-        Vastuväited on põhjendused, millega teine pool võib nõudele vastu vaielda.
-        Näiteks võib väita, et kohustust ei olnud, kahju ei tekkinud või nõue on aegunud.
-      </div>
+    <label class="opt">
+      <input type="radio" name="defenses" value="2" />
+      <span class="opt__text">
+        <span>Võimalik — tal võib olla mõni argument, mis vajab läbitöötamist.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s5-o2"
+                aria-expanded="false"
+                aria-controls="s5-o2"
+                aria-label="Näited">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s5-o2" hidden>
+      <p><strong>Näited:</strong> “kvaliteet oli vaieldav”, “tähtaeg polnud kokku lepitud”, “te ise muutsid tingimusi”.</p>
+      <p class="muted"><strong>Tip:</strong> pane kirja 2–3 võimalikku vastuväidet ja lisa juurde, mis neid ümber lükkab.</p>
+    </div>
 
-      <fieldset class="q" aria-label="Vastuväidete küsimus">
-        <legend class="q__legend">Kui tõenäoline on, et teine pool suudab esitada tugevaid vastuväiteid?</legend>
+    <label class="opt">
+      <input type="radio" name="defenses" value="1" />
+      <span class="opt__text">
+        <span>Tõenäoline — ta on juba esitanud argumente, mis võivad olla veenvad.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s5-o1"
+                aria-expanded="false"
+                aria-controls="s5-o1"
+                aria-label="Millal on tõenäoline?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s5-o1" hidden>
+      <p><strong>Millal:</strong> dokumente on vähe, kokkulepe on ebaselge või on “sõna-sõna vastu” olukord.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="defenses" value="3" />
-          <span>Vähetõenäoline</span>
-        </label>
+    <label class="opt">
+      <input type="radio" name="defenses" value="0" />
+      <span class="opt__text">
+        <span>Väga tõenäoline — tal on tugevad vastuväited ja/või olemas tõendid.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s5-o0"
+                aria-expanded="false"
+                aria-controls="s5-o0"
+                aria-label="Miks kriitiline?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s5-o0" hidden>
+      <p><strong>Miks kriitiline:</strong> vaidluse tulemus muutub ebakindlaks; vaja tõendibaasi ja väidete struktuuri tugevdada.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="defenses" value="2" />
-          <span>Võimalik</span>
-        </label>
+  </fieldset>
 
-        <label class="opt">
-          <input type="radio" name="defenses" value="1" />
-          <span>Tõenäoline</span>
-        </label>
-
-        <label class="opt">
-          <input type="radio" name="defenses" value="0" />
-          <span>Väga tõenäoline</span>
-        </label>
-      </fieldset>
-
-      <footer class="step__nav">
-        <button type="button" class="btn" data-action="back">Tagasi</button>
-        <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
-      </footer>
-    </article>
+  <footer class="step__nav">
+    <button type="button" class="btn" data-action="back">Tagasi</button>
+    <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
+  </footer>
+</article>
 
     <!-- STEP 6 (weighted x2) -->
-    <article class="step step--weighted" data-step="6" aria-labelledby="s6-title" hidden>
-      <header class="step__head">
-        <h2 id="s6-title">6. Aegumisküsimus</h2>
+<article class="step step--weighted" data-step="6" aria-labelledby="s6-title" hidden>
+  <header class="step__head">
+    <h2 id="s6-title">6. Kas on võimalik, et nõue on aegunud või aegumas?</h2>
 
-        <button type="button" class="infoToggle" data-info="s6-info" aria-expanded="false" aria-controls="s6-info">
-          (i)
+    <button type="button"
+            class="helpBtn"
+            data-help="s6-help"
+            aria-expanded="false"
+            aria-controls="s6-help"
+            aria-label="Ava selgitus">
+      ?
+    </button>
+  </header>
+
+  <div class="helpPanel" id="s6-help" hidden>
+    <p><strong>Lihtsas keeles:</strong> mõne nõude puhul ei saa pärast teatud aja möödumist enam edukalt nõuda (tähtaeg saab täis).</p>
+    <p class="muted"><strong>Miks küsime:</strong> aegumine võib nõude maksmapanekut tugevalt piirata — see on kriitiline riskitegur.</p>
+    <p class="muted"><strong>Praktiline tip:</strong> kui kuupäevad pole selged, vali pigem “Võimalik”.</p>
+  </div>
+
+  <fieldset class="q" aria-label="Aegumise küsimus">
+    <legend class="q__legend">Vali kõige sobivam kirjeldus</legend>
+
+    <label class="opt">
+      <input type="radio" name="limitation" value="3" />
+      <span class="opt__text">
+        <span>Ei — juhtum on hiljutine ja kuupäevad on selged.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s6-o3"
+                aria-expanded="false"
+                aria-controls="s6-o3"
+                aria-label="Mida tähendab selge?">
+          ?
         </button>
-      </header>
+      </span>
+    </label>
+    <div class="optHelp" id="s6-o3" hidden>
+      <p><strong>Selge:</strong> tead, millal pidi kohustus täidetama / millal rikkumine toimus / millal kahju ilmnes.</p>
+    </div>
 
-      <div class="step__info" id="s6-info" hidden>
-  Aegumine tähendab, et tähtaja möödumisel võib nõude maksmapanek olla piiratud.
-  Üldreeglina on nõuete aegumistähtaeg sageli 3 aastat, kuid tähtaeg sõltub nõude liigist ja asjaoludest.
-  Kui Sa ei ole kuupäevades kindel, vali pigem “Võimalik”.
-</div>
+    <label class="opt">
+      <input type="radio" name="limitation" value="2" />
+      <span class="opt__text">
+        <span>Ebatõenäoline — juhtum pole vana, aga kõik kuupäevad pole täiesti kindlad.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s6-o2"
+                aria-expanded="false"
+                aria-controls="s6-o2"
+                aria-label="Mida kontrollida?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s6-o2" hidden>
+      <p><strong>Mida kontrollida:</strong> kirjavahetuse kuupäevad, arved, maksed, üleandmine, viimane kontakt.</p>
+    </div>
 
-      <fieldset class="q" aria-label="Aegumise küsimus">
-        <legend class="q__legend">Kas on võimalik, et nõue on aegunud või aegumas?</legend>
+    <label class="opt">
+      <input type="radio" name="limitation" value="1" />
+      <span class="opt__text">
+        <span>Võimalik — kuupäevad on ebaselged või juhtum võib olla vanem.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s6-o1"
+                aria-expanded="false"
+                aria-controls="s6-o1"
+                aria-label="Miks valida see?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s6-o1" hidden>
+      <p><strong>Miks valida:</strong> kui Sa ei ole kindel, on mõistlik käsitleda seda riskina ja kontrollida kuupäevad üle.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="limitation" value="3" />
-          <span>Ei — juhtum on hiljutine ja kuupäevad on selged</span>
-        </label>
+    <label class="opt">
+      <input type="radio" name="limitation" value="0" />
+      <span class="opt__text">
+        <span>Tõenäoline — juhtum on vana või on selge aegumisoht.</span>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s6-o0"
+                aria-expanded="false"
+                aria-controls="s6-o0"
+                aria-label="Miks kriitiline?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s6-o0" hidden>
+      <p><strong>Miks kriitiline:</strong> isegi “hea” nõue võib ebaõnnestuda, kui tähtaeg on möödas.</p>
+      <p class="muted"><strong>Tip:</strong> koosta kuupäevade kronoloogia ja kontrolli, millal nõue muutus sissenõutavaks.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="limitation" value="2" />
-          <span>Ebatõenäoline — juhtum ei ole vana, kuid kõik kuupäevad ei ole täiesti selged</span>
-        </label>
+  </fieldset>
 
-        <label class="opt">
-          <input type="radio" name="limitation" value="1" />
-          <span>Võimalik — kuupäevad on ebaselged või juhtum võib olla vanem</span>
-        </label>
-
-        <label class="opt">
-          <input type="radio" name="limitation" value="0" />
-          <span>Tõenäoline — juhtum on vana või on selge aegumisoht</span>
-        </label>
-      </fieldset>
-
-      <footer class="step__nav">
-        <button type="button" class="btn" data-action="back">Tagasi</button>
-        <button type="button" class="btn btn-primary" data-action="finish">Vaata tulemust</button>
-      </footer>
-    </article>
+  <footer class="step__nav">
+    <button type="button" class="btn" data-action="back">Tagasi</button>
+    <button type="button" class="btn btn-primary" data-action="finish">Vaata tulemust</button>
+  </footer>
+</article>
 
   </section>
 
@@ -423,9 +731,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <header class="results__head">
     <h2>Tulemus</h2>
-    <p class="muted">
-      Hinnang põhineb kaalutud riskikomponentidel, sealhulgas tõendite olemasolul ja aegumisküsimusel.
-    </p>
+<p class="muted">
+  See hinnang võtab kokku Sinu vastused. Kõige suurema mõjuga on tõendid ja aegumisoht.
+</p>
   </header>
 
   <!-- Overall -->
@@ -453,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="card metric" id="m-breach" data-level="unknown">
       <div class="metric__head">
-        <div class="metric__name">Rikkumine</div>
+        <div class="metric__name">Täitmata jätmine</div>
         <div class="metric__dot"></div>
       </div>
       <div class="metric__label" id="m-breach-label">—</div>
@@ -462,7 +770,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="card metric" id="m-damage" data-level="unknown">
       <div class="metric__head">
-        <div class="metric__name">Kahju</div>
+        <div class="metric__name">Summa</div>
         <div class="metric__dot"></div>
       </div>
       <div class="metric__label" id="m-damage-label">—</div>
@@ -471,7 +779,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="card metric" id="m-defenses" data-level="unknown">
       <div class="metric__head">
-        <div class="metric__name">Vastuväited</div>
+        <div class="metric__name">Vastuargumendid</div>
         <div class="metric__dot"></div>
       </div>
       <div class="metric__label" id="m-defenses-label">—</div>
@@ -489,7 +797,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="card metric metric--weighted" id="m-limitation" data-level="unknown">
       <div class="metric__head">
-        <div class="metric__name">Aegumine</div>
+        <div class="metric__name">Aegumisoht</div>
         <div class="metric__dot"></div>
       </div>
       <div class="metric__label" id="m-limitation-label">—</div>
@@ -614,54 +922,66 @@ document.addEventListener("DOMContentLoaded", () => {
   // Component labels + 1-line notes (based on score 0-3)
 const COMPONENT_TEXT = {
   basis: {
-    3: { label: "Tugev", note: "Kohustuse olemasolu on selgelt tuvastatav ja määratletav." },
-    2: { label: "Piisav", note: "Kohustuse olemasolu on tuvastatav, kuid selle sisu vajab täpsustamist." },
-    1: { label: "Nõrk",  note: "Kohustuse sisu ei ole selgelt määratletav või vajab olulist täpsustamist." },
-    0: { label: "Kriitiline", note: "Kohustuse olemasolu ei ole esialgse hinnangu alusel tuvastatav." },
+    3: { label: "Tugev", note: "On selge, mida teine pool pidi tegema, ja see on kirjalikult või hästi tõendatav." },
+    2: { label: "Piisav", note: "Kokkulepe/kohustus on olemas, kuid selle täpsus või vorm vajab täpsustamist." },
+    1: { label: "Nõrk",  note: "Kokkuleppe tingimused (mis, millal, kui palju) ei ole piisavalt selged." },
+    0: { label: "Kriitiline", note: "Puudub selge alus, millele nõue toetub, või seda ei õnnestu esialgu tuvastada." },
   },
 
   breach: {
-    3: { label: "Tugev", note: "Rikkumine on selgelt kirjeldatav ja seostatav konkreetse kohustusega." },
-    2: { label: "Piisav", note: "Rikkumine on tõenäoline, kuid vajab selgemat seost kohustusega." },
-    1: { label: "Nõrk",  note: "Rikkumise olemasolu või selle seos kohustusega võib olla vaieldav." },
-    0: { label: "Kriitiline", note: "Rikkumise olemasolu või selle seos kohustusega ei ole piisavalt tuvastatav." },
+    3: { label: "Tugev", note: "On selge, kuidas kokkulepet ei täidetud (või täideti puudulikult/hilinemisega) ja see on tõendatav." },
+    2: { label: "Piisav", note: "Täitmata jätmine on usutav, kuid vajab paremat kirjeldust või lisatõendeid." },
+    1: { label: "Nõrk",  note: "Täitmata jätmine võib olla vaieldav (nt tingimused või kvaliteet on ebaselged)." },
+    0: { label: "Kriitiline", note: "Ei ole selge, kas ja kuidas kokkulepet rikuti." },
   },
 
   damage: {
-    3: { label: "Tugev", note: "Nõude suurus on rahaliselt määratletud ja põhjendatav." },
-    2: { label: "Piisav", note: "Nõude suurus on määratav, kuid arvutuskäik või põhjendus vajab täiendamist." },
-    1: { label: "Nõrk",  note: "Nõude suurus ei ole piisavalt määratletud või vajab täiendavat põhjendust." },
-    0: { label: "Kriitiline", note: "Nõude suurus ei ole rahaliselt määratletud ega põhjendatud." },
+    3: { label: "Tugev", note: "Nõude summa on selge, arvutatav ja dokumentidega põhjendatav." },
+    2: { label: "Piisav", note: "Summa on hinnanguliselt kokku pandav, kuid arvutuskäik või dokumendid vajavad täiendamist." },
+    1: { label: "Nõrk",  note: "Summa ei ole piisavalt selge või koosneb ebaselgetest osadest." },
+    0: { label: "Kriitiline", note: "Summa ei ole praegu rahaliselt määratletud." },
   },
 
   evidence: {
-    3: { label: "Tugev", note: "Olemas on mitmed asjakohased ja objektiivsed tõendid." },
-    2: { label: "Piisav", note: "Olemas on asjakohaseid tõendeid, kuid nende piisavus võib olla vaieldav." },
-    1: { label: "Nõrk",  note: "Tõendid on piiratud või kaudsed ning nende piisavus võib olla küsitav." },
-    0: { label: "Kriitiline", note: "Asjakohased tõendid puuduvad või ei toeta väidet piisaval määral." },
+    3: { label: "Tugev", note: "Olemas on mitu tugevat tõendit, mis toetavad olulisi väiteid." },
+    2: { label: "Piisav", note: "Mõned tõendid on olemas, kuid mitte kõigi oluliste väidete kohta." },
+    1: { label: "Nõrk",  note: "Tõendeid on vähe või need on pigem kaudsed." },
+    0: { label: "Kriitiline", note: "Asjakohased tõendid puuduvad või ei toeta väiteid piisavalt." },
   },
 
   defenses: {
-    3: { label: "Tugev", note: "Olulised vastuväited ei ole esialgse hinnangu alusel tõenäolised." },
-    2: { label: "Piisav", note: "Võimalikud vastuväited võivad mõjutada nõude hinnangut." },
-    1: { label: "Nõrk",  note: "Võimalikud vastuväited võivad oluliselt mõjutada nõude hinnangut." },
-    0: { label: "Kriitiline", note: "Võimalikud vastuväited võivad oluliselt piirata nõude elujõulisust." },
+    3: { label: "Tugev", note: "Tugevad vastuargumendid ei tundu tõenäolised." },
+    2: { label: "Piisav", note: "Mõni vastuargument on võimalik ja vajab läbimõtlemist." },
+    1: { label: "Nõrk",  note: "Vastuargumendid on tõenäolised ja võivad oluliselt mõjutada tulemust." },
+    0: { label: "Kriitiline", note: "Vastuargumendid võivad olla tugevad ja tõenditega toetatud." },
   },
 
   limitation: {
-    3: { label: "Tugev", note: "Aegumise riski ei ole esialgse hinnangu alusel tuvastatud." },
-    2: { label: "Piisav", note: "Aegumise risk ei ole esialgse hinnangu alusel tõenäoline, kuid vajab kontrolli." },
-    1: { label: "Nõrk",  note: "Aegumise risk võib esineda ja vajab täiendavat kontrolli." },
-    0: { label: "Kriitiline", note: "Aegumise risk võib oluliselt piirata nõude maksmapanekut." },
+    3: { label: "Tugev", note: "Aegumisoht ei paista esialgu olemas olevat ja kuupäevad on selged." },
+    2: { label: "Piisav", note: "Aegumisoht on ebatõenäoline, kuid kuupäevad vajavad kontrolli." },
+    1: { label: "Nõrk",  note: "Aegumisoht on võimalik ja vajab kiiret kontrolli." },
+    0: { label: "Kriitiline", note: "Aegumisoht on tõenäoline ja võib nõude maksmapanekut oluliselt piirata." },
   },
 };
 
   // Overall labels (no percentages shown)
-  const OVERALL_TEXT = {
-    strong:   { badge: "🟢", title: "Üldine riskiprofiil: tugev", desc: "Riskikomponendid on valdavalt piisavad ning kriitilisi piiranguid ei tuvastatud." },
-    moderate: { badge: "🟡", title: "Üldine riskiprofiil: mõõdukas", desc: "Esineb nõrku kohti või ebakindlust. Enne edasist sammu tasub komponentide sisu täpsustada." },
-    weak:     { badge: "🔴", title: "Üldine riskiprofiil: nõrk", desc: "Esineb kriitilisi puudusi või mitut olulist riskikohta. Nõude struktuur vajab läbimõtlemist ja täiendamist." },
-  };
+ const OVERALL_TEXT = {
+  strong: {
+    badge: "🟢",
+    title: "Üldpilt: hea väljavaade",
+    desc: "Sinu vastuste põhjal on põhipunktid (nõude sisu, täitmata jätmine, summa, tõendid ja aeg) üldjoontes selged. Järgmine samm on koondada dokumendid ja sõnastada nõue faktiliselt."
+  },
+  moderate: {
+    badge: "🟡",
+    title: "Üldpilt: vaja täpsustada",
+    desc: "Mõnes olulises kohas on ebakindlus. Enne kohtuteed tasub täpsustada kokkuleppe sisu, kuupäevad ja/või koguda lisatõendeid, et vähendada vaidluse riski."
+  },
+  weak: {
+    badge: "🔴",
+    title: "Üldpilt: kõrge risk",
+    desc: "Esineb kriitilisi puudusi (nt tõendid, aegumisoht või nõude sisu on ebaselge). Enne edasist sammu on mõistlik teha tööplaani järgi selgitused ja dokumentide koondamine — muidu võib vaidlus olla ebamõistlikult riskantne."
+  },
+};
 
   // ---- State
   let currentStep = 1;
@@ -885,8 +1205,8 @@ const COMPONENT_TEXT = {
     // reset cards
     overallCard.dataset.level = "unknown";
     overallBadge.textContent = "—";
-    overallTitle.textContent = "Üldine riskiprofiil";
-    overallDesc.textContent = "Täida küsimustik, et kuvada hinnang.";
+    overallTitle.textContent = "Üldpilt";
+overallDesc.textContent = "Vasta küsimustele, et näha kokkuvõtvat hinnangut ja soovituslikku tööplaani.";
 
 for (const f of FIELDS) {
   const ids = gridIds[f];
