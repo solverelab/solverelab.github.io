@@ -114,8 +114,9 @@
         if (step.classList.contains("is-locked")) return;
 
         const expanded = head.getAttribute("aria-expanded") === "true";
-        head.setAttribute("aria-expanded", String(!expanded));
-        body.style.display = expanded ? "none" : "block";
+head.setAttribute("aria-expanded", String(!expanded));
+body.style.display = expanded ? "none" : "block";
+step.classList.toggle("is-open", !expanded);
       });
 
       // next/back
@@ -263,6 +264,7 @@
       if (!head || !body) return;
       head.setAttribute("aria-expanded", "false");
       body.style.display = "none";
+      s.classList.remove("is-open");
     });
 
     const head = stepEl.querySelector(".step__head");
@@ -270,7 +272,8 @@
     if (!head || !body) return;
 
     head.setAttribute("aria-expanded", "true");
-    body.style.display = "block";
+body.style.display = "block";
+stepEl.classList.add("is-open");
 
     stepEl.scrollIntoView({ behavior: "smooth", block: "start" });
     updateProgress();
