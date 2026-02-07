@@ -61,13 +61,10 @@
   const startBtn = document.getElementById("startBtn");
   const resetBtn = document.getElementById("resetBtn");
   const showResultBtn = document.getElementById("showResultBtn");
-  
-  const progressSection = document.querySelector(".progress");
 
+  const progressSection = document.querySelector(".progress");
   const progressLabel = document.getElementById("progressLabel");
   const progressFill = document.getElementById("progressFill");
-  
-  const progressSection = document.querySelector(".progress");
 
   const steps = Array.from(document.querySelectorAll(".step"));
   const results = document.getElementById("results");
@@ -80,6 +77,14 @@
   init();
 
   function init() {
+    // peida lähtesta kuni kasutaja alustab
+    if (resetBtn) resetBtn.hidden = true;
+
+    // kui on varasemaid vastuseid, näita lähtesta kohe
+    if (resetBtn && state.answers && Object.keys(state.answers).length > 0) {
+      resetBtn.hidden = false;
+    }
+
     // restore answers
     for (const [k, v] of Object.entries(state.answers || {})) {
       const el = document.querySelector(`input[name="${k}"][value="${v}"]`);
@@ -95,7 +100,6 @@
       const body = step.querySelector(".step__body");
 
       head.addEventListener("click", (e) => {
-        // avoid opening by clicking info button
         if (e.target && e.target.classList.contains("info")) return;
         if (step.classList.contains("is-locked")) return;
         const expanded = head.getAttribute("aria-expanded") === "true";
@@ -123,7 +127,7 @@
       });
     });
 
-    // answer change save + unlock
+    // answer change save + unlock (+ re-render if results visible)
     document.querySelectorAll('input[type="radio"]').forEach(r => {
       r.addEventListener("change", () => {
         const name = r.name;
@@ -132,57 +136,43 @@
         state.answers[name] = value;
         saveState(state);
         applyUnlocks();
+
+        if (!results.hidden && isStepComplete(6)) {
+          renderResults();
+        }
       });
     });
 
-    function init() {
-  // peida lähtesta kuni kasutaja alustab
-  if (resetBtn) resetBtn.hidden = true;
+    startBtn?.addEventListener("click", () => {
+      if (resetBtn) resetBtn.hidden = false;
 
-  // restore answers ...
-  for (const [k, v] of Object.entries(state.answers || {})) {
-    const el = document.querySelector(`input[name="${k}"][value="${v}"]`);
-    if (el) el.checked = true;
-  }
+      // 1) scroll progressi juurde
+      if (progressSection) {
+        progressSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
 
-  // unlock based on completion
-  applyUnlocks();
-  }    
-
-  if (resetBtn && state.answers && Object.keys(state.answers).length > 0) {
-    resetBtn.hidden = false;
-  }
-
-  // ... (ülejäänu jääb samaks)
-
-startBtn?.addEventListener("click", () => {
-  if (resetBtn) resetBtn.hidden = false;
-
-  // 1) scroll progressi juurde
-  if (progressSection) {
-    progressSection.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  // 2) avame Samm 1 väikese viivitusega
-  window.setTimeout(() => {
-    gotoStep(1);
-  }, 250);
-});
-
-resetBtn?.addEventListener("click", resetAll);
-
-// ... (ülejäänu jääb samaks)
-}
+      // 2) avame Samm 1 väikese viivitusega
+      window.setTimeout(() => {
+        gotoStep(1);
+      }, 250);
+    });
 
     resetBtn?.addEventListener("click", resetAll);
+
     showResultBtn?.addEventListener("click", () => {
-      if (!isStepComplete(6)) return; // hard gate
+      if (!isStepComplete(6)) return;
       renderResults();
       results.hidden = false;
       results.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     updateProgress();
+    updateShowResultButton();
+  }
+
+  function updateShowResultButton() {
+    if (!showResultBtn) return;
+    showResultBtn.disabled = !isStepComplete(6);
   }
 
   function getStepNum(stepEl) {
@@ -198,7 +188,6 @@ resetBtn?.addEventListener("click", resetAll);
   }
 
   function applyUnlocks() {
-    // unlock step 1 always
     steps.forEach(s => s.classList.add("is-locked"));
     const s1 = steps.find(s => getStepNum(s) === 1);
     if (s1) s1.classList.remove("is-locked");
@@ -209,29 +198,22 @@ resetBtn?.addEventListener("click", resetAll);
       if (stepEl && prevComplete) stepEl.classList.remove("is-locked");
     }
 
-    // optionally keep current opened step visible
     updateProgress();
+    updateShowResultButton();
 
-    // auto-show if previously finished and results exist
-    if (isStepComplete(6)) {
-      // don't show automatically; only after "Vaata tulemust"
-      // but we can re-enable the results if user had seen them:
-      if (state.seenResults) {
-        renderResults();
-        results.hidden = false;
-      }
+    if (isStepComplete(6) && state.seenResults) {
+      renderResults();
+      results.hidden = false;
     }
   }
 
   function gotoStep(n) {
-    if (n < 1) return;
-    if (n > 6) return;
+    if (n < 1 || n > 6) return;
 
     const stepEl = steps.find(s => getStepNum(s) === n);
     if (!stepEl) return;
     if (stepEl.classList.contains("is-locked")) return;
 
-    // close all, open target
     steps.forEach(s => {
       const head = s.querySelector(".step__head");
       const body = s.querySelector(".step__body");
@@ -246,38 +228,36 @@ resetBtn?.addEventListener("click", resetAll);
 
     stepEl.scrollIntoView({ behavior: "smooth", block: "start" });
     updateProgress();
+    updateShowResultButton();
   }
 
   function updateProgress() {
-    const completed = [1,2,3,4,5,6].filter(n => isStepComplete(n)).length;
-    progressLabel.textContent = `Samm ${Math.min(completed,6)} / 6`;
+    const completed = [1, 2, 3, 4, 5, 6].filter(n => isStepComplete(n)).length;
+    if (progressLabel) progressLabel.textContent = `Samm ${Math.min(completed, 6)} / 6`;
     const pct = (completed / 6) * 100;
-    progressFill.style.width = `${pct}%`;
+    if (progressFill) progressFill.style.width = `${pct}%`;
 
     const bar = document.querySelector(".progress__bar");
     if (bar) bar.setAttribute("aria-valuenow", String(completed));
   }
 
   function computeOverall(a) {
-    // a: {basis, breach, damage, evidence, defenses, limitation}
-    const maxPoints = 24; // per your model: 1+1+1+1+2+2 weights *3
+    const maxPoints = 24;
     let sum = 0;
     for (const k of Object.keys(weights)) {
       const v = Number(a[k] ?? 0);
       sum += v * weights[k];
     }
-    const ratio = sum / maxPoints; // 0..1
+    const ratio = sum / maxPoints;
 
     const evidence0 = Number(a.evidence) === 0;
     const limitation0 = Number(a.limitation) === 0;
 
-    // thresholds (not shown to user)
     let level = "mid";
     if (ratio >= 0.75) level = "ok";
     else if (ratio >= 0.50) level = "mid";
     else level = "bad";
 
-    // critical constraints
     if (evidence0 || limitation0) {
       if (level === "ok") level = "mid";
       if (evidence0 && limitation0) level = "bad";
@@ -290,22 +270,21 @@ resetBtn?.addEventListener("click", resetAll);
     const a = state.answers || {};
     const overall = computeOverall(a);
 
-    // lock: results only after click
     state.seenResults = true;
     saveState(state);
 
-    const statusText = overall === "ok"
-      ? "🟢 Tugev riskiprofiil"
-      : overall === "mid"
-        ? "🟡 Mõõdukas riskiprofiil"
-        : "🔴 Nõrk riskiprofiil";
+    const statusText =
+      overall === "ok" ? "🟢 Tugev riskiprofiil"
+      : overall === "mid" ? "🟡 Mõõdukas riskiprofiil"
+      : "🔴 Nõrk riskiprofiil";
 
-    overallText.textContent = statusText;
-    overallStatusDot.setAttribute("data-level", overall);
+    if (overallText) overallText.textContent = statusText;
+    if (overallStatusDot) overallStatusDot.setAttribute("data-level", overall);
 
-    // component grid
+    if (!componentGrid) return;
     componentGrid.innerHTML = "";
-    const order = ["basis","breach","damage","evidence","defenses","limitation"];
+
+    const order = ["basis", "breach", "damage", "evidence", "defenses", "limitation"];
     order.forEach(key => {
       const v = Number(a[key]);
       const lvl = v >= 2 ? (v === 3 ? "ok" : "mid") : "bad";
@@ -317,7 +296,9 @@ resetBtn?.addEventListener("click", resetAll);
           <div class="kcard__name">${labels[key]}</div>
           <div class="kcard__mark">
             <span class="kdot ${lvl}"></span>
-            <span class="muted small">${v >= 2 ? (v === 3 ? "Tugev" : "Piisav") : (v === 1 ? "Nõrk" : "Kriitiline")}</span>
+            <span class="muted small">${
+              v >= 2 ? (v === 3 ? "Tugev" : "Piisav") : (v === 1 ? "Nõrk" : "Kriitiline")
+            }</span>
           </div>
         </div>
         <div class="kcard__desc">${shortNotes[key][String(v)] ?? "—"}</div>
