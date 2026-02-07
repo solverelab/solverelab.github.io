@@ -939,3 +939,52 @@ body > * { position:relative; z-index:1; }
 .helpBtn[aria-expanded="true"]{
   background:#444;
 }
+
+/* ===============================
+   HELP BUTTON (❓) — nähtav igal taustal
+   =============================== */
+
+.helpBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:28px;
+  height:28px;
+  border-radius:999px;
+
+  background:#111;      /* tume taust */
+  color:#fff;           /* valge küsimärk */
+  border:none;
+
+  font-weight:700;
+  font-size:16px;
+  line-height:1;
+
+  cursor:pointer;
+  flex:0 0 auto;
+}
+
+/* Küsimärk tuleb CSS-ist, mitte HTML-ist */
+.helpBtn::before{
+  content:"?";
+}
+
+.helpBtn--sm{
+  width:22px;
+  height:22px;
+  font-size:13px;
+}
+
+.helpBtn:hover{
+  background:#000;
+}
+
+.helpBtn:focus{
+  outline:2px solid #000;
+  outline-offset:2px;
+}
+
+.helpBtn[aria-expanded="true"]{
+  background:#444;
+}
