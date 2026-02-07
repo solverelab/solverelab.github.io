@@ -597,6 +597,8 @@ stepEl.classList.add("is-open");
 
     if (overallText) overallText.textContent = statusText;
     if (overallStatusDot) overallStatusDot.setAttribute("data-level", overall);
+    const mainCard = document.querySelector(".card--main");
+if (mainCard) mainCard.setAttribute("data-level", overall);
 
 const statusBox = document.getElementById("overallStatus");
 if (statusBox) statusBox.setAttribute("data-level", overall);
