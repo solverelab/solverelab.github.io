@@ -96,3 +96,10 @@ h1{font-size:34px;line-height:1.15;margin:0;letter-spacing:-.3px}
 
 .footerline{margin-top:14px;color:var(--muted);font-size:13px}
 .footer{border-top:1px solid var(--line);padding-top:18px}
+
+.list{margin:10px 0 0;padding-left:18px;color:var(--text)}
+.list li{margin:8px 0}
+.checklist{margin:10px 0 0;padding-left:0;list-style:none}
+.checklist li{display:flex;gap:10px;align-items:flex-start;padding:10px 10px;border:1px solid var(--line);border-radius:12px;background:#fff;margin:8px 0}
+.checklist li::before{content:"□";color:var(--muted);font-weight:700;line-height:1.1;margin-top:1px}
+
