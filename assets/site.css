@@ -516,3 +516,19 @@ body{
   border-color: rgba(239,68,68,.35);
   background: rgba(239,68,68,.06);
 }
+
+.kcard{
+  background: var(--card-soft);
+  border:1px solid var(--line);
+}
+
+.plansec{
+  background: var(--card-soft);
+  border:1px solid var(--line);
+}
+.plansec__items{
+  color: var(--muted);
+}
+.plansec__items a{
+  color: var(--text);
+}
