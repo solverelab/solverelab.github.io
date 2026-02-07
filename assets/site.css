@@ -54,7 +54,6 @@ h1{font-size:34px;line-height:1.15;margin:0;letter-spacing:-.3px}
 .steps{display:flex;flex-direction:column;gap:10px;margin:10px 0 24px}
 .step{border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);overflow:hidden}
 .step.is-locked{opacity:.55}
-.step.is-emphasis{border-color:#d1d5db}
 
 .step__head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#fff;border:0;cursor:pointer}
 .step__title{font-weight:650;text-align:left}
