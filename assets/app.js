@@ -72,6 +72,14 @@
   const overallText = document.getElementById("overallText");
   const componentGrid = document.getElementById("componentGrid");
 
+  // II FAAS DOM
+  const reasonsCard = document.getElementById("reasonsCard");
+  const reasonsList = document.getElementById("reasonsList");
+  const conditionsCard = document.getElementById("conditionsCard");
+  const conditionsList = document.getElementById("conditionsList");
+  const actionCard = document.getElementById("actionCard");
+  const actionList = document.getElementById("actionList");
+
   const state = loadState();
 
   init();
@@ -108,13 +116,13 @@
       });
 
       // next/back
-step.querySelectorAll("[data-next]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const n = getStepNum(step);
-    if (!isStepComplete(n)) return;
-    gotoStep(n + 1);
-  });
-});
+      step.querySelectorAll("[data-next]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const n = getStepNum(step);
+          if (!isStepComplete(n)) return;
+          gotoStep(n + 1);
+        });
+      });
 
       step.querySelectorAll("[data-back]").forEach(btn => {
         btn.addEventListener("click", () => gotoStep(getStepNum(step) - 1));
@@ -142,7 +150,7 @@ step.querySelectorAll("[data-next]").forEach(btn => {
         saveState(state);
         applyUnlocks();
 
-        if (!results.hidden && isStepComplete(6)) {
+        if (results && !results.hidden && isStepComplete(6)) {
           renderResults();
         }
       });
@@ -165,15 +173,15 @@ step.querySelectorAll("[data-next]").forEach(btn => {
     resetBtn?.addEventListener("click", resetAll);
 
     showResultBtn?.addEventListener("click", () => {
-  if (!isStepComplete(6)) return;
+      if (!isStepComplete(6)) return;
 
-  state.seenResults = true;
-  saveState(state);
+      state.seenResults = true;
+      saveState(state);
 
-  renderResults();
-  results.hidden = false;
-  results.scrollIntoView({ behavior: "smooth", block: "start" });
-});
+      renderResults();
+      if (results) results.hidden = false;
+      if (results) results.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 
     updateProgress();
     updateShowResultButton();
@@ -186,17 +194,17 @@ step.querySelectorAll("[data-next]").forEach(btn => {
   }
 
   function updateNextButtons() {
-  // iga sammu "Järgmine" disabled kuni sammu vastus on valitud
-  for (let n = 1; n <= 5; n++) {
-    const stepEl = steps.find(s => getStepNum(s) === n);
-    if (!stepEl) continue;
+    // iga sammu "Järgmine" disabled kuni sammu vastus on valitud
+    for (let n = 1; n <= 5; n++) {
+      const stepEl = steps.find(s => getStepNum(s) === n);
+      if (!stepEl) continue;
 
-    const nextBtn = stepEl.querySelector('[data-next]');
-    if (!nextBtn) continue;
+      const nextBtn = stepEl.querySelector('[data-next]');
+      if (!nextBtn) continue;
 
-    nextBtn.disabled = !isStepComplete(n);
+      nextBtn.disabled = !isStepComplete(n);
+    }
   }
-}
 
   function getStepNum(stepEl) {
     return Number(stepEl.getAttribute("data-step"));
@@ -227,7 +235,7 @@ step.querySelectorAll("[data-next]").forEach(btn => {
 
     if (isStepComplete(6) && state.seenResults) {
       renderResults();
-      results.hidden = false;
+      if (results) results.hidden = false;
     }
   }
 
@@ -253,6 +261,7 @@ step.querySelectorAll("[data-next]").forEach(btn => {
     stepEl.scrollIntoView({ behavior: "smooth", block: "start" });
     updateProgress();
     updateShowResultButton();
+    updateNextButtons();
   }
 
   function updateProgress() {
@@ -290,6 +299,211 @@ step.querySelectorAll("[data-next]").forEach(btn => {
     return level;
   }
 
+  // -----------------------
+  // II FAAS — templates + generaatorid
+  // -----------------------
+
+  function decide(a) {
+    const overall = computeOverall(a);
+    if (overall === "ok") return "JAH";
+    if (overall === "mid") return "TINGIMUSLIKULT";
+    return "EI";
+  }
+
+  function pickReasons(a) {
+    const reasons = [];
+    const decision = decide(a);
+
+    const weakCount = ["basis", "breach", "damage", "evidence", "defenses", "limitation"]
+      .map(k => Number(a[k]))
+      .filter(v => v <= 1).length;
+
+    const add = (key, text) => {
+      if (!text) return;
+      if (reasons.some(r => r.key === key)) return;
+      reasons.push({ key, text });
+    };
+
+    const T = {
+      limitation: {
+        0: "Aegumise risk võib oluliselt piirata nõude maksmapanekut ja vajab esmast kontrolli.",
+        1: "Aegumisküsimus on ebaselge ning vajab täpsustamist enne edasist sammu.",
+        2: (decision !== "JAH") ? "Aegumisoht ei näi tõenäoline, kuid mõistlik on teha kontroll." : "",
+        3: ""
+      },
+      evidence: {
+        0: "Asjakohased tõendid ei toeta väidet piisaval määral; enne edasist sammu on vaja tõendibaasi täiendada.",
+        1: "Tõendite maht või kvaliteet võib olla ebapiisav; risk sõltub sellest, kas tõendeid saab juurde.",
+        2: (decision !== "JAH") ? "Tõendeid on olemas, kuid nende katvus vajab kriitilist ülevaatust." : "",
+        3: ""
+      },
+      basis: {
+        0: "Kohustuse olemasolu ei ole esialgse hinnangu alusel tuvastatav; nõude alus vajab ümber sõnastamist ja allikate kinnitamist.",
+        1: "Kohustuse sisu vajab olulist täpsustamist, et nõude alus oleks selge.",
+        2: "",
+        3: ""
+      },
+      breach: {
+        0: "Rikkumise olemasolu või seos kohustusega ei ole piisavalt tuvastatav; vaja on selgemat rikkumise kirjeldust.",
+        1: "Rikkumise seos konkreetse kohustusega võib olla vaieldav ja vajab täpsustamist.",
+        2: "",
+        3: ""
+      },
+      damage: {
+        0: "Nõude suurus ei ole rahaliselt määratletud ega põhjendatud; vaja on arvutuskäiku ja alusandmeid.",
+        1: "Nõude suurus vajab täiendavat põhjendust ja selgemat arvutuskäiku.",
+        2: "",
+        3: ""
+      },
+      defenses: {
+        0: "Võimalikud vastuväited võivad oluliselt piirata nõude elujõulisust; vaja on koostada vastuväidete käsitlus.",
+        1: "Vaidlusrisk on arvestatav; mõistlik on kaardistada peamised vastuväited ja vastused neile.",
+        2: "",
+        3: ""
+      },
+      weakCount:
+        "Mitme riskikoha koosesinemine suurendab ebakindlust; enne edasist sammu tasub nõrku komponente sihipäraselt parandada."
+    };
+
+    if (Number(a.limitation) <= 1) add("limitation", T.limitation[Number(a.limitation)]);
+    if (Number(a.evidence) <= 1) add("evidence", T.evidence[Number(a.evidence)]);
+
+    const core = ["basis", "breach", "damage"]
+      .map(k => ({ k, v: Number(a[k]) }))
+      .filter(x => x.v <= 1)
+      .sort((x, y) => x.v - y.v);
+
+    for (const x of core.slice(0, 2)) add(x.k, T[x.k][x.v]);
+
+    if (Number(a.defenses) <= 1) add("defenses", T.defenses[Number(a.defenses)]);
+
+    if (reasons.length < 3 && weakCount >= 4) add("weakCount", T.weakCount);
+
+    return reasons.slice(0, 3);
+  }
+
+  function generateConditions(a) {
+    const decision = decide(a);
+    if (decision === "JAH") return [];
+
+    const cond = [];
+    const add = (t) => {
+      if (!t) return;
+      if (cond.includes(t)) return;
+      if (cond.length >= 3) return;
+      cond.push(t);
+    };
+
+    if (Number(a.limitation) <= 1) add("Aegumise küsimus vajab kontrolli.");
+    if (Number(a.evidence) <= 1) add("Tõendibaasi tuleb täiendada.");
+
+    const coreWeak = ["basis", "breach", "damage"].some(k => Number(a[k]) <= 1);
+    if (coreWeak) add("Nõude tuuma komponent vajab täpsustamist (alus/rikkumine/kahju).");
+
+    if (Number(a.defenses) === 0) add("Vastuväidete käsitlus on vajalik.");
+
+    return cond;
+  }
+
+  function generateActionTasks(a) {
+    const tasks = [];
+    const pushAll = (arr) => arr.forEach(t => tasks.push(t));
+
+    if (Number(a.basis) <= 1) {
+      pushAll([
+        "Kirjuta ühe lausega üles: kes pidi midagi tegema, mida täpselt pidi tegema, millal pidi tegema.",
+        "Pane kirja, millele kohustus tugines (nt leping, kokkulepe, kirjavahetus, seadus).",
+        "Kirjelda 3–5 lühilausena kohustuse sisu (ilma hinnangute ja oletusteta).",
+        "Täpsusta, mida Sa nõuad (nt raha, kohustuse täitmist, kahju hüvitamist)."
+      ]);
+    }
+
+    if (Number(a.breach) <= 1) {
+      pushAll([
+        "Kirjelda faktina, mida tehti valesti, hilinemisega või jäeti tegemata.",
+        "Seo rikkumine konkreetse kohustusega (millist lubadust või kokkulepet ei täidetud).",
+        "Koosta lihtne kronoloogia: kuupäev → mis toimus → millest see selgub (nt e-kiri, arve, sõnum)."
+      ]);
+    }
+
+    if (Number(a.damage) <= 1) {
+      pushAll([
+        "Koosta arvutuskäik (nt summa × periood, konkreetne arve, kuludokumendid).",
+        "Erista: tegelik kahju vs hinnangulised või tulevased kulud.",
+        "Kirjelda lühidalt põhjuslik seos: kuidas rikkumine viis rahalise kaotuseni."
+      ]);
+    }
+
+    if (Number(a.evidence) <= 1) {
+      pushAll([
+        "Koosta nimekiri olemasolevatest tõenditest (nt leping, kirjavahetus, arve, akt, foto).",
+        "Märgi iga tõendi juurde, millist väidet see kinnitab (alus / rikkumine / kahju).",
+        "Tuvasta, millise olulise väite kohta on tõend puudu.",
+        "Koonda failid ühtsesse loogilisse struktuuri (nt kaustad või failinimed)."
+      ]);
+    }
+
+    if (Number(a.defenses) <= 1) {
+      pushAll([
+        "Pane kirja 2–3 kõige tõenäolisemat vastuväidet, mida teine pool võiks esitada.",
+        "Kirjuta iga vastuväite juurde lühike vastus (fakt + olemasolev tõend).",
+        "Märgi, milline vastuväide tundub Sulle nõrgim koht."
+      ]);
+    }
+
+    if (Number(a.limitation) <= 1) {
+      pushAll([
+        "Pane kirja olulised kuupäevad: kokkulepe, rikkumine, kahju ilmnemine, teavitamine (kui oli).",
+        "Täpsusta hetk, mil nõue muutus sissenõutavaks (millal oleks pidanud täitma).",
+        "Märgi sündmused, mis võisid aega mõjutada (nt kirjavahetus, osaline tasumine, läbirääkimised).",
+        "Kui Sa ei ole kindel, käsitle seda riskina edasiste sammude planeerimisel."
+      ]);
+    }
+
+    return tasks;
+  }
+
+  function renderPhase2(a) {
+    if (!reasonsCard || !reasonsList || !conditionsCard || !conditionsList || !actionCard || !actionList) {
+      return;
+    }
+
+    const decision = decide(a);
+    const reasons = pickReasons(a);
+    const conditions = generateConditions(a);
+    const tasks = generateActionTasks(a);
+
+    // Põhjendused
+    reasonsList.innerHTML = "";
+    reasons.forEach(r => {
+      const li = document.createElement("li");
+      li.textContent = r.text;
+      reasonsList.appendChild(li);
+    });
+    reasonsCard.hidden = reasons.length === 0;
+
+    // Tingimused
+    conditionsList.innerHTML = "";
+    conditions.forEach(t => {
+      const li = document.createElement("li");
+      li.textContent = t;
+      conditionsList.appendChild(li);
+    });
+    conditionsCard.hidden = (decision === "JAH" || conditions.length === 0);
+
+    // Tööplaan
+    actionList.innerHTML = "";
+    tasks.forEach(t => {
+      const li = document.createElement("li");
+      li.textContent = t;
+      actionList.appendChild(li);
+    });
+    actionCard.hidden = tasks.length === 0;
+  }
+
+  // -----------------------
+  // I FAAS tulemuse render
+  // -----------------------
   function renderResults() {
     const a = state.answers || {};
     const overall = computeOverall(a);
@@ -299,8 +513,8 @@ step.querySelectorAll("[data-next]").forEach(btn => {
 
     const statusText =
       overall === "ok" ? "🟢 Tugev riskiprofiil"
-      : overall === "mid" ? "🟡 Mõõdukas riskiprofiil"
-      : "🔴 Nõrk riskiprofiil";
+        : overall === "mid" ? "🟡 Mõõdukas riskiprofiil"
+          : "🔴 Nõrk riskiprofiil";
 
     if (overallText) overallText.textContent = statusText;
     if (overallStatusDot) overallStatusDot.setAttribute("data-level", overall);
@@ -329,6 +543,9 @@ step.querySelectorAll("[data-next]").forEach(btn => {
       `;
       componentGrid.appendChild(card);
     });
+
+    // II FAAS
+    renderPhase2(a);
   }
 
   function resetAll() {
@@ -348,6 +565,6 @@ step.querySelectorAll("[data-next]").forEach(btn => {
   function saveState(s) {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(s));
-    } catch {}
+    } catch { }
   }
 })();
