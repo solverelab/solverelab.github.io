@@ -413,3 +413,106 @@ a{color:inherit}
   padding: 22px 0 30px;
   color: var(--muted);
 }
+
+:root{
+  --bg:#0f1115;
+  --card:#151922;
+  --card-soft:#1b2230;
+
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --line:#262b36;
+
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+
+  --ok:#22c55e;
+  --mid:#f59e0b;
+  --bad:#ef4444;
+
+  --radius:16px;
+  --radius-sm:12px;
+}
+
+body{
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar{
+  background: rgba(15,17,21,.85);
+  backdrop-filter: blur(12px);
+  border-bottom:1px solid var(--line);
+}
+
+.card,
+.step,
+.progress__row,
+.notice{
+  background: var(--card);
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.hero h1{
+  color: var(--text);
+}
+.lead{
+  color: var(--muted);
+}
+
+.btn{
+  background: var(--text);
+  color: #0f1115;
+  border:1px solid #2d3340;
+}
+.btn--ghost{
+  background: transparent;
+  color: var(--text);
+  border:1px solid var(--line);
+}
+.btn:hover{
+  filter: brightness(1.05);
+}
+
+.choices label{
+  background: var(--card-soft);
+  border:1px solid var(--line);
+}
+.choices label:hover{
+  border-color:#3b4253;
+}
+
+.info__panel{
+  background: var(--card-soft);
+  border:1px solid var(--line);
+}
+
+.progress__bar{
+  background:#1f2530;
+  border:1px solid #222733;
+}
+.progress__fill{
+  background:#3b4253;
+}
+
+.status{
+  padding:12px 14px;
+  border-radius: var(--radius);
+  border:1px solid var(--line);
+  background: var(--card-soft);
+}
+
+.status[data-level="ok"]{
+  border-color: rgba(34,197,94,.35);
+  background: rgba(34,197,94,.06);
+}
+
+.status[data-level="mid"]{
+  border-color: rgba(245,158,11,.35);
+  background: rgba(245,158,11,.06);
+}
+
+.status[data-level="bad"]{
+  border-color: rgba(239,68,68,.35);
+  background: rgba(239,68,68,.06);
+}
