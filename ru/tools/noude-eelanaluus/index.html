@@ -345,6 +345,15 @@
 
 <script>
 (() => {
+    // --- Plausible events (RU tool) ---
+  function track(eventName, props = {}) {
+    try {
+      if (typeof window.plausible === "function") {
+        window.plausible(eventName, { props: { lang: "ru", tool: "claim_precheck", ...props } });
+      }
+    } catch {}
+  }
+
   // Separate key so RU and ET don't overwrite each other in the same session
   const STORAGE_KEY = "solverelab_claim_precheck_ru_v1";
 
@@ -573,6 +582,9 @@
 
   function bindAnswerPersistence(){
     document.addEventListener("change", (e) => {
+      saved[field] = Number(inp.value);
+      save(saved);
+      track("tool_answer", { field, value: Number(inp.value) });
       const inp = e.target;
       if (!(inp instanceof HTMLInputElement)) return;
       if (inp.type !== "radio") return;
@@ -631,21 +643,23 @@
       const action = btn.getAttribute("data-action");
       if (!action) return;
 
-      if (action === "back"){
+            if (action === "back"){
+        track("tool_step_back", { step: currentStep });
         if (currentStep > 1) showStep(currentStep - 1);
         return;
       }
 
-      if (action === "next"){
+           if (action === "next"){
         if (!validateStepAnswered(currentStep)){
           alert("Пожалуйста, выберите вариант ответа, чтобы продолжить.");
           return;
         }
+        track("tool_step_next", { step: currentStep });
         if (currentStep < 6) showStep(currentStep + 1);
         return;
       }
 
-      if (action === "finish"){
+         if (action === "finish"){
         if (!validateStepAnswered(currentStep)){
           alert("Пожалуйста, выберите вариант ответа, чтобы увидеть результат.");
           return;
@@ -661,6 +675,7 @@
           return;
         }
 
+        track("tool_finish");
         renderDashboard(saved);
         showResults();
         return;
@@ -704,9 +719,20 @@
     _showResults();
   };
 
-  btnStart.addEventListener("click", () => showStep(1));
-  btnEdit?.addEventListener("click", () => showStep(1));
-  btnResetBottom?.addEventListener("click", resetAll);
+    btnStart.addEventListener("click", () => {
+    track("tool_start");
+    showStep(1);
+  });
+
+  btnEdit?.addEventListener("click", () => {
+    track("tool_edit");
+    showStep(1);
+  });
+
+  btnResetBottom?.addEventListener("click", () => {
+    track("tool_reset");
+    resetAll();
+  });
 
   bindNavAndInfo();
   bindAnswerPersistence();
@@ -859,6 +885,7 @@ const TASKS = {
   }
 
   function openPlan(){
+    track("tool_plan_open");
     const saved = getSaved();
     if (!saved) return;
 
@@ -873,6 +900,7 @@ const TASKS = {
   }
 
   function closePlan(){
+    track("tool_plan_close");
     actionPlanCard.hidden = true;
   }
 
