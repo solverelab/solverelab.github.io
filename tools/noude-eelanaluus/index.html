@@ -948,7 +948,10 @@ function initFromStorage() {
   showStep(1);
 });
   btnEdit?.addEventListener("click", () => showStep(1));
-  btnResetBottom?.addEventListener("click", resetAll);
+ btnResetBottom?.addEventListener("click", () => {
+  track("tool_reset", TRACK_CTX);
+  resetAll();
+});
 
   bindNavAndInfo();
   bindAnswerPersistence();
@@ -1124,7 +1127,10 @@ function initFromStorage() {
     actionPlanCard.hidden = true;
   }
 
-  btnPlanOpen?.addEventListener("click", openPlan);
+  btnPlanOpen?.addEventListener("click", () => {
+  track("tool_plan_open", TRACK_CTX);
+  openPlan();
+});
   btnPlanClose?.addEventListener("click", closePlan);
 })();
 </script>
