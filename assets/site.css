@@ -819,3 +819,76 @@ body > * { position:relative; z-index:1; }
     row-gap:8px;
   }
 }
+
+/* --- Help UI (question + option help) --- */
+.step__head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.helpBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.25);
+  background:#fff;
+  color:inherit;
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.helpBtn:hover{ border-color: rgba(0,0,0,.45); }
+.helpBtn:focus{ outline:2px solid rgba(0,0,0,.35); outline-offset:2px; }
+
+.helpBtn--sm{
+  width:22px;
+  height:22px;
+  font-size:12px;
+}
+
+.helpPanel{
+  margin:10px 0 14px;
+  padding:10px 12px;
+  border:1px solid rgba(0,0,0,.15);
+  border-radius:10px;
+  background:rgba(0,0,0,.03);
+}
+
+.helpPanel p{ margin:6px 0; }
+.helpPanel .muted{ opacity:.8; }
+
+.opt{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+.opt__text{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  width:100%;
+}
+.opt__text > span{
+  flex:1 1 auto;
+}
+.optHelpWrap{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  width:100%;
+}
+
+/* Option-level help panels appear under the option */
+.optHelp{
+  margin:8px 0 0 32px; /* indent under radio */
+  padding:10px 12px;
+  border:1px solid rgba(0,0,0,.15);
+  border-radius:10px;
+  background:rgba(0,0,0,.03);
+}
