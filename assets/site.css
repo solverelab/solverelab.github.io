@@ -532,3 +532,90 @@ body{
 .plansec__items a{
   color: var(--text);
 }
+
+/* =========================
+   Steps as Timeline (1–6)
+   ========================= */
+
+/* kogu sammu kaart muutub "timeline itemiks" */
+.steps{
+  position: relative;
+}
+
+/* jäta vasakule ruumi numbrile + joonele */
+.step{
+  position: relative;
+  padding-left: 54px; /* timeline rail */
+}
+
+/* numbriring */
+.step::before{
+  content: attr(data-step);
+  position: absolute;
+  left: 18px;
+  top: 14px;
+
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  font-weight: 700;
+  font-size: 13px;
+
+  background: #0f1115;            /* tumeda teema taust */
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+/* vertikaalne joon sammude vahel */
+.step::after{
+  content: "";
+  position: absolute;
+  left: 32px;                      /* ringi keskjoon */
+  top: 46px;                       /* ringist allapoole */
+  bottom: -12px;                   /* ulatub järgmise sammuni */
+  width: 1px;
+  background: var(--line);
+}
+
+/* viimane samm: ära joonista joont edasi */
+.step:last-child::after{
+  display: none;
+}
+
+/* step__head/body padding reset (kuna stepil on nüüd padding-left) */
+.step__head{
+  padding-left: 0;
+}
+.step__body{
+  padding-left: 0;
+}
+
+/* locked: natuke "kaugem" */
+.step.is-locked::before{
+  opacity: .55;
+}
+
+/* avatud samm: rõhutus (prestiižne, mitte karjuv) */
+.step.is-open{
+  border-color: #3b4253;
+}
+.step.is-open::before{
+  color: var(--text);
+  border-color: #3b4253;
+}
+
+/* kui samm on täidetud, võime numbriringi teha neutraalselt "kindlamaks"
+   (valikuline – töötab, kui lisame JS-is is-done klassi; allpool panen patchi) */
+.step.is-done::before{
+  color: var(--text);
+  border-color: #2d3340;
+}
+
+/* aktiivne samm + üldtoon: head hover */
+.step__head:hover{
+  background: rgba(255,255,255,.02);
+}
