@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
   <header class="pagehead">
     <h1>Nõude eelanalüüs</h1>
     <p class="lead">
-      Struktureeritud eelanalüüs enne kohtusse pöördumist: nõude alus, riskid ja tõendite piisavus.
-    </p>
+  Struktureeritud eelanalüüs enne kohtusse pöördumist: mida Te teiselt poolelt nõuate, peamised riskid ja tõendite piisavus.
+</p>
 
     <div class="notice notice--neutral" role="note" aria-label="Oluline märkus">
       Tegemist on informatiivse eelanalüüsi tööriistaga. See ei asenda individuaalset õigusnõustamist ega prognoosi menetluse tulemust.
@@ -73,50 +73,122 @@ document.addEventListener("DOMContentLoaded", () => {
   <!-- STEPS (single page, step-by-step) -->
   <section class="steps" id="steps" aria-label="Küsimustik" hidden>
 
-    <!-- STEP 1 -->
-    <article class="step" data-step="1" aria-labelledby="s1-title" hidden>
-      <header class="step__head">
-        <h2 id="s1-title">1. Nõude alus</h2>
+   <!-- STEP 1 -->
+<article class="step" data-step="1" aria-labelledby="s1-title" hidden>
+  <header class="step__head">
+    <h2 id="s1-title">1. Mida Te teiselt poolelt nõuate?</h2>
 
-        <button type="button" class="infoToggle" data-info="s1-info" aria-expanded="false" aria-controls="s1-info">
-          (i)
+    <!-- Question-level help -->
+    <button type="button"
+            class="helpBtn"
+            data-help="s1-help"
+            aria-expanded="false"
+            aria-controls="s1-help"
+            aria-label="Ava selgitus">
+      ?
+    </button>
+  </header>
+
+  <div class="helpPanel" id="s1-help" hidden>
+    <p><strong>Lihtsas keeles:</strong> vali, milline olukord on Sinu juhtumile kõige lähem.</p>
+    <p class="muted"><strong>Miks küsime:</strong> see aitab hinnata, kui selge on nõude sisu ja milline on tõendamisrisk.</p>
+    <p class="muted"><strong>Näide:</strong> “maksin, aga ei saanud teenust” vs “töö jäi tegemata” vs “tekitati kahju”.</p>
+  </div>
+
+  <fieldset class="q" aria-label="Nõude sisu küsimus">
+    <legend class="q__legend">Vali kõige sobivam kirjeldus</legend>
+
+    <!-- OPTION 3 -->
+    <label class="opt">
+      <input type="radio" name="basis" value="3" />
+      <span class="opt__text">
+        <span>Jah — meil on kirjalik kokkulepe (leping, e-kiri või sõnumid) ja on selge, mida teine pool pidi tegema.</span>
+
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s1-o3"
+                aria-expanded="false"
+                aria-controls="s1-o3"
+                aria-label="Mis loeb kirjalikuks?">
+          ?
         </button>
-      </header>
+      </span>
+    </label>
+    <div class="optHelp" id="s1-o3" hidden>
+      <p><strong>Mis loeb kirjalikuks?</strong> allkirjastatud leping, tellimus + kinnitus, e-kirjad, sõnumid, arve aktsepteerimisega.</p>
+      <p class="muted"><strong>Miks oluline:</strong> vähendab vaidlust selle üle, mis kokku lepiti.</p>
+    </div>
 
-      <div class="step__info" id="s1-info" hidden>
-        Kohustus tähendab teise poole lubadust või lepingulist või seadusest tulenevat kohustust midagi teha, mitte teha või hüvitada kahju.
-        Kui kohustuse sisu ei ole selge, võib nõue olla nõrgem.
-      </div>
+    <!-- OPTION 2 -->
+    <label class="opt">
+      <input type="radio" name="basis" value="2" />
+      <span class="opt__text">
+        <span>Jah — kokkulepe oli suuline, kuid kohustus ja tingimused on siiski üsna selged.</span>
 
-      <fieldset class="q" aria-label="Nõude alus küsimus">
-        <legend class="q__legend">Kas teisel poolel oli konkreetne kohustus, mille täitmist Te nõuate?</legend>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s1-o2"
+                aria-expanded="false"
+                aria-controls="s1-o2"
+                aria-label="Kuidas suulist kokkulepet hinnata?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s1-o2" hidden>
+      <p><strong>Näited, mis aitavad:</strong> pealtnägijad, hilisem kirjavahetus, maksed, töö üleandmine, varasem praktika.</p>
+      <p class="muted"><strong>Miks oluline:</strong> võimalik, kuid tõendamisrisk on suurem kui kirjaliku kokkuleppe korral.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="basis" value="3" />
-          <span>Jah, kohustus on kirjalikult fikseeritud</span>
-        </label>
+    <!-- OPTION 1 -->
+    <label class="opt">
+      <input type="radio" name="basis" value="1" />
+      <span class="opt__text">
+        <span>Osaliselt — midagi oli kokku lepitud, aga tingimused (mis, millal, kui palju) ei ole selged.</span>
 
-        <label class="opt">
-          <input type="radio" name="basis" value="2" />
-          <span>Jah, kohustus lepiti kokku suuliselt</span>
-        </label>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s1-o1"
+                aria-expanded="false"
+                aria-controls="s1-o1"
+                aria-label="Mida täpsustada?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s1-o1" hidden>
+      <p><strong>Mida täpsustada:</strong> kes pidi mida tegema, mis ajaks, mis hinnaga/mahus, millistel tingimustel.</p>
+      <p class="muted"><strong>Miks oluline:</strong> kui sisu on ebaselge, võib nõue muutuda vaieldavaks.</p>
+    </div>
 
-        <label class="opt">
-          <input type="radio" name="basis" value="1" />
-          <span>Kohustuse sisu on ebaselge</span>
-        </label>
+    <!-- OPTION 0 -->
+    <label class="opt">
+      <input type="radio" name="basis" value="0" />
+      <span class="opt__text">
+        <span>Ei — mul ei ole selget kokkulepet/kohustust, millele nõue toetub.</span>
 
-        <label class="opt">
-          <input type="radio" name="basis" value="0" />
-          <span>Selgelt tuvastatavat kohustust ei ole</span>
-        </label>
-      </fieldset>
+        <button type="button"
+                class="helpBtn helpBtn--sm"
+                data-help="s1-o0"
+                aria-expanded="false"
+                aria-controls="s1-o0"
+                aria-label="Millal see variant sobib?">
+          ?
+        </button>
+      </span>
+    </label>
+    <div class="optHelp" id="s1-o0" hidden>
+      <p><strong>Millal sobib:</strong> näiteks raha kanti üle eksituse tõttu või puudub arusaadav alus, miks teine pool “peab”.</p>
+      <p class="muted"><strong>Miks oluline:</strong> võib viidata teistsugusele alusele (nt alusetu rikastumine), kuid risk on kõrgem.</p>
+    </div>
 
-      <footer class="step__nav">
-        <button type="button" class="btn" data-action="back" disabled>Tagasi</button>
-        <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
-      </footer>
-    </article>
+  </fieldset>
+
+  <footer class="step__nav">
+    <button type="button" class="btn" data-action="back" disabled>Tagasi</button>
+    <button type="button" class="btn btn-primary" data-action="next">Järgmine</button>
+  </footer>
+</article>
 
     <!-- STEP 2 -->
     <article class="step" data-step="2" aria-labelledby="s2-title" hidden>
@@ -372,7 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="card metric" id="m-basis" data-level="unknown">
       <div class="metric__head">
-        <div class="metric__name">Nõude alus</div>
+        <div class="metric__name">Nõude sisu</div>
         <div class="metric__dot"></div>
       </div>
       <div class="metric__label" id="m-basis-label">—</div>
@@ -835,13 +907,15 @@ document.getElementById("app").scrollIntoView({ behavior: "smooth", block: "star
       const btn = e.target.closest("button");
       if (!btn) return;
 
-      // Info toggles
-      if (btn.classList.contains("infoToggle")) {
-        const infoId = btn.getAttribute("data-info");
-        const infoEl = document.getElementById(infoId);
+       // Help toggles (question-level + option-level)
+      if (btn.classList.contains("helpBtn")) {
+        const helpId = btn.getAttribute("data-help");
+        const panel = document.getElementById(helpId);
+        if (!panel) return;
+
         const expanded = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", String(!expanded));
-        infoEl.hidden = expanded;
+        panel.hidden = expanded;
         return;
       }
 
