@@ -131,7 +131,36 @@
       });
     });
 
-    startBtn?.addEventListener("click", () => gotoStep(1));
+    function init() {
+  // peida lähtesta kuni kasutaja alustab
+  if (resetBtn) resetBtn.hidden = true;
+
+  // restore answers ...
+  for (const [k, v] of Object.entries(state.answers || {})) {
+    const el = document.querySelector(`input[name="${k}"][value="${v}"]`);
+    if (el) el.checked = true;
+  }
+
+  // unlock based on completion
+  applyUnlocks();
+  }    
+
+  if (resetBtn && state.answers && Object.keys(state.answers).length > 0) {
+    resetBtn.hidden = false;
+  }
+
+  // ... (ülejäänu jääb samaks)
+
+  startBtn?.addEventListener("click", () => {
+    if (resetBtn) resetBtn.hidden = false;
+    gotoStep(1);
+  });
+
+  resetBtn?.addEventListener("click", resetAll);
+
+  // ... (ülejäänu jääb samaks)
+}
+
     resetBtn?.addEventListener("click", resetAll);
     showResultBtn?.addEventListener("click", () => {
       if (!isStepComplete(6)) return; // hard gate
