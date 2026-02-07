@@ -106,10 +106,13 @@
     steps.forEach(step => {
       const head = step.querySelector(".step__head");
       const body = step.querySelector(".step__body");
+      if (!head || !body) return;
 
       head.addEventListener("click", (e) => {
-        if (e.target && e.target.classList.contains("info")) return;
+        // kui klikitakse lisainfo nupule/elemendile, ära toggle samm
+        if (e.target && e.target.closest && e.target.closest(".info")) return;
         if (step.classList.contains("is-locked")) return;
+
         const expanded = head.getAttribute("aria-expanded") === "true";
         head.setAttribute("aria-expanded", String(!expanded));
         body.style.display = expanded ? "none" : "block";
@@ -128,14 +131,22 @@
         btn.addEventListener("click", () => gotoStep(getStepNum(step) - 1));
       });
 
-      // info toggles
+      // info toggles (+ klaviatuur)
       step.querySelectorAll(".info").forEach(infoBtn => {
-        infoBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
+        const toggleInfo = (ev) => {
+          ev.stopPropagation();
           const key = infoBtn.getAttribute("data-info");
           const panel = document.querySelector(`.info__panel[data-panel="${key}"]`);
           if (!panel) return;
           panel.hidden = !panel.hidden;
+        };
+
+        infoBtn.addEventListener("click", toggleInfo);
+        infoBtn.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            toggleInfo(ev);
+          }
         });
       });
     });
@@ -249,12 +260,15 @@
     steps.forEach(s => {
       const head = s.querySelector(".step__head");
       const body = s.querySelector(".step__body");
+      if (!head || !body) return;
       head.setAttribute("aria-expanded", "false");
       body.style.display = "none";
     });
 
     const head = stepEl.querySelector(".step__head");
     const body = stepEl.querySelector(".step__body");
+    if (!head || !body) return;
+
     head.setAttribute("aria-expanded", "true");
     body.style.display = "block";
 
@@ -405,72 +419,72 @@
     return cond;
   }
 
-function generateActionPlan(a) {
-  // Tagastab sektsioonid kujul: [{ key, title, items: [string|{html}] }]
-  const plan = [];
+  function generateActionPlan(a) {
+    // [{ key, title, items: [string|{html}] }]
+    const plan = [];
 
-  const addSection = (key, title, items) => {
-    if (!items || items.length === 0) return;
-    plan.push({ key, title, items });
-  };
+    const addSection = (key, title, items) => {
+      if (!items || items.length === 0) return;
+      plan.push({ key, title, items });
+    };
 
-  if (Number(a.basis) <= 1) {
-    addSection("basis", "Nõude alus", [
-      "Kirjuta ühe lausega üles: – kes pidi midagi tegema – mida täpselt pidi tegema – millal pidi tegema.",
-      "Pane kirja, millele see kohustus tugines (nt leping, kokkulepe, kirjavahetus, seadus).",
-      "Kirjelda 3–5 lühilausena, mis oli kohustuse sisu (ilma hinnangute ja oletusteta).",
-      "Mõtle, mida Sa tegelikult nõuad (nt raha, kohustuse täitmist, kahju hüvitamist)."
-    ]);
+    if (Number(a.basis) <= 1) {
+      addSection("basis", "Nõude alus", [
+        "Kirjuta ühe lausega üles: – kes pidi midagi tegema – mida täpselt pidi tegema – millal pidi tegema.",
+        "Pane kirja, millele see kohustus tugines (nt leping, kokkulepe, kirjavahetus, seadus).",
+        "Kirjelda 3–5 lühilausena, mis oli kohustuse sisu (ilma hinnangute ja oletusteta).",
+        "Mõtle, mida Sa tegelikult nõuad (nt raha, kohustuse täitmist, kahju hüvitamist)."
+      ]);
+    }
+
+    if (Number(a.breach) <= 1) {
+      addSection("breach", "Rikkumine", [
+        "Kirjelda faktina, mida tehti valesti, hilinemisega või jäeti tegemata.",
+        "Seo rikkumine konkreetse kohustusega (st millist lubadust või kokkulepet ei täidetud).",
+        "Koosta lihtne kronoloogia: – kuupäev – mis toimus – millest see selgub (nt e-kiri, arve, sõnum)."
+      ]);
+    }
+
+    if (Number(a.damage) <= 1) {
+      addSection("damage", "Kahju", [
+        "Pane kirja, millest nõude summa koosneb.",
+        "Kirjuta lahti arvutuskäik (nt summa × periood, konkreetne arve, kuludokumendid).",
+        "Erista: – tegelik kahju – hinnangulised või tulevased kulud.",
+        "Mõtle läbi, miks just see rikkumine kahju tekitas (st kuidas rikkumine viis rahalise kaotuseni).",
+        { html: 'Viivise ja intressi kalkulaator: <a href="https://viivisekalkulaator.ee/calculator/debt" target="_blank" rel="noopener">viivisekalkulaator.ee</a>' }
+      ]);
+    }
+
+    if (Number(a.evidence) <= 1) {
+      addSection("evidence", "Tõendid", [
+        "Koosta nimekiri olemasolevatest tõenditest (nt leping, kirjavahetus, arve, akt, foto).",
+        "Märgi iga tõendi juurde, millist väidet see kinnitab (nt kohustuse olemasolu, rikkumise toimumine, kahju suurus).",
+        "Mõtle, kas mõne olulise väite kohta on tõend puudu.",
+        "Koonda failid ühtsesse loogilisse struktuuri (nt kaustad või failinimed)."
+      ]);
+    }
+
+    if (Number(a.defenses) <= 1) {
+      addSection("defenses", "Vastuväited", [
+        "Mõtle, millistele väidetele teine pool võiks vastu vaielda.",
+        "Pane kirja 2–3 kõige tõenäolisemat vastuväidet.",
+        "Kirjuta iga vastuväite juurde lühike vastus (fakt + olemasolev tõend).",
+        "Märgi, milline vastuväide tundub Sulle kõige nõrgem koht."
+      ]);
+    }
+
+    if (Number(a.limitation) <= 1) {
+      addSection("limitation", "Aegumine", [
+        "Pane kirja olulised kuupäevad: – millal kokkulepe sõlmiti – millal rikkumine toimus – millal kahju ilmnes – millal teist poolt teavitati (kui teavitati).",
+        "Mõtle, millal nõue muutus tegelikult sissenõutavaks (st hetk, mil teisel poolel oleks tulnud kohustus täita).",
+        "Kontrolli, kas vahepeal toimus midagi, mis võis aega mõjutada (nt kirjavahetus, osaline tasumine, läbirääkimised).",
+        "Mõtle, kas Sinu juhtum võib kuuluda valdkonda, kus tähtajad on tavapärasest erinevad (nt töö-, üüri- või tarbijavaidlus).",
+        "Kui Sa ei ole kindel, on mõistlik seda käsitleda riskina ja arvestada sellega edasiste sammude planeerimisel."
+      ]);
+    }
+
+    return plan;
   }
-
-  if (Number(a.breach) <= 1) {
-    addSection("breach", "Rikkumine", [
-      "Kirjelda faktina, mida tehti valesti, hilinemisega või jäeti tegemata.",
-      "Seo rikkumine konkreetse kohustusega (st millist lubadust või kokkulepet ei täidetud).",
-      "Koosta lihtne kronoloogia: – kuupäev – mis toimus – millest see selgub (nt e-kiri, arve, sõnum)."
-    ]);
-  }
-
-  if (Number(a.damage) <= 1) {
-    addSection("damage", "Kahju", [
-      "Pane kirja, millest nõude summa koosneb.",
-      "Kirjuta lahti arvutuskäik (nt summa × periood, konkreetne arve, kuludokumendid).",
-      "Erista: – tegelik kahju – hinnangulised või tulevased kulud.",
-      "Mõtle läbi, miks just see rikkumine kahju tekitas (st kuidas rikkumine viis rahalise kaotuseni).",
-      { html: 'Viivise ja intressi kalkulaator: <a href="https://viivisekalkulaator.ee/calculator/debt" target="_blank" rel="noopener">viivisekalkulaator.ee</a>' }
-    ]);
-  }
-
-  if (Number(a.evidence) <= 1) {
-    addSection("evidence", "Tõendid", [
-      "Koosta nimekiri olemasolevatest tõenditest (nt leping, kirjavahetus, arve, akt, foto).",
-      "Märgi iga tõendi juurde, millist väidet see kinnitab (nt kohustuse olemasolu, rikkumise toimumine, kahju suurus).",
-      "Mõtle, kas mõne olulise väite kohta on tõend puudu.",
-      "Koonda failid ühtsesse loogilisse struktuuri (nt kaustad või failinimed)."
-    ]);
-  }
-
-  if (Number(a.defenses) <= 1) {
-    addSection("defenses", "Vastuväited", [
-      "Mõtle, millistele väidetele teine pool võiks vastu vaielda.",
-      "Pane kirja 2–3 kõige tõenäolisemat vastuväidet.",
-      "Kirjuta iga vastuväite juurde lühike vastus (fakt + olemasolev tõend).",
-      "Märgi, milline vastuväide tundub Sulle kõige nõrgem koht."
-    ]);
-  }
-
-  if (Number(a.limitation) <= 1) {
-    addSection("limitation", "Aegumine", [
-      "Pane kirja olulised kuupäevad: – millal kokkulepe sõlmiti – millal rikkumine toimus – millal kahju ilmnes – millal teist poolt teavitati (kui teavitati).",
-      "Mõtle, millal nõue muutus tegelikult sissenõutavaks (st hetk, mil teisel poolel oleks tulnud kohustus täita).",
-      "Kontrolli, kas vahepeal toimus midagi, mis võis aega mõjutada (nt kirjavahetus, osaline tasumine, läbirääkimised).",
-      "Mõtle, kas Sinu juhtum võib kuuluda valdkonda, kus tähtajad on tavapärasest erinevad (nt töö-, üüri- või tarbijavaidlus).",
-      "Kui Sa ei ole kindel, on mõistlik seda käsitleda riskina ja arvestada sellega edasiste sammude planeerimisel."
-    ]);
-  }
-
-  return plan;
-}
 
   function renderPhase2(a) {
     if (!reasonsCard || !reasonsList || !conditionsCard || !conditionsList || !actionCard || !actionList) {
@@ -480,7 +494,7 @@ function generateActionPlan(a) {
     const decision = decide(a);
     const reasons = pickReasons(a);
     const conditions = generateConditions(a);
-    const tasks = generateActionTasks(a);
+    const plan = generateActionPlan(a);
 
     // Põhjendused
     reasonsList.innerHTML = "";
@@ -500,71 +514,68 @@ function generateActionPlan(a) {
     });
     conditionsCard.hidden = (decision === "JAH" || conditions.length === 0);
 
-    // Tööplaan
-const plan = generateActionPlan(a);
+    // Tööplaan: sektsioonid (collapsible)
+    actionList.innerHTML = "";
 
-// Tööplaan: sektsioonid (collapsible)
-actionList.innerHTML = "";
+    plan.forEach(sec => {
+      const li = document.createElement("li");
+      li.className = "plansec";
+      li.setAttribute("aria-expanded", "false"); // vaikimisi kinni
 
-plan.forEach(sec => {
-  const li = document.createElement("li");
-  li.className = "plansec";
-  li.setAttribute("aria-expanded", "false"); // vaikimisi kinni
+      const head = document.createElement("div");
+      head.className = "plansec__head";
+      head.setAttribute("role", "button");
+      head.setAttribute("tabindex", "0");
+      head.setAttribute("aria-label", sec.title);
 
-  // päis (klikiala)
-  const head = document.createElement("div");
-  head.className = "plansec__head";
-  head.setAttribute("role", "button");
-  head.setAttribute("tabindex", "0");
-  head.setAttribute("aria-label", sec.title);
+      const title = document.createElement("div");
+      title.className = "plansec__title";
+      title.textContent = sec.title;
 
-  const title = document.createElement("div");
-  title.className = "plansec__title";
-  title.textContent = sec.title;
+      const chev = document.createElement("div");
+      chev.className = "plansec__chev";
+      chev.textContent = "▼";
 
-  const chev = document.createElement("div");
-  chev.className = "plansec__chev";
-  chev.textContent = "▼";
+      head.appendChild(title);
+      head.appendChild(chev);
 
-  head.appendChild(title);
-  head.appendChild(chev);
+      const ul = document.createElement("ul");
+      ul.className = "plansec__items";
 
-  const ul = document.createElement("ul");
-  ul.className = "plansec__items";
+      sec.items.forEach(item => {
+        const i = document.createElement("li");
+        if (typeof item === "string") {
+          i.textContent = item;
+        } else if (item && typeof item === "object" && item.html) {
+          i.innerHTML = item.html;
+        }
+        ul.appendChild(i);
+      });
 
-  sec.items.forEach(item => {
-    const i = document.createElement("li");
-    if (typeof item === "string") {
-      i.textContent = item;
-    } else if (item && typeof item === "object" && item.html) {
-      i.innerHTML = item.html;
-    }
-    ul.appendChild(i);
-  });
+      const toggle = () => {
+        const expanded = li.getAttribute("aria-expanded") === "true";
+        li.setAttribute("aria-expanded", expanded ? "false" : "true");
+      };
 
-  const toggle = () => {
-    const expanded = li.getAttribute("aria-expanded") === "true";
-    li.setAttribute("aria-expanded", expanded ? "false" : "true");
-  };
+      head.addEventListener("click", toggle);
+      head.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      });
 
-  head.addEventListener("click", toggle);
-  head.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggle();
-    }
-  });
+      li.appendChild(head);
+      li.appendChild(ul);
+      actionList.appendChild(li);
+    });
 
-  li.appendChild(head);
-  li.appendChild(ul);
-  actionList.appendChild(li);
-});
+    // esimene sektsioon lahti (kui olemas)
+    const first = actionList.querySelector(".plansec");
+    if (first) first.setAttribute("aria-expanded", "true");
 
-// kui tahad, et esimene sektsioon oleks automaatselt lahti:
-const first = actionList.querySelector(".plansec");
-if (first) first.setAttribute("aria-expanded", "true");
-
-actionCard.hidden = plan.length === 0;
+    actionCard.hidden = plan.length === 0;
+  }
 
   // -----------------------
   // I FAAS tulemuse render
@@ -578,8 +589,8 @@ actionCard.hidden = plan.length === 0;
 
     const statusText =
       overall === "ok" ? "🟢 Tugev riskiprofiil"
-        : overall === "mid" ? "🟡 Mõõdukas riskiprofiil"
-          : "🔴 Nõrk riskiprofiil";
+      : overall === "mid" ? "🟡 Mõõdukas riskiprofiil"
+      : "🔴 Nõrk riskiprofiil";
 
     if (overallText) overallText.textContent = statusText;
     if (overallStatusDot) overallStatusDot.setAttribute("data-level", overall);
@@ -630,6 +641,6 @@ actionCard.hidden = plan.length === 0;
   function saveState(s) {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(s));
-    } catch { }
+    } catch {}
   }
 })();
