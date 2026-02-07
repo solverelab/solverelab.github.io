@@ -31,20 +31,19 @@
 <body class="page-tool">
 <main class="container" id="app">
 
-  <!-- Tool navigation + language (match ET layout) -->
-  <nav class="tool-nav langswitch" aria-label="Навигация">
-    <div class="tool-nav__left">
-      <a href="/ru/" class="tool-nav__link">← Главная</a>
-      <span class="tool-nav__sep">·</span>
-      <a href="/ru/metoodika/" class="tool-nav__link">Методика</a>
-    </div>
+<!-- Tool navigation (RU) -->
+<nav class="tool-nav" aria-label="Вторичная навигация">
+  <a href="/ru/" class="tool-nav__link">← Главная</a>
+  <span class="tool-nav__sep">·</span>
+  <a href="/ru/metoodika/" class="tool-nav__link">Методика</a>
+</nav>
 
-    <div class="tool-nav__right">
-      <a href="/tools/noude-eelanaluus/" class="tool-nav__link" data-lang="et">ET</a>
-      <span class="tool-nav__sep">·</span>
-      <a href="/ru/tools/noude-eelanaluus/" class="tool-nav__link" data-lang="ru">RU</a>
-    </div>
-  </nav>
+<!-- Language switch (ET / RU) -->
+<nav class="langswitch" aria-label="Язык">
+  <a href="/tools/noude-eelanaluus/" data-lang="et">ET</a>
+  <span class="langswitch__sep" aria-hidden="true">·</span>
+  <a href="/ru/tools/noude-eelanaluus/" data-lang="ru">RU</a>
+</nav>
 
   <!-- HEADER / INTRO -->
   <header class="pagehead">
