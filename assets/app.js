@@ -503,16 +503,31 @@ function generateActionPlan(a) {
     // Tööplaan
 const plan = generateActionPlan(a);
 
-// Tööplaan: sektsioonid
+// Tööplaan: sektsioonid (collapsible)
 actionList.innerHTML = "";
 
 plan.forEach(sec => {
   const li = document.createElement("li");
   li.className = "plansec";
+  li.setAttribute("aria-expanded", "false"); // vaikimisi kinni
+
+  // päis (klikiala)
+  const head = document.createElement("div");
+  head.className = "plansec__head";
+  head.setAttribute("role", "button");
+  head.setAttribute("tabindex", "0");
+  head.setAttribute("aria-label", sec.title);
 
   const title = document.createElement("div");
   title.className = "plansec__title";
   title.textContent = sec.title;
+
+  const chev = document.createElement("div");
+  chev.className = "plansec__chev";
+  chev.textContent = "▼";
+
+  head.appendChild(title);
+  head.appendChild(chev);
 
   const ul = document.createElement("ul");
   ul.className = "plansec__items";
@@ -527,13 +542,29 @@ plan.forEach(sec => {
     ul.appendChild(i);
   });
 
-  li.appendChild(title);
+  const toggle = () => {
+    const expanded = li.getAttribute("aria-expanded") === "true";
+    li.setAttribute("aria-expanded", expanded ? "false" : "true");
+  };
+
+  head.addEventListener("click", toggle);
+  head.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
+    }
+  });
+
+  li.appendChild(head);
   li.appendChild(ul);
   actionList.appendChild(li);
 });
 
+// kui tahad, et esimene sektsioon oleks automaatselt lahti:
+const first = actionList.querySelector(".plansec");
+if (first) first.setAttribute("aria-expanded", "true");
+
 actionCard.hidden = plan.length === 0;
-  }
 
   // -----------------------
   // I FAAS tulemuse render
