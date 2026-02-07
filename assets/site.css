@@ -103,3 +103,9 @@ h1{font-size:34px;line-height:1.15;margin:0;letter-spacing:-.3px}
 .checklist li{display:flex;gap:10px;align-items:flex-start;padding:10px 10px;border:1px solid var(--line);border-radius:12px;background:#fff;margin:8px 0}
 .checklist li::before{content:"□";color:var(--muted);font-weight:700;line-height:1.1;margin-top:1px}
 
+.checklist .plansec{display:block;padding:12px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;margin:10px 0}
+.checklist .plansec__title{font-weight:650;margin:0 0 8px}
+.checklist .plansec__items{margin:0;padding-left:18px;list-style:disc}
+.checklist .plansec__items li{margin:6px 0}
+.checklist .plansec__items a{color:inherit;text-decoration:underline}
+
