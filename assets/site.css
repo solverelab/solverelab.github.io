@@ -686,3 +686,52 @@ body{
 .plansec{
   background: var(--card-soft);
 }
+
+/* =========================
+   Accent rail (audit feel)
+   ========================= */
+
+/* üldine "rail" utiliit kaardile */
+.card{
+  position: relative;
+}
+
+/* peen vasak riba kaardile */
+.card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: transparent; /* default */
+}
+
+/* ÜLDHINNANGU KAART – värviline riba (seotud overall tasemega)
+   eeldab, et lisame kaardile data-level atribuudi JS-ist (allpool) */
+.card--main[data-level="ok"]::before{ background: rgba(34,197,94,.85); }
+.card--main[data-level="mid"]::before{ background: rgba(245,158,11,.85); }
+.card--main[data-level="bad"]::before{ background: rgba(239,68,68,.85); }
+
+/* kui data-level puudub */
+.card--main::before{ background: rgba(148,163,184,.22); }
+
+/* II faasi kaardid – neutraalne grafiit riba */
+#reasonsCard::before,
+#conditionsCard::before,
+#actionCard::before{
+  background: rgba(148,163,184,.18);
+}
+
+/* (valikuline) rõhuta "tingimused" ja "põhjendused" veidi, et need tunduks raportiosana */
+#reasonsCard,
+#conditionsCard,
+#actionCard{
+  background: var(--card-soft);
+}
+
+/* väike sisemine padding-kompensatsioon, et riba ei "sööks" teksti */
+.card{
+  padding-left: 16px;
+}
