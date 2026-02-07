@@ -619,3 +619,70 @@ body{
 .step__head:hover{
   background: rgba(255,255,255,.02);
 }
+
+/* =========================
+   FIX: Action plan dark
+   ========================= */
+
+/* kogu checklist konteiner */
+.checklist{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+/* iga sektsioon */
+.plansec{
+  background: var(--card);          /* mitte #fff */
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin:12px 0;
+  padding:14px;
+}
+
+/* sektsiooni päis */
+.plansec__head{
+  background: transparent;
+}
+
+/* sektsiooni avatud osa */
+.plansec__items{
+  margin-top:12px;
+  padding-left:18px;
+  color: var(--muted);
+}
+
+/* eemaldame kõik võimalikud valged taustad list itemitel */
+.plansec__items li{
+  background: transparent;
+}
+
+/* link tööplaanis */
+.plansec__items a{
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* collapsible suletud */
+.plansec[aria-expanded="false"] .plansec__items{
+  display:none;
+}
+
+/* collapsible avatud */
+.plansec[aria-expanded="true"] .plansec__items{
+  display:block;
+}
+
+/* noole pööramine */
+.plansec__chev{
+  color: var(--muted);
+  transition: transform .15s ease;
+}
+.plansec[aria-expanded="true"] .plansec__chev{
+  transform: rotate(180deg);
+}
+
+.plansec{
+  background: var(--card-soft);
+}
