@@ -61,9 +61,13 @@
   const startBtn = document.getElementById("startBtn");
   const resetBtn = document.getElementById("resetBtn");
   const showResultBtn = document.getElementById("showResultBtn");
+  
+  const progressSection = document.querySelector(".progress");
 
   const progressLabel = document.getElementById("progressLabel");
   const progressFill = document.getElementById("progressFill");
+  
+  const progressSection = document.querySelector(".progress");
 
   const steps = Array.from(document.querySelectorAll(".step"));
   const results = document.getElementById("results");
@@ -151,14 +155,23 @@
 
   // ... (ülejäänu jääb samaks)
 
-  startBtn?.addEventListener("click", () => {
-    if (resetBtn) resetBtn.hidden = false;
+startBtn?.addEventListener("click", () => {
+  if (resetBtn) resetBtn.hidden = false;
+
+  // 1) scroll progressi juurde
+  if (progressSection) {
+    progressSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // 2) avame Samm 1 väikese viivitusega
+  window.setTimeout(() => {
     gotoStep(1);
-  });
+  }, 250);
+});
 
-  resetBtn?.addEventListener("click", resetAll);
+resetBtn?.addEventListener("click", resetAll);
 
-  // ... (ülejäänu jääb samaks)
+// ... (ülejäänu jääb samaks)
 }
 
     resetBtn?.addEventListener("click", resetAll);
