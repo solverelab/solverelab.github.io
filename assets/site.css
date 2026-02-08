@@ -773,3 +773,49 @@ body{
 .card{
   background: var(--card);
 }
+
+/* RU (ja üldiselt dark) loetavus: sundvärvid */
+body {
+  color: var(--text, #e8e8ea);
+  background: var(--bg, #0b0d10);
+}
+
+.step__body,
+.step__intro,
+.choices,
+.choices label,
+.results,
+.card,
+.plansec,
+.plansec__items,
+.list,
+.checklist {
+  color: var(--text, #e8e8ea);
+}
+
+.muted,
+.small,
+.lead,
+.meta__item {
+  color: var(--muted, rgba(232,232,234,.72));
+}
+
+/* Radio label read: et kindlasti ei läheks “mustaks” */
+.choices label {
+  display: block;
+  line-height: 1.35;
+  color: var(--text, #e8e8ea) !important;
+}
+
+/* Kui sul on link tumedal taustal liiga tume */
+a {
+  color: var(--link, #cfd6ff);
+}
+a:hover {
+  opacity: .9;
+}
+
+/* Radionupu “accent” (tumedal parem) */
+input[type="radio"] {
+  accent-color: var(--accent, #8ea2ff);
+}
