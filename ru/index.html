@@ -22,32 +22,253 @@
   </header>
 
   <main class="wrap">
-    <section class="hero">
-      <h1>Оцените структурную устойчивость требования до обращения в суд.</h1>
-
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Оцените структурную устойчивость требования до обращения в суд.</h1>
       <p class="lead">
-        Инструмент предварительного анализа помогает структурировать требование
-        и выявить ключевые зоны риска: основание, нарушение, размер ущерба,
-        доказательства, возражения и вопрос давности.
+        Анкета помогает выявить зоны риска: основание требования, нарушение, размер ущерба,
+        доказательства, возражения и вопрос давности. Результат — визуальный риск-профиль без юридических деталей.
       </p>
 
       <div class="notice">
-        Инструмент носит информационный характер и не является юридической консультацией
-        или прогнозом исхода судебного разбирательства.<br>
+        Инструмент носит информационный характер. Он не заменяет индивидуальную юридическую консультацию
+        и не является прогнозом исхода судебного разбирательства.<br>
         Solvere Lab не оказывает юридических услуг.
       </div>
 
-      <div class="card" style="margin-top:28px;">
-        <div class="card__title">Русская версия находится в разработке</div>
-        <p class="muted">
-          Полная версия инструмента на русском языке будет доступна в ближайшее время.
+      <div class="actions">
+        <button class="btn" id="startBtn" type="button">Начать анализ</button>
+        <button class="btn btn--ghost" id="resetBtn" type="button">Начать заново</button>
+      </div>
+
+      <div class="meta">
+        <div class="meta__item">Ответы сохраняются только в вашем браузере и не передаются на сервер.</div>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section class="progress" aria-label="Прогресс">
+      <div class="progress__row">
+        <div class="progress__label" id="progressLabel">Шаг 0 / 6</div>
+        <div class="progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+          <div class="progress__fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="steps" aria-label="Анкета">
+      <div class="step is-locked" data-step="1">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Шаг 1 — Основание требования</span>
+          <span class="step__meta">
+            <span class="info" role="button" tabindex="0" data-info="basis" aria-label="Справка">?</span>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Определите, была ли у другой стороны конкретная обязанность.</p>
+          <div class="info__panel" data-panel="basis" hidden>
+            Обязанность — это обещание или согласованное обязательство другой стороны что-то сделать, не сделать или возместить ущерб.
+            Если содержание обязанности неясно, основание требования обычно слабее.
+          </div>
+
+          <fieldset class="choices" aria-label="Основание требования">
+            <label><input type="radio" name="basis" value="3"> Да, обязанность закреплена письменно (договор, переписка, счёт, сообщения)</label>
+            <label><input type="radio" name="basis" value="2"> Да, договорились устно (без письменного подтверждения)</label>
+            <label><input type="radio" name="basis" value="1"> Содержание обязанности неясно или спорно</label>
+            <label><input type="radio" name="basis" value="0"> Чётко определяемой обязанности нет</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Назад</button>
+            <button class="btn" type="button" data-next>Далее</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="2">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Шаг 2 — Нарушение обязанности</span>
+          <span class="step__meta">
+            <span class="info" role="button" tabindex="0" data-info="breach" aria-label="Справка">?</span>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Оцените, можно ли установить нарушение конкретной обязанности.</p>
+          <div class="info__panel" data-panel="breach" hidden>
+            Нарушение означает, что обязанность не выполнена, выполнена ненадлежащим образом или с задержкой.
+            Важно, чтобы нарушение было описуемым и связано с конкретной обязанностью.
+          </div>
+
+          <fieldset class="choices" aria-label="Нарушение">
+            <label><input type="radio" name="breach" value="3"> Нарушение чётко установимо и подтверждено документально</label>
+            <label><input type="radio" name="breach" value="2"> Нарушение вероятно, но подтверждено неполностью</label>
+            <label><input type="radio" name="breach" value="1"> Нарушение спорно</label>
+            <label><input type="radio" name="breach" value="0"> Наличие нарушения неясно</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Назад</button>
+            <button class="btn" type="button" data-next>Далее</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="3">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Шаг 3 — Ущерб / сумма требования</span>
+          <span class="step__meta">
+            <span class="info" role="button" tabindex="0" data-info="damage" aria-label="Справка">?</span>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Оцените, определима ли сумма и можно ли её обосновать.</p>
+          <div class="info__panel" data-panel="damage" hidden>
+            Ущерб должен быть выражен в деньгах. Сумма требования должна быть рассчитываемой и обоснованной,
+            а не основанной на предположениях.
+          </div>
+
+          <fieldset class="choices" aria-label="Ущерб / сумма">
+            <label><input type="radio" name="damage" value="3"> Сумма точно рассчитывается и обоснована</label>
+            <label><input type="radio" name="damage" value="2"> Сумма рассчитывается приблизительно</label>
+            <label><input type="radio" name="damage" value="1"> Сумма неопределённая</label>
+            <label><input type="radio" name="damage" value="0"> Сумма в деньгах не определена</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Назад</button>
+            <button class="btn" type="button" data-next>Далее</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="4">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Шаг 4 — Доказательства</span>
+          <span class="step__meta">
+            <span class="info" role="button" tabindex="0" data-info="evidence" aria-label="Справка">?</span>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Оцените, какие доказательства поддерживают требование.</p>
+          <div class="info__panel" data-panel="evidence" hidden>
+            Доказательства — это документы, переписка, счета, акты, фото и другие объективные данные.
+            В споре обычно важны наличие и надёжность доказательственной базы.
+          </div>
+
+          <fieldset class="choices" aria-label="Доказательства">
+            <label><input type="radio" name="evidence" value="3"> Несколько сильных письменных или объективных доказательств</label>
+            <label><input type="radio" name="evidence" value="2"> Доказательства есть, но ограниченные</label>
+            <label><input type="radio" name="evidence" value="1"> Доказательства слабые или косвенные</label>
+            <label><input type="radio" name="evidence" value="0"> Доказательства отсутствуют</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Назад</button>
+            <button class="btn" type="button" data-next>Далее</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked" data-step="5">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Шаг 5 — Возможные возражения</span>
+          <span class="step__meta">
+            <span class="info" role="button" tabindex="0" data-info="defenses" aria-label="Справка">?</span>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Оцените, насколько сильными могут быть возражения другой стороны.</p>
+          <div class="info__panel" data-panel="defenses" hidden>
+            Возражения — это аргументы, которыми другая сторона может оспаривать требование.
+            Например: обязанности не было, ущерба нет, сумма неверна или истёк срок давности.
+          </div>
+
+          <fieldset class="choices" aria-label="Возражения">
+            <label><input type="radio" name="defenses" value="3"> Маловероятны</label>
+            <label><input type="radio" name="defenses" value="2"> Возможны</label>
+            <label><input type="radio" name="defenses" value="1"> Вероятны</label>
+            <label><input type="radio" name="defenses" value="0"> Очень вероятны / сильные</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Назад</button>
+            <button class="btn" type="button" data-next>Далее</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step is-locked is-emphasis" data-step="6">
+        <button class="step__head" type="button" aria-expanded="false">
+          <span class="step__title">Шаг 6 — Срок давности</span>
+          <span class="step__meta">
+            <span class="info" role="button" tabindex="0" data-info="limitation" aria-label="Справка">?</span>
+          </span>
+        </button>
+        <div class="step__body">
+          <p class="step__intro">Оцените, может ли предъявление требования быть ограничено по времени.</p>
+          <div class="info__panel" data-panel="limitation" hidden>
+            Срок давности означает, что по истечении установленного срока предъявление требования может быть ограничено.
+            Во многих случаях общий срок часто составляет около 3 лет, но он зависит от вида требования и обстоятельств.
+            Если вы не уверены в датах, выбирайте «Возможно».
+          </div>
+
+          <fieldset class="choices" aria-label="Срок давности">
+            <label><input type="radio" name="limitation" value="3"> Нет</label>
+            <label><input type="radio" name="limitation" value="2"> Маловероятно</label>
+            <label><input type="radio" name="limitation" value="1"> Возможно</label>
+            <label><input type="radio" name="limitation" value="0"> Вероятно</label>
+          </fieldset>
+
+          <div class="step__nav">
+            <button class="btn btn--ghost" type="button" data-back>Назад</button>
+            <button class="btn" type="button" id="showResultBtn">Показать результат</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="results" id="results" hidden aria-label="Результаты">
+      <div class="card card--main">
+        <div class="card__title">Общий риск-профиль</div>
+        <div class="status" id="overallStatus">
+          <div class="status__dot" data-level="neutral"></div>
+          <div class="status__text" id="overallText">—</div>
+        </div>
+        <p class="muted" id="overallNote">
+          Оценка основана на введённых ответах и отражает структурную устойчивость требования, а не исход процесса.
         </p>
       </div>
 
-      <div class="meta" style="margin-top:16px;">
-        <div class="meta__item">
-          Ответы пользователей не сохраняются на сервере.
+      <div class="grid" id="componentGrid"></div>
+
+      <!-- II PHASE -->
+      <div class="card" id="reasonsCard" hidden>
+        <div class="card__title">Обоснования</div>
+        <ul class="list" id="reasonsList"></ul>
+      </div>
+
+      <div class="card" id="conditionsCard" hidden>
+        <div class="card__title">Перед следующим шагом</div>
+        <ul class="list" id="conditionsList"></ul>
+      </div>
+
+      <div class="card" id="actionCard" hidden>
+        <div class="card__title">План работ</div>
+        <div class="muted small" style="margin-top:-6px;margin-bottom:10px;">
+          Чек-лист для улучшения слабых или неясных компонентов.
         </div>
+        <ul class="checklist" id="actionList"></ul>
+      </div>
+
+      <div class="notice notice--subtle" id="methodNote">
+        Оценка основана на взвешенных риск-компонентах, включая наличие доказательств и вопрос давности.
+        Это структурированный предварительный анализ.
+      </div>
+
+      <div class="footerline">
+        Более глубокий структурированный анализ (протокол предварительной оценки иска) находится в разработке.
       </div>
     </section>
 
@@ -55,5 +276,7 @@
       <div class="muted small">© Solvere Lab</div>
     </footer>
   </main>
+
+  <script src="/assets/app.js"></script>
 </body>
 </html>
