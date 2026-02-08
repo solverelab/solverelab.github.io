@@ -819,3 +819,43 @@ a:hover {
 input[type="radio"] {
   accent-color: var(--accent, #8ea2ff);
 }
+
+/* STEP HEAD: alati hele tekst tumedal taustal */
+.step__head,
+.step__title,
+.step__meta {
+  color: var(--text, #e8e8ea);
+}
+
+.step__head {
+  background: var(--panel, rgba(255,255,255,0.04));
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+}
+
+/* lukustatud samm: veidi tuhmim, aga mitte must */
+.step.is-locked .step__head,
+.step.is-locked .step__title {
+  color: rgba(232,232,234,0.45);
+}
+
+/* nummerdatud ring (1..6) kui sul on seal eraldi element */
+.step .step__num,
+.step [data-step] {
+  color: var(--text, #e8e8ea);
+}
+
+/* Dark ghost button: tume pill + valge tekst */
+.btn--ghost {
+  background: rgba(255,255,255,0.06);
+  color: var(--text, #e8e8ea);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.btn--ghost:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.16);
+}
+
+.btn--ghost:active {
+  background: rgba(255,255,255,0.12);
+}
